@@ -1,0 +1,29 @@
+# @version 0.1 (2007-03-15)
+# - 新規作成
+#
+# @see http://www.limy.org/program/screen_command.html
+
+# 起動時にウィンドウサイズが変更されるのを抑止、FreeBSDのみの問題らしい
+# @see http://www.proton.jp/apps/screen.html
+term xterm-256color
+termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+# スクリーンコマンドモードに入るキーの変更
+escape ^Zz
+#escape ^Aa
+
+# ステータスライン
+# @see kawadu's .screenrc
+hardstatus alwayslastline "[%02c] %0`%-w%{=b bw}%n %t%{-}%+w %= %?%{=brw}%2`%{-} %?%1`"
+#スクロールバッファ
+defscrollback 4000
+# 文字コードの指定
+# UTF-8ではない環境もあるため一時無効にする
+# screen alias="screen -U" で対処する
+defencoding UTF-8
+# Wuff Wuffを消す
+vbell off
+# on にすると、ハングアップしたときにscreenは自動的にデタッチされます。
+# # off の場合は、ハングアップすると実行中の全プロセスは強制終了されます。
+autodetach on
+
