@@ -54,25 +54,25 @@ NeoBundle 'thinca/vim-quickrun'
 " シンタックスチェック
 " 'thinca/vim-quickruni' 'Shougo/vimproc'に依存
 " :WatchdogsRun
-NeoBundle 'osyo-manga/shabadou.vim'
-NeoBundle 'osyo-manga/vim-watchdogs'
+"NeoBundle 'osyo-manga/shabadou.vim'
+"NeoBundle 'osyo-manga/vim-watchdogs'
 " ghc-mod を使用した Haskell のシンタックスチェックを追加する
-let g:quickrun_config = {
- \
- \   'watchdogs_checker/ghc-mod' : {
- \       'command' : 'ghc-mod',
- \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check %s:p',
- \   },
- \
- \   'haskell/watchdogs_checker' : {
- \       'type' : 'watchdogs_checker/ghc-mod'
- \   },
- \   'watchdogs_checker/_' : {
- \       'hook/close_quickfix/enable_exit' : 1,
- \   },
- \}
+"let g:quickrun_config = {
+" \
+" \   'watchdogs_checker/ghc-mod' : {
+" \       'command' : 'ghc-mod',
+" \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check %s:p',
+" \   },
+" \
+" \   'haskell/watchdogs_checker' : {
+" \       'type' : 'watchdogs_checker/ghc-mod'
+" \   },
+" \   'watchdogs_checker/_' : {
+" \       'hook/close_quickfix/enable_exit' : 1,
+" \   },
+" \}
 " watchdogs.vim の呼び出し
-call watchdogs#setup(g:quickrun_config)
+"call watchdogs#setup(g:quickrun_config)
 " エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
 NeoBundle 'jceb/vim-hier'
 " haskell用ハイライト
