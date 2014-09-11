@@ -32,7 +32,10 @@ NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'jpalardy/vim-slime'
-NeoBundle 'scrooloose/syntastic'
+NeoBundleLazy 'scrooloose/syntastic' , {
+ \ 'autoload' : {
+  \  'filetypes': ['python', 'python3', 'djangohtml']
+ \ }}
 NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'git://github.com/kevinw/pyflakes-vim.git'
 NeoBundle 'git://github.com/nathanaelkane/vim-indent-guides.git'
@@ -61,16 +64,19 @@ let g:quickrun_config = {
  \
  \   'watchdogs_checker/ghc-mod' : {
  \       'command' : 'ghc-mod',
- \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check %s:p',
+ \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check -g -Wall -g -fno-warn-type-defaults %s:p ',
  \   },
  \
  \   'haskell/watchdogs_checker' : {
  \       'type' : 'watchdogs_checker/ghc-mod'
  \   },
- \   'watchdogs_checker/_' : {
- \       'hook/close_quickfix/enable_exit' : 1,
- \   },
  \}
+" quickfixを自動で閉じる
+" \   'watchdogs_checker/_' : {
+" \       'hook/close_quickfix/enable_exit' : 1,
+" \   },
+
+
 " watchdogs.vim の呼び出し
 call watchdogs#setup(g:quickrun_config)
 " エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
@@ -83,10 +89,10 @@ let g:haskell_conceal = 0
 NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', {'autoload' : { 'filetypes' : ['haskell'] }}
 " hoogleを開く
 " cabal install hoogleが必要
-" 調べたいキーワードにカーソルを合わせて K で hoogle の結果が表示
+" hoogle dataも必要(wgetコマンドが必要)
+" 調べたいキーワードにカーソルを合わせて sift k で hoogle の結果が表示
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'ujihisa/ref-hoogle'
-
 NeoBundle 'Shougo/unite.vim'
 " haddockを開く
 " 'Shougo/unite.vim'に依存
@@ -98,8 +104,15 @@ NeoBundleLazy 'eagletmt/unite-haddock', {'autoload' : { 'filetypes' : ['haskell'
 " importを便利に
 " 'Shougo/unite.vim'に依存
 " :Unite haskellimport
+" iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
 NeoBundleLazy 'ujihisa/unite-haskellimport', {'autoload' : { 'filetypes' : ['haskell'] }}
-"
+
+
+nnoremap <Space>o :only<CR>
+nnoremap <Space>w :WatchdogsRun<CR>
+nnoremap <Space>g :GhcModType<CR>
+nnoremap <Space>c :GhcModTypeClear<CR>
+
 filetype plugin indent on     " required!
 filetype indent on
 syntax on
