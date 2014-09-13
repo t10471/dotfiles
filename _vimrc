@@ -17,13 +17,12 @@ endif
 " originalrepos on github
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-    \ 'windows' : 'make -f make_mingw32.mak',
-    \ 'cygwin' : 'make -f make_cygwin.mak',
-    \ 'mac' : 'make -f make_mac.mak',
-    \ 'unix' : 'make -f make_unix.mak',
-  \ },
-  \ }
+ \ 'build' : {
+ \  'windows' : 'make -f make_mingw32.mak',
+ \  'cygwin' : 'make -f make_cygwin.mak',
+ \  'mac' : 'make -f make_mac.mak',
+ \  'unix' : 'make -f make_unix.mak',
+ \ }}
 NeoBundle 'VimClojure'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
@@ -34,7 +33,7 @@ NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'jpalardy/vim-slime'
 NeoBundleLazy 'scrooloose/syntastic' , {
  \ 'autoload' : {
-  \  'filetypes': ['python', 'python3', 'djangohtml']
+ \   'filetypes': ['python', 'python3', 'djangohtml']
  \ }}
 NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'git://github.com/kevinw/pyflakes-vim.git'
@@ -57,8 +56,8 @@ NeoBundle 'thinca/vim-quickrun'
 " シンタックスチェック
 " 'thinca/vim-quickruni' 'Shougo/vimproc'に依存
 " :WatchdogsRun
-"NeoBundle 'osyo-manga/shabadou.vim'
-"NeoBundle 'osyo-manga/vim-watchdogs'
+NeoBundle 'osyo-manga/shabadou.vim'
+NeoBundle 'osyo-manga/vim-watchdogs'
 " ghc-mod を使用した Haskell のシンタックスチェックを追加する
 let g:quickrun_config = {
  \
@@ -110,6 +109,7 @@ nnoremap <Space>o :only<CR>
 nnoremap <Space>w :WatchdogsRun<CR>
 nnoremap <Space>g :GhcModType<CR>
 nnoremap <Space>c :GhcModTypeClear<CR>
+nnoremap <Space>i :Unite haskellimport<CR>
 
 filetype plugin indent on     " required!
 filetype indent on
