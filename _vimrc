@@ -53,12 +53,14 @@ NeoBundleLazy 'ujihisa/neco-ghc', {'autoload' : { 'filetypes' : ['haskell'] }}
 " 即時実行 haskell以外も対応 
 " :QuickRun か \r
 NeoBundle 'thinca/vim-quickrun'
+
 " シンタックスチェック
 " 'thinca/vim-quickruni' 'Shougo/vimproc'に依存
 " :WatchdogsRun
 NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'osyo-manga/vim-watchdogs'
 " ghc-mod を使用した Haskell のシンタックスチェックを追加する
+" cのも追加
 let g:quickrun_config = {
  \
  \   'watchdogs_checker/ghc-mod' : {
@@ -68,6 +70,16 @@ let g:quickrun_config = {
  \
  \   'haskell/watchdogs_checker' : {
  \       'type' : 'watchdogs_checker/ghc-mod'
+ \   },
+ \  'c' :{
+ \     'type' : 'my_c'
+ \   },
+ \   'my_c' : {
+ \     'command': 'clang',
+ \     'cmdopt' : '-lm',
+ \     'exec': ['%c %o %s -o %s:p:r', '%s:p:r %a'],
+ \     'tempfile': '%{tempname()}.c',
+ \     'hook/sweep/files': '%S:p:r',
  \   },
  \}
 " quickfixを自動で閉じる
@@ -144,7 +156,10 @@ imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
 " キャッシュを削除してからオムに補完を行う
 imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 
-
+" コメントアウト
+NeoBundle "tyru/caw.vim.git"
+nmap <Leader>c <Plug>(caw:i:toggle)
+vmap <Leader>c <Plug>(caw:i:toggle)
 
 nnoremap <Space>o :only<CR>
 nnoremap <Space>w :WatchdogsRun<CR>
@@ -152,6 +167,16 @@ nnoremap <Space>g :GhcModType<CR>
 nnoremap <Space>c :GhcModTypeClear<CR>
 nnoremap <Space>i :Unite haskellimport<CR>
 
+
+" QuickFix
+map <C-n> :cn<CR>
+map <C-p> :cp<CR>
+" alt-gtags.vim
+nnoremap <Space>a :AltGtags<CR>
+nnoremap <Space>f :AltGtags -f<CR>
+nnoremap <Space>r :AltGtags -r<CR>
+nnoremap <Space>s :AltGtags -s<CR>
+"
 filetype plugin indent on     " required!
 filetype indent on
 syntax on
