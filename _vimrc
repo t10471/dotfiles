@@ -53,6 +53,9 @@ NeoBundleLazy 'ujihisa/neco-ghc', {'autoload' : { 'filetypes' : ['haskell'] }}
 " 即時実行 haskell以外も対応 
 " :QuickRun か \r
 NeoBundle 'thinca/vim-quickrun'
+" Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
+set splitbelow
+set splitright
 
 " シンタックスチェック
 " 'thinca/vim-quickruni' 'Shougo/vimproc'に依存
@@ -121,7 +124,7 @@ NeoBundleLazy 'osyo-manga/vim-marching', {'autoload' : { 'filetypes' : ['c', 'cp
 NeoBundleLazy 'vim-scripts/c.vim', {'autoload' : { 'filetypes' : ['c'] }}
 NeoBundleLazy 'vim-jp/cpp-vim', {'autoload' : { 'filetypes' : ['cpp'] }}
 NeoBundleLazy '5t111111/alt-gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
-
+NeoBundleLazy 'rhysd/vim-clang-format', {'autoload' : {'filetypes' : ['c', 'cpp', 'objc']}}
 "clang コマンドの設定
 let g:marching_clang_command = '/usr/bin/clang'
 
@@ -158,24 +161,44 @@ imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
 
 " コメントアウト
 NeoBundle "tyru/caw.vim.git"
+" <Plug>(caw:i:toggle)というがcawに設定されている
+" それを<Leader>cにここで割り当てている
 nmap <Leader>c <Plug>(caw:i:toggle)
 vmap <Leader>c <Plug>(caw:i:toggle)
 
+let g:clang_format#command = 'clang-format-3.5'
+" ========== vim-clang-format の設定 ============
+" アクセス指定子は1インデント分下げる
+" 短い if 文は1行にまとめる
+" テンプレートの宣言(template<class ...>)後は必ず改行する
+" C++11 の機能を使う
+" {} の改行は Stroustrup スタイル（関数宣言時の { のみ括弧前で改行を入れる）
+
+let g:clang_format#style_options = {
+ \ 'AccessModifierOffset' : -4,
+ \ 'AllowShortIfStatementsOnASingleLine' : 'true',
+ \ 'AlwaysBreakTemplateDeclarations' : 'true',
+ \ 'Standard' : 'C++11',
+ \ 'BreakBeforeBraces' : 'Stroustrup',
+ \}
+
+
 nnoremap <Space>o :only<CR>
 nnoremap <Space>w :WatchdogsRun<CR>
-nnoremap <Space>g :GhcModType<CR>
-nnoremap <Space>c :GhcModTypeClear<CR>
-nnoremap <Space>i :Unite haskellimport<CR>
-
-
 " QuickFix
-map <C-n> :cn<CR>
-map <C-p> :cp<CR>
+autocmd FileType c,cpp,objc map <C-n> :cn<CR>
+autocmd FileType c,cpp,objc map <C-p> :cp<CR>
 " alt-gtags.vim
-nnoremap <Space>a :AltGtags<CR>
-nnoremap <Space>f :AltGtags -f<CR>
-nnoremap <Space>r :AltGtags -r<CR>
-nnoremap <Space>s :AltGtags -s<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>a :AltGtags<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>f :AltGtags -f<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>r :AltGtags -r<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>s :AltGtags -s<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>m :ClangFormat<CR>
+
+autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
+autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
+autocmd FileType haskell nnoremap <Space>i :Unite haskellimport<CR>
+
 "
 filetype plugin indent on     " required!
 filetype indent on
