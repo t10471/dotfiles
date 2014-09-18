@@ -9,6 +9,9 @@ nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
 
 set nocompatible               " be iMproved
+" README.md以外のmdファイルもmarkdownに関連づける
+au BufNewFile,BufRead *.md :set filetype=markdown
+
 filetype off
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim
@@ -40,6 +43,17 @@ NeoBundle 'git://github.com/kevinw/pyflakes-vim.git'
 NeoBundle 'git://github.com/nathanaelkane/vim-indent-guides.git'
 NeoBundle 'sudo.vim'
 NeoBundle 'yonchu/accelerated-smooth-scroll'
+
+" markdown
+NeoBundleLazy 'Markdown', {
+ \ 'autoload' : {
+ \   'filetypes': ['markdown']
+ \ }}
+NeoBundleLazy 'rcmdnk/vim-markdown', {
+ \ 'autoload' : {
+ \   'filetypes': ['markdown']
+ \ }}
+
 ""NeoBundle 'https://bitbucket.org/kovisoft/slimv'
 " 以下haskell
 " インデント
