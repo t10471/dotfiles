@@ -43,6 +43,7 @@ NeoBundle 'git://github.com/kevinw/pyflakes-vim.git'
 NeoBundle 'git://github.com/nathanaelkane/vim-indent-guides.git'
 NeoBundle 'sudo.vim'
 NeoBundle 'yonchu/accelerated-smooth-scroll'
+NeoBundle 'kana/vim-submode'
 
 " markdown
 NeoBundleLazy 'Markdown', {
@@ -97,6 +98,12 @@ let g:quickrun_config = {
  \     'exec': ['%c %o %s -o %s:p:r', '%s:p:r %a'],
  \     'tempfile': '%{tempname()}.c',
  \     'hook/sweep/files': '%S:p:r',
+ \   },
+ \   'scons' : {
+ \       'command'   : 'scons',
+ \       'exec' : '%c',
+ \       'outputter' : 'error:buffer:quickfix',
+ \       'runner' : 'vimproc',
  \   },
  \}
 " quickfixを自動で閉じる
@@ -213,7 +220,9 @@ autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
 autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
 autocmd FileType haskell nnoremap <Space>i :Unite haskellimport<CR>
 
-"
+
+
+
 filetype plugin indent on     " required!
 filetype indent on
 syntax on
@@ -221,8 +230,6 @@ syntax on
 NeoBundleCheck
 
 colorscheme default
-
-let g:flake8_builtins="_,apply"
 
 
 "------------------------------------
@@ -263,7 +270,10 @@ inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
 " end neocomplete.vim
 
+"pythonの設定
 autocmd FileType python setlocal omnifunc=jedi#completions
+
+let g:flake8_builtins="_,apply"
 
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
@@ -275,3 +285,79 @@ endif
 let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
 let g:syntastic_python_checkers = ['pyflakes']
 
+" バッファリストの一つ前のバッファを開く
+nnoremap <silent>bp :bprevious<CR>
+" バッファリストの次のバッファを開く
+nnoremap <silent>bn :bnext<CR>
+" 直前のバッファを開く
+nnoremap <silent>bb :b#<CR>
+" バッファリストの先頭を開く
+nnoremap <silent>bf :bf<CR>
+" バッファリストの最後を開く
+nnoremap <silent>bl :bl<CR>
+" 変更中の次のバッファへ移動
+nnoremap <silent>bm :bm<CR>
+" カレントのバッファを閉じてバッファリストから削除
+nnoremap <silent>bd :bdelete<CR>
+
+nnoremap s <Nop>
+" 下に移動
+nnoremap sj <C-w>j
+" 上に移動
+nnoremap sk <C-w>k
+" 右に移動
+nnoremap sl <C-w>l
+" 左に移動
+nnoremap sh <C-w>h
+" 下に移動 
+nnoremap sJ <C-w>J
+" 上に移動
+nnoremap sK <C-w>K
+" 右に移動
+nnoremap sL <C-w>L
+" 左に移動
+nnoremap sH <C-w>H
+" 次のタブに切替
+nnoremap sn gt
+" 前のタブに切替
+nnoremap sp gT
+" 回転
+nnoremap sr <C-w>r
+" 大きさを揃える
+nnoremap s= <C-w>=
+" 次に移動
+nnoremap sw <C-w>w
+" 縦横最大化
+nnoremap so <C-w>_<C-w>|
+" 大きさを揃える
+nnoremap sO <C-w>=
+
+nnoremap sN :<C-u>bn<CR>
+nnoremap sP :<C-u>bp<CR>
+" 新規タブ
+nnoremap st :<C-u>tabnew<CR>
+" タブ一覧
+nnoremap sT :<C-u>Unite tab<CR>
+" 水平分割
+nnoremap ss :<C-u>sp<CR>
+" 垂直分割 
+nnoremap sv :<C-u>vs<CR>
+" ウィンドウを閉じる
+nnoremap sq :<C-u>q<CR>
+" バッファを閉じる
+nnoremap sQ :<C-u>bd<CR>
+" 現在のタブで開いたバッファ一覧
+nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
+" バッファ一覧
+nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+call submode#map('bufmove', 'n', '', '<', '<C-w><')
+call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+
+>
