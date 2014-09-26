@@ -144,6 +144,7 @@ NeoBundleLazy 'ujihisa/unite-haskellimport', {'autoload' : { 'filetypes' : ['has
 NeoBundleLazy 'osyo-manga/vim-marching', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
 NeoBundleLazy 'vim-scripts/c.vim', {'autoload' : { 'filetypes' : ['c'] }}
 NeoBundleLazy 'vim-jp/cpp-vim', {'autoload' : { 'filetypes' : ['cpp'] }}
+NeoBundleLazy 'vim-scripts/gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
 NeoBundleLazy '5t111111/alt-gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
 NeoBundleLazy 'rhysd/vim-clang-format', {'autoload' : {'filetypes' : ['c', 'cpp', 'objc']}}
 "clang コマンドの設定
@@ -209,12 +210,21 @@ nnoremap <Space>w :WatchdogsRun<CR>
 " QuickFix
 autocmd FileType c,cpp,objc map <C-n> :cn<CR>
 autocmd FileType c,cpp,objc map <C-p> :cp<CR>
+" gtags.vim
+" <C-R>"でヤンクを貼り付け 
+autocmd FileType c,cpp,objc nnoremap w <Nop>
+autocmd FileType c,cpp,objc nnoremap wq <C-w><C-w><C-w>q
+autocmd FileType c,cpp,objc nnoremap wg :Gtags -g
+autocmd FileType c,cpp,objc nnoremap wl :Gtags -f %<CR>
+autocmd FileType c,cpp,objc nnoremap wj :Gtags <C-r><C-w><CR>
+autocmd FileType c,cpp,objc nnoremap wk :Gtags -r <C-r><C-w><CR>
 " alt-gtags.vim
 autocmd FileType c,cpp,objc nnoremap <Space>a :AltGtags<CR>
 autocmd FileType c,cpp,objc nnoremap <Space>f :AltGtags -f<CR>
 autocmd FileType c,cpp,objc nnoremap <Space>r :AltGtags -r<CR>
 autocmd FileType c,cpp,objc nnoremap <Space>s :AltGtags -s<CR>
 autocmd FileType c,cpp,objc nnoremap <Space>m :ClangFormat<CR>
+
 
 autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
 autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
@@ -350,6 +360,9 @@ nnoremap sQ :<C-u>bd<CR>
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 " バッファ一覧
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+
+" cでヘッダファイルにタブで開く
+nnoremap sgf <C-w>gf<CR>
 
 call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
