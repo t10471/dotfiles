@@ -364,12 +364,17 @@ nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 " cでヘッダファイルにタブで開く
 nnoremap sgf <C-w>gf<CR>
 
+nnoremap ~ $
+nnoremap = j$
+vnoremap ~ $
+nnoremap <F2> :w<CR>
+nnoremap <F4> :q<CR>
 
-nnoremap 0 $
-nnoremap 9 j$
+inoremap <F2> <C-[>:w<CR>
+inoremap <F4> <C-[>:q<CR>
 
 
-call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 'S>', '<C-w>>')
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
 call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
 call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
