@@ -85,7 +85,6 @@ let g:quickrun_config = {
  \       'command' : 'ghc-mod',
  \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check -g -Wall -g -fno-warn-type-defaults %s:p ',
  \   },
- \
  \   'haskell/watchdogs_checker' : {
  \       'type' : 'watchdogs_checker/ghc-mod'
  \   },
@@ -99,6 +98,9 @@ let g:quickrun_config = {
  \     'tempfile': '%{tempname()}.c',
  \     'hook/sweep/files': '%S:p:r',
  \   },
+ \  'c/watchdogs_checker' :{
+ \     'type' : 'watchdogs_checker/clang'
+ \   },
  \   'scons' : {
  \       'command'   : 'scons',
  \       'exec' : '%c',
@@ -106,12 +108,14 @@ let g:quickrun_config = {
  \       'runner' : 'vimproc',
  \   },
  \}
+" \     'tempfile': '%{tempname()}.c',
+" \     'hook/sweep/files': '%S:p:r',
 " quickfixを自動で閉じる
 " \   'watchdogs_checker/_' : {
 " \       'hook/close_quickfix/enable_exit' : 1,
 " \   },
 " watchdogs.vim の呼び出し
-"call watchdogs#setup(g:quickrun_config)
+call watchdogs#setup(g:quickrun_config)
 " エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
 NeoBundle 'jceb/vim-hier'
 " haskell用ハイライト
@@ -204,6 +208,9 @@ let g:clang_format#style_options = {
  \ 'BreakBeforeBraces' : 'Stroustrup',
  \}
 
+
+NeoBundle "thinca/vim-prettyprint"
+NeoBundle "thinca/vim-editvar"
 
 nnoremap <Space>o :only<CR>
 nnoremap <Space>w :WatchdogsRun<CR>
