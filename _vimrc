@@ -9,15 +9,13 @@ nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
 
 set nocompatible               " be iMproved
-" README.md以外のmdファイルもmarkdownに関連づける
-au BufNewFile,BufRead *.md :set filetype=markdown
 
 filetype off
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
-" originalrepos on github
+
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
  \ 'build' : {
@@ -34,6 +32,7 @@ NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'jpalardy/vim-slime'
+" python
 NeoBundleLazy 'scrooloose/syntastic' , {
  \ 'autoload' : {
  \   'filetypes': ['python', 'python3', 'djangohtml']
@@ -44,7 +43,10 @@ NeoBundle 'git://github.com/nathanaelkane/vim-indent-guides.git'
 NeoBundle 'sudo.vim'
 NeoBundle 'yonchu/accelerated-smooth-scroll'
 NeoBundle 'kana/vim-submode'
-
+" ctags
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'szw/vim-tags'
+NeoBundle 'vim-scripts/errormarker.vim.git'
 " markdown
 NeoBundleLazy 'Markdown', {
  \ 'autoload' : {
@@ -54,7 +56,6 @@ NeoBundleLazy 'rcmdnk/vim-markdown', {
  \ 'autoload' : {
  \   'filetypes': ['markdown']
  \ }}
-
 ""NeoBundle 'https://bitbucket.org/kovisoft/slimv'
 " 以下haskell
 " インデント
@@ -68,15 +69,118 @@ NeoBundleLazy 'ujihisa/neco-ghc', {'autoload' : { 'filetypes' : ['haskell'] }}
 " 即時実行 haskell以外も対応 
 " :QuickRun か \r
 NeoBundle 'thinca/vim-quickrun'
-" Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
-set splitbelow
-set splitright
-
 " シンタックスチェック
 " 'thinca/vim-quickruni' 'Shougo/vimproc'に依存
 " :WatchdogsRun
 NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'osyo-manga/vim-watchdogs'
+" エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
+NeoBundle 'jceb/vim-hier'
+" haskell用ハイライト
+NeoBundleLazy 'dag/vim2hs', {'autoload' : { 'filetypes' : ['haskell'] }}
+" \をラムダにするのをやめる
+" Yesod用htmlハイライト
+NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', {'autoload' : { 'filetypes' : ['haskell'] }}
+" hoogleを開く
+" cabal install hoogleが必要
+" hoogle dataも必要(wgetコマンドが必要)
+" 調べたいキーワードにカーソルを合わせて sift k で hoogle の結果が表示
+NeoBundle 'thinca/vim-ref'
+NeoBundle 'ujihisa/ref-hoogle'
+NeoBundle 'Shougo/unite.vim'
+" haddockを開く
+" 'Shougo/unite.vim'に依存
+" cabal install haddock
+" :Unite haddock
+" :Unite hoogle 
+" :Unite hoogle:exact
+NeoBundleLazy 'eagletmt/unite-haddock', {'autoload' : { 'filetypes' : ['haskell'] }}
+" importを便利に
+" 'Shougo/unite.vim'に依存
+" :Unite haskellimport
+" iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
+NeoBundleLazy 'ujihisa/unite-haskellimport', {'autoload' : { 'filetypes' : ['haskell'] }}
+
+" c c++用 
+NeoBundleLazy 'osyo-manga/vim-marching', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
+NeoBundleLazy 'vim-scripts/c.vim', {'autoload' : { 'filetypes' : ['c'] }}
+NeoBundleLazy 'vim-jp/cpp-vim', {'autoload' : { 'filetypes' : ['cpp'] }}
+NeoBundleLazy 'vim-scripts/gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
+NeoBundleLazy '5t111111/alt-gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
+NeoBundleLazy 'rhysd/vim-clang-format', {'autoload' : {'filetypes' : ['c', 'cpp', 'objc']}}
+" コメントアウト
+NeoBundle "tyru/caw.vim.git"
+NeoBundle "thinca/vim-prettyprint"
+NeoBundle "thinca/vim-editvar"
+NeoBundle 'vim-scripts/errormarker.vim.git'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundleLazy 'derekwyatt/vim-scala.git', {'autoload' : { 'filetypes' : ['scala'] }}
+
+
+filetype plugin indent on     " required!
+filetype indent on
+syntax on
+NeoBundleCheck
+colorscheme default
+
+" marker
+let g:errormarker_errortext     = '!!'
+let g:errormarker_warningtext   = '??'
+let g:errormarker_errorgroup    = 'Error'
+let g:errormarker_warninggroup  = 'ToDo'
+" NERDTree
+nmap <silent> <C-e> :NERDTreeToggle<CR>
+vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+omap <silent> <C-e> :NERDTreeToggle<CR>
+imap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+let g:NERDTreeShowHidden=1
+
+nnoremap <Space>o :only<CR>
+nnoremap <Space>w :WatchdogsRun<CR>
+" QuickFix
+map <C-n> :cn<CR>
+map <C-p> :cp<CR>
+
+" c
+" gtags.vim
+" <C-R>"でヤンクを貼り付け 
+autocmd FileType c,cpp,objc nnoremap w <Nop>
+autocmd FileType c,cpp,objc nnoremap wq <C-w><C-w><C-w>q
+autocmd FileType c,cpp,objc nnoremap wg :Gtags -g
+autocmd FileType c,cpp,objc nnoremap wl :Gtags -f %<CR>
+autocmd FileType c,cpp,objc nnoremap wj :Gtags <C-r><C-w><CR>
+autocmd FileType c,cpp,objc nnoremap wk :Gtags -r <C-r><C-w><CR>
+" alt-gtags.vim
+autocmd FileType c,cpp,objc nnoremap <Space>a :AltGtags<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>f :AltGtags -f<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>r :AltGtags -r<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>s :AltGtags -s<CR>
+autocmd FileType c,cpp,objc nnoremap <Space>m :ClangFormat<CR>
+
+" haskell
+autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
+autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
+autocmd FileType haskell nnoremap <Space>i :Unite haskellimport<CR>
+
+" VimShell
+" シェルを起動
+nnoremap <silent> ,vs :VimShell<CR>
+" 言語ごとの対話環境
+" pythonを非同期で起動
+autocmd FileType python  nnoremap <silent> ,vi :VimShellInteractive python<CR>
+" irbを非同期で起動
+autocmd FileType ruby nnoremap <silent> ,vi :VimShellInteractive irb<CR>
+" scalaを非同期で起動
+autocmd FileType scala nnoremap <silent> ,vi :VimShellInteractive scala<CR>
+"言語ごとのコンパイル対話環境
+" scalaを非同期で起動
+autocmd FileType scala nnoremap <silent> ,vc :VimShellInteractive scala<CR>
+" 非同期で開いたインタプリタに現在の行を評価させる
+vmap <silent> ,ve :VimShellSendString<CR>
+" 選択範囲を非同期で開いたインタプリタに選択行を評価させる
+nnoremap <silent> ,ve <S-v>:VimShellSendString<CR>
+
 " ghc-mod を使用した Haskell のシンタックスチェックを追加する
 " cのも追加
 let g:quickrun_config = {
@@ -107,7 +211,41 @@ let g:quickrun_config = {
  \       'outputter' : 'error:buffer:quickfix',
  \       'runner' : 'vimproc',
  \   },
+ \   'sbt' : {
+ \       'command'   : 'sbt',
+ \       'exec' : ['%c compile', '%c run'],
+ \       'outputter'                 : 'multi:buffer:quickfix',
+ \       'runner' : 'vimproc',
+ \   },
  \}
+let g:quickrun_config.scala = {'type': 'scala/process_manager'}
+
+function! s:vimrc_scala()
+  nnoremap <buffer> <Space>s :<C-u>write<Cr>:call <SID>sbt_run()<Cr>
+endfunction
+
+augroup vimrc_scala
+  autocmd!
+  autocmd FileType scala call s:vimrc_scala()
+augroup END
+
+augroup vimrc-scala-switch
+  autocmd!
+  autocmd FileType scala let b:switch_custom_definitions =
+        \ [{
+        \   '\(log[ \.]\+\)info\>': '\1warn',
+        \   '\(log[ \.]\+\)warn\>': '\1error',
+        \   '\(log[ \.]\+\)error\>': '\1info'},
+        \  {
+        \   '\<extends\>': 'with',
+        \   '\<with\>': 'extends'}]
+augroup END
+
+augroup vimrc-int-sbt
+  autocmd!
+  autocmd FileType int-sbt call <SID>vimrc_int_sbt()
+augroup END
+
 " \     'tempfile': '%{tempname()}.c',
 " \     'hook/sweep/files': '%S:p:r',
 " quickfixを自動で閉じる
@@ -116,143 +254,40 @@ let g:quickrun_config = {
 " \   },
 " watchdogs.vim の呼び出し
 call watchdogs#setup(g:quickrun_config)
-" エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
-NeoBundle 'jceb/vim-hier'
-" haskell用ハイライト
-NeoBundleLazy 'dag/vim2hs', {'autoload' : { 'filetypes' : ['haskell'] }}
-" \をラムダにするのをやめる
-let g:haskell_conceal = 0
-" Yesod用htmlハイライト
-NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', {'autoload' : { 'filetypes' : ['haskell'] }}
-" hoogleを開く
-" cabal install hoogleが必要
-" hoogle dataも必要(wgetコマンドが必要)
-" 調べたいキーワードにカーソルを合わせて sift k で hoogle の結果が表示
-NeoBundle 'thinca/vim-ref'
-NeoBundle 'ujihisa/ref-hoogle'
-NeoBundle 'Shougo/unite.vim'
-" haddockを開く
-" 'Shougo/unite.vim'に依存
-" cabal install haddock
-" :Unite haddock
-" :Unite hoogle 
-" :Unite hoogle:exact
-NeoBundleLazy 'eagletmt/unite-haddock', {'autoload' : { 'filetypes' : ['haskell'] }}
-" importを便利に
-" 'Shougo/unite.vim'に依存
-" :Unite haskellimport
-" iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
-NeoBundleLazy 'ujihisa/unite-haskellimport', {'autoload' : { 'filetypes' : ['haskell'] }}
 
-" c c++用 
-NeoBundleLazy 'osyo-manga/vim-marching', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
-NeoBundleLazy 'vim-scripts/c.vim', {'autoload' : { 'filetypes' : ['c'] }}
-NeoBundleLazy 'vim-jp/cpp-vim', {'autoload' : { 'filetypes' : ['cpp'] }}
-NeoBundleLazy 'vim-scripts/gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
-NeoBundleLazy '5t111111/alt-gtags.vim', {'autoload' : { 'filetypes' : ['c', 'cpp'] }}
-NeoBundleLazy 'rhysd/vim-clang-format', {'autoload' : {'filetypes' : ['c', 'cpp', 'objc']}}
-"clang コマンドの設定
-let g:marching_clang_command = '/usr/bin/clang'
+" Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
+set splitbelow
+set splitright
+" tagbar
+autocmd FileType scala nmap <F8> :TagbarToggle<CR>
+" vim-tags
+autocmd FileType scala nnoremap <C-]> g<C-]>
+autocmd FileType scala au BufNewFile,BufRead *.scala set tags+=$HOME/workspace/scala.tags
+autocmd FileType scala au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = "ctags --languages=scala -f ~/workspace/scala.tags `pwd` 2>/dev/null &" 
+autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
+NeoBundle 'vim-scripts/errormarker.vim.git'
+" indent-guides
+autocmd FileType scala let g:indent_guides_guide_size = 1
+autocmd FileType scala let g:indent_guides_auto_colors = 1
 
-" オプションを追加する
-" filetype=cpp に対して設定する場合
-let g:marching#clang_command#options = {
-\   'cpp' : '-std=gnu++1y'
-\}
-
-" インクルードディレクトリのパスを設定
-" let g:marching_include_paths = [
-" \]
-
-" neocomplete.vim と併用して使用する場合
-let g:marching_enable_neocomplete = 1
-
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {}
+" neosnippet
+"   Plugin key-mappings.
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+"   SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"   For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
 endif
+let g:neosnippet#snippets_directory='~/.vim/snippets'
 
-let g:neocomplete#force_omni_input_patterns.cpp =
-    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-
-" 処理のタイミングを制御する
-" 短いほうがより早く補完ウィンドウが表示される
-" ただし、marching.vim 以外の処理にも影響するので注意する
-set updatetime=200
-
-" オムニ補完時に補完ワードを挿入したくない場合
-imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
-
-" キャッシュを削除してからオムに補完を行う
-imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
-
-" コメントアウト
-NeoBundle "tyru/caw.vim.git"
-" <Plug>(caw:i:toggle)というがcawに設定されている
-" それを<Leader>cにここで割り当てている
-nmap <Leader>c <Plug>(caw:i:toggle)
-vmap <Leader>c <Plug>(caw:i:toggle)
-
-let g:clang_format#command = 'clang-format-3.5'
-" ========== vim-clang-format の設定 ============
-" アクセス指定子は1インデント分下げる
-" 短い if 文は1行にまとめる
-" テンプレートの宣言(template<class ...>)後は必ず改行する
-" C++11 の機能を使う
-" {} の改行は Stroustrup スタイル（関数宣言時の { のみ括弧前で改行を入れる）
-
-let g:clang_format#style_options = {
- \ 'AccessModifierOffset' : -4,
- \ 'AllowShortIfStatementsOnASingleLine' : 'true',
- \ 'AlwaysBreakTemplateDeclarations' : 'true',
- \ 'Standard' : 'C++11',
- \ 'BreakBeforeBraces' : 'Stroustrup',
- \}
-
-
-NeoBundle "thinca/vim-prettyprint"
-NeoBundle "thinca/vim-editvar"
-
-nnoremap <Space>o :only<CR>
-nnoremap <Space>w :WatchdogsRun<CR>
-" QuickFix
-autocmd FileType c,cpp,objc map <C-n> :cn<CR>
-autocmd FileType c,cpp,objc map <C-p> :cp<CR>
-" gtags.vim
-" <C-R>"でヤンクを貼り付け 
-autocmd FileType c,cpp,objc nnoremap w <Nop>
-autocmd FileType c,cpp,objc nnoremap wq <C-w><C-w><C-w>q
-autocmd FileType c,cpp,objc nnoremap wg :Gtags -g
-autocmd FileType c,cpp,objc nnoremap wl :Gtags -f %<CR>
-autocmd FileType c,cpp,objc nnoremap wj :Gtags <C-r><C-w><CR>
-autocmd FileType c,cpp,objc nnoremap wk :Gtags -r <C-r><C-w><CR>
-" alt-gtags.vim
-autocmd FileType c,cpp,objc nnoremap <Space>a :AltGtags<CR>
-autocmd FileType c,cpp,objc nnoremap <Space>f :AltGtags -f<CR>
-autocmd FileType c,cpp,objc nnoremap <Space>r :AltGtags -r<CR>
-autocmd FileType c,cpp,objc nnoremap <Space>s :AltGtags -s<CR>
-autocmd FileType c,cpp,objc nnoremap <Space>m :ClangFormat<CR>
-
-
-autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
-autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
-autocmd FileType haskell nnoremap <Space>i :Unite haskellimport<CR>
-
-
-
-
-filetype plugin indent on     " required!
-filetype indent on
-syntax on
-
-NeoBundleCheck
-
-colorscheme default
-
-
-"------------------------------------
 " neocomplete.vim
-"------------------------------------
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+let g:neocomplete#sources#dictionary#dictionaries = {
+ \ 'default':    '',
+ \ 'scala':      $HOME.'/.vim/dict/scala.dict',
+ \ }
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 " Use neocomplete.
@@ -285,8 +320,6 @@ inoremap <expr><C-e>  neocomplete#cancel_popup()
 " Close popup by <Space>.
 inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
-" end neocomplete.vim
-
 "pythonの設定
 autocmd FileType python setlocal omnifunc=jedi#completions
 
@@ -301,6 +334,66 @@ endif
 
 let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
 let g:syntastic_python_checkers = ['pyflakes']
+
+
+"clang コマンドの設定
+let g:marching_clang_command = '/usr/bin/clang'
+
+" オプションを追加する
+" filetype=cpp に対して設定する場合
+let g:marching#clang_command#options = {
+\   'cpp' : '-std=gnu++1y'
+\}
+
+" インクルードディレクトリのパスを設定
+" let g:marching_include_paths = [
+" \]
+
+" neocomplete.vim と併用して使用する場合
+let g:marching_enable_neocomplete = 1
+
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+
+let g:neocomplete#force_omni_input_patterns.cpp =
+    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+" 処理のタイミングを制御する
+" 短いほうがより早く補完ウィンドウが表示される
+" ただし、marching.vim 以外の処理にも影響するので注意する
+set updatetime=200
+" オムニ補完時に補完ワードを挿入したくない場合
+imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
+" キャッシュを削除してからオムに補完を行う
+imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
+
+" \をラムダにするのをやめる
+let g:haskell_conceal = 0
+
+" <Plug>(caw:i:toggle)というがcawに設定されている
+" それを<Leader>cにここで割り当てている
+nmap <Leader>c <Plug>(caw:i:toggle)
+vmap <Leader>c <Plug>(caw:i:toggle)
+
+let g:clang_format#command = 'clang-format-3.5'
+" ========== vim-clang-format の設定 ============
+" アクセス指定子は1インデント分下げる
+" 短い if 文は1行にまとめる
+" テンプレートの宣言(template<class ...>)後は必ず改行する
+" C++11 の機能を使う
+" {} の改行は Stroustrup スタイル（関数宣言時の { のみ括弧前で改行を入れる）
+
+let g:clang_format#style_options = {
+ \ 'AccessModifierOffset' : -4,
+ \ 'AllowShortIfStatementsOnASingleLine' : 'true',
+ \ 'AlwaysBreakTemplateDeclarations' : 'true',
+ \ 'Standard' : 'C++11',
+ \ 'BreakBeforeBraces' : 'Stroustrup',
+ \}
+
+" README.md以外のmdファイルもmarkdownに関連づける
+au BufNewFile,BufRead *.md :set filetype=markdown
 
 " バッファリストの一つ前のバッファを開く
 nnoremap <silent>bp :bprevious<CR>
@@ -372,7 +465,7 @@ nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 nnoremap sgf <C-w>gf<CR>
 
 nnoremap ~ $
-nnoremap = j$
+nnoremap ; j$
 vnoremap ~ $
 nnoremap <F2> :w<CR>
 nnoremap <F4> :q<CR>
@@ -389,3 +482,101 @@ call submode#map('bufmove', 'n', '', '>', '<C-w>>')
 call submode#map('bufmove', 'n', '', '<', '<C-w><')
 call submode#map('bufmove', 'n', '', '+', '<C-w>+')
 call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+
+function! s:start_sbt()
+  if !has_key(t:, 'vsm_cmds')
+    "let t:vsm_cmds = [input('t:vsm_cmds[0] = ')]
+    let t:vsm_cmds = ['compile']
+  endif
+  execute 'normal' "\<Plug>(vimshell_split_switch)\<Plug>(vimshell_hide)"
+  execute 'VimShellInteractive sbt'
+  stopinsert
+  let t:sbt_bufname = bufname('%')
+  wincmd L
+  wincmd p
+endfunction
+
+function! s:sbt_run()
+  let sbt_bufname = get(t:, 'sbt_bufname', '*not-found*')
+  if sbt_bufname == '*not-found*'
+    call s:start_sbt()
+  else
+    if !has_key(t:, 'vsm_cmds')
+      echoerr 'please give t:vsm_cmds a list'
+      return
+    endif
+
+    " go to the window
+    let wn = bufwinnr(sbt_bufname)
+    if wn == -1
+      echo "buffer exists but window doesn't exist. opening it."
+      execute 'sbuffer' sbt_bufname
+      wincmd L
+    else
+      execute wn . 'wincmd w'
+    endif
+
+    " make sure if it's vimshell
+    if !has_key(b:, 'interactive')
+      close
+      unlet t:sbt_bufname
+      call s:sbt_run()
+      return
+    endif
+
+    normal! Gzt
+    " go back to the previous window
+    wincmd p
+
+    call vimshell#interactive#set_send_buffer(sbt_bufname)
+    call vimshell#interactive#clear()
+    call vimshell#interactive#send(t:vsm_cmds)
+    " explosion
+    "call vimproc#system_bg('curl -s http://localhost:8080/requests/status.xml?command=pl_play')
+  endif
+endfunction
+
+function! s:vimrc_int_sbt()
+  nunmap  <buffer> j
+  nunmap  <buffer> k
+
+  syntax case ignore
+
+  syntax match intsbtPrompt /^> .*/ contains=intsbtPromptBody,intsbtPromptHead
+  syntax match intsbtPromptBody /.*/ contained
+  syntax match intsbtPromptHead /^> / contained
+
+  syntax match intsbtDebug /^\[debug\] .*/ contains=intsbtDebugHead,intsbtDebugBody
+  syntax match intsbtDebugBody /.*/ contained
+  syntax match intsbtDebugHead /\[debug\]/ contained
+
+  syntax match intsbtInfo /^\[info\] .*/ contains=intsbtInfoHead,intsbtInfoBody
+  syntax match intsbtInfoBody /.*/ contained
+  syntax match intsbtInfoHead /\[info\]/ contained
+
+  syntax match intsbtWarn /^\[warn\] .*/ contains=intsbtWarnHead,intsbtWarnBody
+  syntax match intsbtWarnBody /.*/ contained
+  syntax match intsbtWarnHead /\[warn\]/ contained
+
+  syntax match intsbtError /^\[error\] .*/ contains=intsbtErrorHead,intsbtErrorBody
+  syntax match intsbtErrorBody /.*/ contained
+  syntax match intsbtErrorHead /\[error\]/ contained
+
+  syntax match intsbtSuccess /^\[success\] .*/
+
+  hi def link intsbtPromptBody Statement
+  hi def link intsbtPromptHead Operator
+
+  hi def link intsbtDebugBody Comment
+  hi def link intsbtDebugHead LineNr
+
+  hi def link intsbtInfoBody Comment
+  hi def link intsbtInfoHead LineNr
+  " intsbtWarnBody: something easy to read and doesn't look too strong
+  hi def link intsbtWarnBody String
+  hi def link intsbtWarnHead LineNr
+  " intsbtErrorBody: something easy to read and does look strong
+  hi def link intsbtErrorBody Normal
+  hi def link intsbtErrorHead LineNr
+  hi def link intsbtSuccess LineNr
+endfunction
