@@ -24,18 +24,16 @@ NeoBundle 'Shougo/vimproc', {
  \  'mac' : 'make -f make_mac.mak',
  \  'unix' : 'make -f make_unix.mak',
  \ }}
-NeoBundle 'VimClojure'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 " NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'jpalardy/vim-slime'
-" python
+"python
 NeoBundleLazy 'scrooloose/syntastic' , {
  \ 'autoload' : {
- \   'filetypes': ['python', 'python3', 'djangohtml']
+ \   'filetypes': ['python', 'python3', 'djangohtml', 'php']
  \ }}
 NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'git://github.com/kevinw/pyflakes-vim.git'
@@ -46,7 +44,6 @@ NeoBundle 'kana/vim-submode'
 " ctags
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'szw/vim-tags'
-NeoBundle 'vim-scripts/errormarker.vim.git'
 " markdown
 NeoBundleLazy 'Markdown', {
  \ 'autoload' : {
@@ -112,9 +109,13 @@ NeoBundleLazy 'rhysd/vim-clang-format', {'autoload' : {'filetypes' : ['c', 'cpp'
 NeoBundle "tyru/caw.vim.git"
 NeoBundle "thinca/vim-prettyprint"
 NeoBundle "thinca/vim-editvar"
-NeoBundle 'vim-scripts/errormarker.vim.git'
 NeoBundle 'scrooloose/nerdtree'
+" コマンド(:で始まるやつ :mapとか)を設定バッファする
+" :VO map
+NeoBundle 'vim-scripts/ViewOutput'
+" scala
 NeoBundleLazy 'derekwyatt/vim-scala.git', {'autoload' : { 'filetypes' : ['scala'] }}
+
 
 
 filetype plugin indent on     " required!
@@ -123,11 +124,6 @@ syntax on
 NeoBundleCheck
 colorscheme default
 
-" marker
-let g:errormarker_errortext     = '!!'
-let g:errormarker_warningtext   = '??'
-let g:errormarker_errorgroup    = 'Error'
-let g:errormarker_warninggroup  = 'ToDo'
 " NERDTree
 nmap <silent> <C-e> :NERDTreeToggle<CR>
 vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
@@ -266,10 +262,12 @@ autocmd FileType scala nnoremap <C-]> g<C-]>
 au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null &"
 " au BufNewFile,BufRead *.scala let g:vim_tags_directories = []
 autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
-NeoBundle 'vim-scripts/errormarker.vim.git'
 " indent-guides
 autocmd FileType scala let g:indent_guides_guide_size = 1
 autocmd FileType scala let g:indent_guides_auto_colors = 1
+
+" autocmd FileType php compiler php
+" autocmd BufWritePost *.php silent make %
 
 " neosnippet
 "   Plugin key-mappings.
@@ -393,6 +391,7 @@ let g:clang_format#style_options = {
  \ 'BreakBeforeBraces' : 'Stroustrup',
  \}
 
+
 " README.md以外のmdファイルもmarkdownに関連づける
 au BufNewFile,BufRead *.md :set filetype=markdown
 
@@ -475,7 +474,7 @@ inoremap <F2> <C-[>:w<CR>
 inoremap <F4> <C-[>:q<CR>
 
 
-call submode#enter_with('bufmove', 'n', '', 'S>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
 call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
 call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
