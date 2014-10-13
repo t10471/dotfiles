@@ -5,8 +5,10 @@
 
 # 起動時にウィンドウサイズが変更されるのを抑止、FreeBSDのみの問題らしい
 # @see http://www.proton.jp/apps/screen.html
+defbce on
 term xterm-256color
-termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+shell $SHELL
+termcapinfo xterm* 'Co#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm:'
 
 # スクリーンコマンドモードに入るキーの変更
 escape ^Zz
