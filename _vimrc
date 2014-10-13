@@ -33,6 +33,7 @@ NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'vim-jp/vimdoc-ja'
+NeoBundle 'w0ng/vim-hybrid'
 "python
 NeoBundleLazy 'scrooloose/syntastic' , {
  \ 'autoload' : {
@@ -124,7 +125,9 @@ filetype plugin indent on     " required!
 filetype indent on
 syntax on
 NeoBundleCheck
-colorscheme default
+let g:hybrid_use_Xresources = 1
+" colorscheme default
+colorscheme hybrid
 
 nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
