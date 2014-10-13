@@ -4,18 +4,19 @@ set tabstop=4
 set autoindent
 set expandtab
 set shiftwidth=4
-
-nnoremap <PageDown> <C-F>
-nnoremap <PageUp> <C-B>
-
+" Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
+set splitbelow
+set splitright
 set nocompatible               " be iMproved
 
 filetype off
+
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
+NeoBundle 'vim-jp/vimdoc-ja'
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
  \ 'build' : {
@@ -117,12 +118,14 @@ NeoBundle 'vim-scripts/ViewOutput'
 NeoBundleLazy 'derekwyatt/vim-scala.git', {'autoload' : { 'filetypes' : ['scala'] }}
 
 
-
 filetype plugin indent on     " required!
 filetype indent on
 syntax on
 NeoBundleCheck
 colorscheme default
+
+nnoremap <PageDown> <C-F>
+nnoremap <PageUp> <C-B>
 
 " NERDTree
 nmap <silent> <C-e> :NERDTreeToggle<CR>
@@ -251,9 +254,6 @@ augroup END
 " watchdogs.vim の呼び出し
 call watchdogs#setup(g:quickrun_config)
 
-" Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
-set splitbelow
-set splitright
 " tagbar
 autocmd FileType scala nmap <F8> :TagbarToggle<CR>
 " vim-tags
@@ -341,8 +341,8 @@ let g:marching_clang_command = '/usr/bin/clang'
 " オプションを追加する
 " filetype=cpp に対して設定する場合
 let g:marching#clang_command#options = {
-\   'cpp' : '-std=gnu++1y'
-\}
+ \   'cpp' : '-std=gnu++1y'
+ \}
 
 " インクルードディレクトリのパスを設定
 " let g:marching_include_paths = [
@@ -356,7 +356,7 @@ if !exists('g:neocomplete#force_omni_input_patterns')
 endif
 
 let g:neocomplete#force_omni_input_patterns.cpp =
-    \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+ \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
 " 処理のタイミングを制御する
 " 短いほうがより早く補完ウィンドウが表示される
@@ -390,7 +390,6 @@ let g:clang_format#style_options = {
  \ 'Standard' : 'C++11',
  \ 'BreakBeforeBraces' : 'Stroustrup',
  \}
-
 
 " README.md以外のmdファイルもmarkdownに関連づける
 au BufNewFile,BufRead *.md :set filetype=markdown
