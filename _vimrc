@@ -16,7 +16,6 @@ if has('vim_starting')
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
-NeoBundle 'vim-jp/vimdoc-ja'
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc', {
  \ 'build' : {
@@ -31,6 +30,7 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'vim-jp/vimdoc-ja'
 "python
 NeoBundleLazy 'scrooloose/syntastic' , {
  \ 'autoload' : {
