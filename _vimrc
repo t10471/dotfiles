@@ -264,7 +264,7 @@ autocmd FileType scala nmap <F8> :TagbarToggle<CR>
 " vim-tags
 autocmd FileType scala nnoremap <C-]> g<C-]>
 " au BufNewFile,BufRead *.scala set tags+=$HOME/workspace/scala.tags
-au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null &"
+au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
 " au BufNewFile,BufRead *.scala let g:vim_tags_directories = []
 autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
 " indent-guides
