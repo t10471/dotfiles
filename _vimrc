@@ -190,8 +190,10 @@ let g:neocomplete#force_omni_input_patterns.cpp =
 " 短いほうがより早く補完ウィンドウが表示される
 " ただし、marching.vim 以外の処理にも影響するので注意する
 " set updatetime=200
-imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)            " オムニ補完時に補完ワードを挿入したくない場合
-imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete) " キャッシュを削除してからオムに補完を行う
+" オムニ補完時に補完ワードを挿入したくない場合
+imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)            
+" キャッシュを削除してからオムに補完を行う
+imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete) 
 
 let g:clang_format#command = 'clang-format-3.5'
 " ========== vim-clang-format の設定 ============
