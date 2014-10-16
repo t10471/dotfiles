@@ -17,7 +17,7 @@ set splitright
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f
 set grepprg=grep\ -In
 set laststatus=2
-
+set fdm=marker
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
   \ exe "normal g`\"" | endif
