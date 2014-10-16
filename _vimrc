@@ -194,8 +194,10 @@ let g:neocomplete#force_omni_input_patterns.cpp =
 " set updatetime=200
 " オムニ補完時に補完ワードを挿入したくない場合
 autocmd FileType c,cpp,objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)            
+" autocmd FileType c,cpp,objc imap <buffer> <space>a <Plug>(marching_start_omni_complete)            
 " キャッシュを削除してからオムに補完を行う
 autocmd FileType c,cpp,objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete) 
+" autocmd FileType c,cpp,objc imap <buffer> <space>b <Plug>(marching_force_start_omni_complete) 
 
 let g:clang_format#command = 'clang-format-3.5'
 " ========== vim-clang-format の設定 ============
@@ -283,6 +285,15 @@ let g:syntastic_python_checkers = ['pyflakes']
 command! ES :e sudo:%<CR><C-^>:bd!
 " root権限で保存
 command! WS :w sudo:%
+" }}}
+
+" NERDTree {{{
+nmap <silent> <C-e> :NERDTreeToggle<CR>
+vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+omap <silent> <C-e> :NERDTreeToggle<CR>
+imap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+let g:NERDTreeShowHidden=1
 " }}}
 
 " VimShell {{{
@@ -403,14 +414,6 @@ let g:gitgutter_sign_modified = '➜'
 let g:gitgutter_sign_removed = '✘'
 " }}}
 
-" NERDTree {{{
-nmap <silent> <C-e> :NERDTreeToggle<CR>
-vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
-omap <silent> <C-e> :NERDTreeToggle<CR>
-imap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-let g:NERDTreeShowHidden=1
-" }}}
 
 " keymapping  {{{
 " <Plug>(caw:i:toggle)というがcawに設定されている それを<Leader>cにここで割り当てている
@@ -459,8 +462,10 @@ nnoremap <F4> :q<CR>
 inoremap <F2> <C-[>:w<CR>
 inoremap <F4> <C-[>:q<CR>
 " vimgrepの結果を検索 :vim main /home/clang/workspace/**.c 
-nnoremap <C-p> :cprevious<CR>   " 前へ
-nnoremap <C-n> :cnext<CR>       " 次へ
+" nnoremap <C-p> :cprevious<CR>   " 前へ
+" nnoremap <C-n> :cnext<CR>       " 次へ
+nnoremap [q :cprevious<CR>   " 前へ
+nnoremap ]q :cnext<CR>       " 次へ
 nnoremap [Q :<C-u>cfirst<CR> " 最初へ
 nnoremap ]Q :<C-u>clast<CR>  " 最後へ
 nnoremap ]c :<C-u>copen<CR>  " quickfix open
