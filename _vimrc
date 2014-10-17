@@ -68,6 +68,9 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'airblade/vim-gitgutter'
 NeoBundleLazy 'osyo-manga/vim-anzu'
+NeoBundleLazy 'LeafCage/yankround.vim'
+NeoBundleLazy 'kana/vim-operator-user'
+NeoBundleLazy 'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
 " ctags
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'szw/vim-tags'
@@ -75,12 +78,11 @@ NeoBundle 'thinca/vim-ref'
 NeoBundleLazy 'ynkdir/vim-vimlparser'
 NeoBundle 'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
 NeoBundleLazy 'osyo-manga/shabadou.vim'
-NeoBundle 'thinca/vim-quickrun', { 'depends' : [ 'osyo-manga/shabadou.vim' ] }
+NeoBundle 'thinca/vim-quickrun', { 'depends' : 'osyo-manga/shabadou.vim'}
 NeoBundle "osyo-manga/unite-quickfix"
 NeoBundle 'osyo-manga/vim-watchdogs'
 NeoBundleLazy 'jceb/vim-hier'
 NeoBundleLazy 'scrooloose/syntastic' 
-NeoBundleLazy 'LeafCage/yankround.vim'
 " python
 NeoBundleLazy 'Flake8-vim'
 NeoBundleLazy 'davidhalter/jedi-vim'
@@ -228,6 +230,12 @@ if neobundle#tap('yankround.vim') "{{{
     nmap gP <Plug>(yankround-gP)
     nmap <C-p> <Plug>(yankround-prev)
     nmap <C-n> <Plug>(yankround-next)
+endif
+"}}}
+
+if neobundle#tap('vim-operator-replace') "{{{
+    call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
+    map R  <Plug>(operator-replace)
 endif
 "}}}
 
@@ -781,6 +789,13 @@ nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
 nnoremap <Space>o :only<CR>
 nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
+nnoremap qqq: <Esc>q:
+nnoremap qqq/ <Esc>q/
+nnoremap qqq? <Esc>q?
+nnoremap q: <Nop>
+nnoremap q/ <Nop>
+nnoremap q? <Nop>
+
 " }}} 
 
 " lightline {{{
