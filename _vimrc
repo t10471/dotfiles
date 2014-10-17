@@ -65,6 +65,7 @@ NeoBundleLazy 'osyo-manga/vim-anzu'
 NeoBundleLazy 'LeafCage/yankround.vim'
 NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
+NeoBundle 'tpope/vim-abolish'
 " ctags
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'szw/vim-tags'
@@ -332,6 +333,17 @@ if neobundle#tap('sudo.vim') "{{{
         command! WS :w sudo:%
     endfunction
     call neobundle#untap()
+endif
+"}}}
+
+if neobundle#tap('vim-abolish') "{{{
+    " キャメルケース  crc
+    " ミックストケース    crm
+    " スネークケース  cr_
+    " スネークケース  crs
+    " スネークアッパーケース  cru
+    " 単語連結法（ハイフン連結）* cr-
+    " * この命名規則から他の命名規則には変換できない
 endif
 "}}}
 
