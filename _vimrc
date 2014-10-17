@@ -1,7 +1,7 @@
 
 " vim: set fdm=marker :
 
-" initialize {{{
+" set {{{
 scriptencoding utf-8
 set encoding=utf-8
 set backspace=indent,eol,start
@@ -105,13 +105,12 @@ NeoBundleLazy 'derekwyatt/vim-scala'
 call neobundle#end()
 " }}}
 
-" plugin seeting start {{{
+" plugin seeting {{{
 filetype plugin indent on     " required!
 syntax on
 NeoBundleCheck
 let g:hybrid_use_Xresources = 1
 colorscheme hybrid
-" }}}
 
 if neobundle#tap('vimproc') " {{{
     call neobundle#config({
@@ -519,6 +518,10 @@ if neobundle#tap('vim-watchdogs') "{{{
 endif
 " }}}
 
+" }}}
+
+" language {{{
+
 " markdown {{{
 if neobundle#tap('Markdown') 
     call neobundle#config({'autoload' : {'filetypes': ['markdown']}})
@@ -750,6 +753,8 @@ if neobundle#tap('vim-python-pep8-indent')
     call neobundle#untap()
 endif
 autocmd FileType python setlocal omnifunc=jedi#completions
+
+" }}}
 
 " }}}
 
