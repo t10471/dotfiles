@@ -38,13 +38,7 @@ endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc', {
-            \ 'build' : {
-            \  'windows' : 'make -f make_mingw32.mak',
-            \  'cygwin' : 'make -f make_cygwin.mak',
-            \  'mac' : 'make -f make_mac.mak',
-            \  'unix' : 'make -f make_unix.mak',
-            \ }}
+NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
@@ -117,6 +111,20 @@ syntax on
 NeoBundleCheck
 let g:hybrid_use_Xresources = 1
 colorscheme hybrid
+" }}}
+
+if neobundle#tap('vimproc') " {{{
+    call neobundle#config({
+                \ 'build' : {
+                \  'windows' : 'make -f make_mingw32.mak',
+                \  'cygwin' : 'make -f make_cygwin.mak',
+                \  'mac' : 'make -f make_mac.mak',
+                \  'unix' : 'make -f make_unix.mak',
+                \ }
+                \ })
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+endif
 " }}}
 
 if neobundle#tap('vimshell') " {{{
@@ -236,6 +244,22 @@ endif
 if neobundle#tap('vim-operator-replace') "{{{
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
     map R  <Plug>(operator-replace)
+endif
+"}}}
+
+if neobundle#tap('vim-indent-guides') "{{{
+    call neobundle#config({
+                \ 'augroup': 'indent_guides', 
+                \ 'autoload': {'mappings': [['n', '<Plug>IndentGuides']], 
+                \ 'commands': ['IndentGuidesEnable', 'IndentGuidesToggle', 'IndentGuidesDisable']}
+                \ })
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    let g:indent_guides_auto_colors=0
+    let g:indent_guides_enable_on_vim_startup=1
+    let g:indent_guides_guide_size=1
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
 endif
 "}}}
 
@@ -540,7 +564,6 @@ if neobundle#tap('gtags.vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
     function! neobundle#hooks.on_source(bundle)
     endfunction
-    nnoremap w <Nop>
     nnoremap wq <C-w><C-w><C-w>q
     nnoremap wg :Gtags -g
     nnoremap wl :Gtags -f %<CR>
@@ -673,9 +696,6 @@ autocmd FileType scala nnoremap <C-]> g<C-]>
 au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = 
             \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
 autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
-" indent-guides
-autocmd FileType scala let g:indent_guides_guide_size = 1
-autocmd FileType scala let g:indent_guides_auto_colors = 1
 " }}}
 
 " php {{{
@@ -723,7 +743,8 @@ endif
 if neobundle#tap('vim-python-pep8-indent')
     call neobundle#config({
                 \   'autoload' : {
-                \     'filetypes': ['python']
+                \     'insert': 1, 
+                \     'filetypes': ['python', 'python3', 'djangohtml']
                 \   }
                 \ })
     call neobundle#untap()
@@ -769,7 +790,6 @@ nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>     " バッファ一覧
 map s, <C-w>, " Quickfixウィンドウのオープン/クローズ
 map s. <C-w>. " Quickfixウィンドウへ移動
 nnoremap ~ $
-" nnoremap ; j$
 vnoremap ~ $
 nnoremap <F2> :w<CR>
 nnoremap <F4> :q<CR>
