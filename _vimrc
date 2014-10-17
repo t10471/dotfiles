@@ -1,11 +1,14 @@
 
-" vim: set fdm=marker:
+" vim: set fdm=marker :
 
 " initialize {{{
+scriptencoding utf-8
+set encoding=utf-8
 set backspace=indent,eol,start
 set foldmethod=syntax
 set tabstop=4
 set modeline
+set helplang=ja
 " set updatetime=4000
 set autoindent
 set expandtab
@@ -42,11 +45,11 @@ NeoBundle 'Shougo/vimproc', {
             \  'mac' : 'make -f make_mac.mak',
             \  'unix' : 'make -f make_unix.mak',
             \ }}
-NeoBundleLazy 'Shougo/vimshell' 
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundleLazy 'Shougo/vimshell' 
 NeoBundle 'vim-jp/vimdoc-ja'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'fuenor/qfixgrep'
@@ -57,7 +60,7 @@ NeoBundle 'yonchu/accelerated-smooth-scroll'
 NeoBundle 'kana/vim-submode'
 NeoBundleLazy 'tyru/caw.vim'
 NeoBundle 'thinca/vim-prettyprint'
-NeoBundleLazy 'surround.vim'
+NeoBundle 'surround.vim'
 NeoBundle 'thinca/vim-editvar'
 NeoBundleLazy 'scrooloose/nerdtree'
 NeoBundleLazy 'vim-scripts/ViewOutput'
@@ -69,12 +72,15 @@ NeoBundleLazy 'osyo-manga/vim-anzu'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'szw/vim-tags'
 NeoBundle 'thinca/vim-ref'
-NeoBundleLazy 'thinca/vim-quickrun'
-NeoBundle 'osyo-manga/shabadou.vim'
-NeoBundle 'osyo-manga/vim-watchdogs', { 'depends' : [ 'osyo-manga/shabadou.vim', 'thinca/vim-quickrun', 'Shougo/vimproc' ] }
+NeoBundleLazy 'ynkdir/vim-vimlparser'
+NeoBundle 'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
+NeoBundleLazy 'osyo-manga/shabadou.vim'
+NeoBundle 'thinca/vim-quickrun', { 'depends' : [ 'osyo-manga/shabadou.vim' ] }
+NeoBundle "osyo-manga/unite-quickfix"
+NeoBundle 'osyo-manga/vim-watchdogs'
 NeoBundleLazy 'jceb/vim-hier'
 NeoBundleLazy 'scrooloose/syntastic' 
-NeoBundle 'LeafCage/yankround.vim'
+NeoBundleLazy 'LeafCage/yankround.vim'
 " python
 NeoBundleLazy 'Flake8-vim'
 NeoBundleLazy 'davidhalter/jedi-vim'
@@ -88,7 +94,7 @@ NeoBundleLazy 'eagletmt/ghcmod-vim'
 NeoBundleLazy 'ujihisa/neco-ghc'
 NeoBundleLazy 'dag/vim2hs'
 NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare'
-NeoBundleLazy 'ujihisa/ref-hoogle', { 'depends' : [ 'thinca/vim-ref' ] }
+NeoBundleLazy 'ujihisa/ref-hoogle'
 NeoBundleLazy 'eagletmt/unite-haddock'
 NeoBundleLazy 'ujihisa/unite-haskellimport'
 " c c++用 
@@ -190,13 +196,14 @@ endif
 "}}}
 
 if neobundle#tap('surround.vim') "{{{
-    call neobundle#config({
-                \ 'autoload': {
-                \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround', 
-                \         ['i', '<Plug>ISurround'], ['sx', '<Plug>VgSurround'], 
-                \         '<Plug>Yssurround', '<Plug>SurroundRepeat', '<Plug>Csurround', 
-                \         ['i', '<Plug>Isurround'], ['sx', '<Plug>VSurround']]}
-                \ })
+    "プラグイン内部でコマンドを定義している場合はLazyできない
+    " call neobundle#config({
+    "             \ 'autoload': {
+    "             \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround', 
+    "             \         ['i', '<Plug>ISurround'], ['sx', '<Plug>VgSurround'], 
+    "             \         '<Plug>Yssurround', '<Plug>SurroundRepeat', '<Plug>Csurround', 
+    "             \         ['i', '<Plug>Isurround'], ['sx', '<Plug>VSurround']]}
+    "             \ })
     " {motion}はwなど
     " ys{motion}) {motion} で指定される範囲を () で囲む
     " yS{motion}) {motion} で指定される範囲を () で囲みインデント
@@ -209,6 +216,18 @@ if neobundle#tap('surround.vim') "{{{
     " cs'"    ' を " に変える
     " cs'<b>  ' を <b>に変える
 
+endif
+"}}}
+
+if neobundle#tap('yankround.vim') "{{{
+    call neobundle#config({
+                \ 'autoload': {'unite_sources': ['yankround'], 'mappings': [['xn', '<Plug>(yankround-']]}})
+    nmap p <Plug>(yankround-p)
+    nmap P <Plug>(yankround-P)
+    nmap gp <Plug>(yankround-gp)
+    nmap gP <Plug>(yankround-gP)
+    nmap <C-p> <Plug>(yankround-prev)
+    nmap <C-n> <Plug>(yankround-next)
 endif
 "}}}
 
@@ -293,12 +312,12 @@ endif
 
 if neobundle#tap('neosnippet') "{{{
     function! neobundle#hooks.on_source(bundle)
-        "   For snippet_complete marker.
-        if has('conceal')
-            set conceallevel=2 concealcursor=i
-        endif
-        let g:neosnippet#snippets_directory='~/.vim/snippets'
     endfunction
+    "   For snippet_complete marker.
+    if has('conceal')
+        set conceallevel=2 concealcursor=i
+    endif
+    let g:neosnippet#snippets_directory='~/.vim/snippets'
     "   Plugin key-mappings.
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -326,26 +345,26 @@ endif
 
 if neobundle#tap('neocomplete.vim') "{{{
     function! neobundle#hooks.on_source(bundle)
-        let g:neocomplete#sources#dictionary#dictionaries = {
-                    \ 'default':    '',
-                    \ 'scala':      $HOME.'/.vim/dict/scala.dict',
-                    \ }
-        if !exists('g:neocomplete#force_omni_input_patterns')
-            let g:neocomplete#force_omni_input_patterns = {}
-        endif
-        let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-        let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-        let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
-        " Disable AutoComplPop.
-        let g:acp_enableAtStartup = 0
-        " Use neocomplete.
-        let g:neocomplete#enable_at_startup = 1
-        " Use smartcase.
-        let g:neocomplete#enable_smart_case = 1
-        " Set minimum syntax keyword length.
-        let g:neocomplete#sources#syntax#min_keyword_length = 3
-        let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     endfunction
+    let g:neocomplete#sources#dictionary#dictionaries = {
+                \ 'default':    '',
+                \ 'scala':      $HOME.'/.vim/dict/scala.dict',
+                \ }
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+    " Disable AutoComplPop.
+    let g:acp_enableAtStartup = 0
+    " Use neocomplete.
+    let g:neocomplete#enable_at_startup = 1
+    " Use smartcase.
+    let g:neocomplete#enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
     " Plugin key-mappings.
     inoremap <expr><C-g>     neocomplete#undo_completion()
     inoremap <expr><C-l>     neocomplete#complete_common_string()
@@ -371,15 +390,50 @@ if neobundle#tap('neocomplete.vim') "{{{
 endif
 " }}}
 
+if neobundle#tap('vim-vimlint') "{{{
+    call neobundle#config('vim-vimlint', {
+                \ 'autoload' : {
+                \   'functions' : 'vimlint#vimlint'}
+                \ })
+    let g:vimlint#config = {
+                \ 'EVL102': 1,
+                \ 'EVL103': 1,
+                \ 'EVL105': 1,
+                \ 'EVL201': 1,
+                \ 'EVL204': 1,
+                \ 'EVL205': 1 
+                \ }
+endif
+"}}}
+
 if neobundle#tap('vim-quickrun') "{{{
     " :QuickRun か \rで実行
-    call neobundle#config({
-                \ 'autoload': {'mappings': [['sxn', '<Plug>(quickrun']], 
-                \     'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}
-                \ })
+    " call neobundle#config({
+    "             \ 'autoload': {'mappings': [['sxn', '<Plug>(quickrun']], 
+    "             \     'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}
+    "             \ })
     function! neobundle#hooks.on_source(bundle)
     endfunction
+                " \       'hook/vim_vimlint/enable' : 1,
+                " \       'hook/vim_vimlint/vimlint_path' : $HOME . '/.vim/bundle/vim-vimlint/autoload/vimlint.vim',
+                " \       'hook/vim_vimlint/vimlparser_path' : $HOME . '/.vim/bundle/vim-vimlparser/autoload/vimlparser.vim',
     let g:quickrun_config = {
+                \   '_' : {
+                \       'hook/close_unite_quickfix/enable_hook_loaded' : 1,
+                \       'hook/unite_quickfix/enable_failure' : 1,
+                \       'hook/close_quickfix/enable_exit' : 1,
+                \       'hook/close_buffer/enable_failure' : 1,
+                \       'hook/close_buffer/enable_empty_data' : 1,
+                \       'outputter' : "multi:buffer:quickfix",
+                \       'hook/shabadoubi_touch_henshin/enable' : 1,
+                \       'hook/shabadoubi_touch_henshin/wait' : 20,
+                \       'outputter/buffer/split' : ':botright 8sp',
+                \       'runner' : "vimproc",
+                \       'runner/vimproc/updatetime' : 40,
+                \   },
+                \   'vim/watchdogs_checker' : {
+                \       'type' : 'watchdogs_checker/vimlint'
+                \   },
                 \   'watchdogs_checker/ghc-mod' : {
                 \       'command' : 'ghc-mod',
                 \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check -g -Wall -g -fno-warn-type-defaults %s:p ',
@@ -419,15 +473,15 @@ if neobundle#tap('vim-quickrun') "{{{
     " quickfixを自動で閉じる
     " \   'watchdogs_checker/_' : {
     " \       'hook/close_quickfix/enable_exit' : 1,
-    " \   },
+    " \   }
     call neobundle#untap()
 endif
 " }}}
 
 if neobundle#tap('vim-watchdogs') "{{{
     function! neobundle#hooks.on_source(bundle)
-        call watchdogs#setup(g:quickrun_config)
     endfunction
+"    call watchdogs#setup(g:quickrun_config)
     nnoremap <Space>w :WatchdogsRun<CR>
     call neobundle#untap()
 endif
