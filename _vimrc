@@ -66,9 +66,14 @@ NeoBundleLazy  'LeafCage/yankround.vim'
 NeoBundleLazy  'kana/vim-operator-user'
 NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
 NeoBundle      'tpope/vim-abolish'
-NeoBundleLazy  'junegunn/vim-easy-align'
-NeoBundle      'Lokaltog/vim-easymotion'
-" ctags
+NeoBundleLazy 'junegunn/vim-easy-align'
+NeoBundle     'Lokaltog/vim-easymotion'
+NeoBundle     'tpope/vim-repeat' 
+NeoBundle     "kana/vim-textobj-user"
+NeoBundle     "kana/vim-textobj-syntax" "ay, iy
+NeoBundle     "kana/vim-textobj-indent" "al, il
+NeoBundle     "kana/vim-textobj-fold" " az, iz
+"ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
 NeoBundle      'thinca/vim-ref'
@@ -357,11 +362,38 @@ endif
 "}}}
 
 if neobundle#tap('vim-easy-align') "{{{
+    " :EasyAlignは  Left, Right, Center
+    " :EasyAlign!は Right, Left, Center
     call neobundle#config({
                 \    'autoload': {
                 \        'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], 
                 \                    ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 
                 \        'commands': ['EasyAlign', 'LiveEasyAlign']}})
+
+    let g:easy_align_delimiters = {
+                \ '>': { 'pattern': '>>\|=>\|>' },
+                \ '/': {
+                \     'pattern':         '//\+\|/\*\|\*/',
+                \     'delimiter_align': 'l',
+                \     'ignore_groups':   ['!Comment'] },
+                \ ']': {
+                \     'pattern':       '[[\]]',
+                \     'left_margin':   0,
+                \     'right_margin':  0,
+                \     'stick_to_left': 0
+                \   },
+                \ ')': {
+                \     'pattern':       '[()]',
+                \     'left_margin':   0,
+                \     'right_margin':  0,
+                \     'stick_to_left': 0
+                \   },
+                \ 'd': {
+                \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+                \     'left_margin':  0,
+                \     'right_margin': 0
+                \   }
+                \ }
     "start interactive EasyAlign in visual mode (e.g. vip<Enter>)
     vmap <Enter> <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
@@ -850,7 +882,8 @@ nnoremap q/ <Nop>
 nnoremap q? <Nop>
 vnoremap < <gv 
 vnoremap > >gv 
-
+nnoremap o :<C-u>call append(expand('.'), '')<Cr>j
+nnoremap O k:<C-u>call append(expand('.'), '')<Cr>j
 " }}} 
 
 " lightline {{{

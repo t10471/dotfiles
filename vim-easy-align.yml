@@ -1,0 +1,38 @@
+mysql:
+  # JDBC driver for MySQL database:
+  driver: com.mysql.jdbc.Driver
+  # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
+  url: jdbc:mysql://localhost/test
+  database: test
+  "user:pass":r00t:pa55
+
+# <C-g><C-g><C-g><C-g>*:
+# コメントと文字列を無視する
+
+mysql:
+  # JDBC driver for MySQL database:
+  driver:      com.mysql.jdbc.Driver
+  # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
+  url:         jdbc: mysql: //localhost/test
+  database:    test
+  "user:pass": r00t: pa55
+
+# <C-g><C-g><C-g><C-g><Right>*:
+
+mysql         :
+  # JDBC driver for MySQL database:
+  driver      : com.mysql.jdbc.Driver
+  # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
+  url         : jdbc : mysql : //localhost/test
+  database    : test
+  "user:pass" : r00t : pa55
+
+# <C-g><C-g><C-g><C-g><Right>:
+
+mysql         :
+  # JDBC driver for MySQL database:
+  driver      : com.mysql.jdbc.Driver
+  # JDBC URL for the connection (jdbc:mysql://HOSTNAME/DATABASE)
+  url         : jdbc:mysql://localhost/test
+  database    : test
+  "user:pass" : r00t:pa55
