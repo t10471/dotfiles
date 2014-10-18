@@ -21,6 +21,8 @@ set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f
 set grepprg=grep\ -In
 set laststatus=2
 set fdm=marker
+set wildmenu
+set wildmode=longest:full,full
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
                 \ exe "normal g`\"" | endif
@@ -69,10 +71,10 @@ NeoBundle      'tpope/vim-abolish'
 NeoBundleLazy 'junegunn/vim-easy-align'
 NeoBundle     'Lokaltog/vim-easymotion'
 NeoBundle     'tpope/vim-repeat' 
-NeoBundle     "kana/vim-textobj-user"
-NeoBundle     "kana/vim-textobj-syntax" "ay, iy
-NeoBundle     "kana/vim-textobj-indent" "al, il
-NeoBundle     "kana/vim-textobj-fold" " az, iz
+NeoBundle     'kana/vim-textobj-user'
+NeoBundle     'kana/vim-textobj-syntax' "ay, iy
+NeoBundle     'kana/vim-textobj-indent' "al, il
+NeoBundle     'kana/vim-textobj-fold' " az, iz
 "ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
@@ -819,56 +821,124 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 " }}}
 
 " keymapping  {{{
-nnoremap <silent>bp :bprevious<CR> " バッファリストの一つ前のバッファを開く
-nnoremap <silent>bn :bnext<CR>     " バッファリストの次のバッファを開く
-nnoremap <silent>bb :b#<CR>        " 直前のバッファを開く
-nnoremap <silent>bf :bf<CR>        " バッファリストの先頭を開く
-nnoremap <silent>bl :bl<CR>        " バッファリストの最後を開く
-nnoremap <silent>bm :bm<CR>        " 変更中の次のバッファへ移動
-nnoremap <silent>bd :bdelete<CR>   " カレントのバッファを閉じてバッファリストから削除
+
+" buffer {{{
+" バッファリストの一つ前のバッファを開く
+nnoremap <silent>bp :bprevious<CR> 
+" バッファリストの次のバッファを開く
+nnoremap <silent>bn :bnext<CR>     
+" 直前のバッファを開く
+nnoremap <silent>bb :b#<CR>        
+" バッファリストの先頭を開く
+nnoremap <silent>bf :bf<CR>        
+" バッファリストの最後を開く
+nnoremap <silent>bl :bl<CR>        
+" 変更中の次のバッファへ移動
+nnoremap <silent>bm :bm<CR>        
+" カレントのバッファを閉じてバッファリストから削除
+nnoremap <silent>bd :bdelete<CR>   
+" }}}
+
+" 画面 {{{
 nnoremap s <Nop>
-nnoremap sj <C-w>j " 下に移動
-nnoremap sk <C-w>k " 上に移動
-nnoremap sl <C-w>l " 右に移動
-nnoremap sh <C-w>h " 左に移動
-nnoremap sJ <C-w>J " 下に移動 
-nnoremap sK <C-w>K " 上に移動
-nnoremap sL <C-w>L " 右に移動
-nnoremap sH <C-w>H " 左に移動
-nnoremap sn gt " 次のタブに切替
-nnoremap sp gT " 前のタブに切替
-nnoremap sr <C-w>r       " 回転
-nnoremap s= <C-w>=       " 大きさを揃える
-nnoremap sw <C-w>w       " 次に移動
-nnoremap so <C-w>_<C-w>| " 縦横最大化
-nnoremap sO <C-w>=       " 大きさを揃える
+" 下に移動
+nnoremap sj <C-w>j 
+" 上に移動
+nnoremap sk <C-w>k 
+" 右に移動
+nnoremap sl <C-w>l 
+" 左に移動
+nnoremap sh <C-w>h 
+" 下に移動 
+nnoremap sJ <C-w>J 
+" 上に移動
+nnoremap sK <C-w>K 
+" 右に移動
+nnoremap sL <C-w>L 
+" 左に移動
+nnoremap sH <C-w>H 
+" 次のタブに切替
+nnoremap sn gt 
+" 前のタブに切替
+nnoremap sp gT 
+" 回転
+nnoremap sr <C-w>r       
+" 大きさを揃える
+nnoremap s= <C-w>=       
+" 次に移動
+nnoremap sw <C-w>w       
+" 縦横最大化
+nnoremap so <C-w>_<C-w>| 
+" 大きさを揃える
+nnoremap sO <C-w>=       
 nnoremap sN :<C-u>bn<CR>
 nnoremap sP :<C-u>bp<CR>
-nnoremap st :<C-u>tabnew<CR>    " 新規タブ
-nnoremap sT :<C-u>Unite tab<CR> " タブ一覧
-nnoremap ss :<C-u>sp<CR>        " 水平分割
-nnoremap sv :<C-u>vs<CR>        " 垂直分割 
-nnoremap sq :<C-u>q<CR>         " ウィンドウを閉じる
-nnoremap sQ :<C-u>bd<CR>        " バッファを閉じる
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR> " 現在のタブで開いたバッファ一覧
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>     " バッファ一覧
-map s, <C-w>, " Quickfixウィンドウのオープン/クローズ
-map s. <C-w>. " Quickfixウィンドウへ移動
+" 新規タブ
+nnoremap st :<C-u>tabnew<CR>    
+" タブ一覧
+nnoremap sT :<C-u>Unite tab<CR> 
+" 水平分割
+nnoremap ss :<C-u>sp<CR>        
+" 垂直分割 
+nnoremap sv :<C-u>vs<CR>        
+" ウィンドウを閉じる
+nnoremap sq :<C-u>q<CR>         
+" バッファを閉じる
+nnoremap sQ :<C-u>bd<CR>        
+" 現在のタブで開いたバッファ一覧
+nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR> 
+" バッファ一覧
+nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>     
+" Quickfixウィンドウのオープン/クローズ
+map s, <C-w>, 
+" Quickfixウィンドウへ移動
+map s. <C-w>. 
+" }}}
+
+" コマンドライン {{{
+cnoremap <C-A> <Home>
+" 一文字戻る
+cnoremap <C-B> <Left>
+" カーソルの下の文字を削除
+cnoremap <C-D> <Del>
+" 行末へ移動
+cnoremap <C-E> <End>
+" 一文字進む
+cnoremap <C-F> <Right>
+" コマンドライン履歴を一つ進む
+cnoremap <C-N> <Down>
+" コマンドライン履歴を一つ戻る
+cnoremap <C-P> <Up>
+" 前の単語へ移動
+cnoremap <C-K> <S-Left>
+" 次の単語へ移動
+cnoremap <C-L> <S-Right>
+" }}}
+
+" etc {{{
 nnoremap ~ $
 vnoremap ~ $
 nnoremap <F2> :w<CR>
 nnoremap <F4> :q<CR>
 inoremap <F2> <C-[>:w<CR>
 inoremap <F4> <C-[>:q<CR>
+
 " vimgrepの結果を検索 :vim main /home/clang/workspace/**.c 
-" nnoremap <C-p> :cprevious<CR>   " 前へ
-" nnoremap <C-n> :cnext<CR>       " 次へ
-nnoremap [q :cprevious<CR>   " 前へ
-nnoremap ]q :cnext<CR>       " 次へ
-nnoremap [Q :<C-u>cfirst<CR> " 最初へ
-nnoremap ]Q :<C-u>clast<CR>  " 最後へ
-nnoremap ]c :<C-u>copen<CR>  " quickfix open
-nnoremap [c :<C-u>cclose<CR> " quickfix close
+" 前へ
+nnoremap <C-p> :cprevious<CR>   
+" 次へ
+nnoremap <C-n> :cnext<CR>       
+nnoremap [q :cprevious<CR>   
+nnoremap ]q :cnext<CR>       
+" 最初へ
+nnoremap [Q :<C-u>cfirst<CR> 
+" 最後へ
+nnoremap ]Q :<C-u>clast<CR>  
+" quickfix open
+nnoremap ]c :<C-u>copen<CR>  
+" quickfix close
+nnoremap [c :<C-u>cclose<CR> 
+
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
 nnoremap <Space>o :only<CR>
@@ -884,6 +954,8 @@ vnoremap < <gv
 vnoremap > >gv 
 nnoremap o :<C-u>call append(expand('.'), '')<Cr>j
 nnoremap O k:<C-u>call append(expand('.'), '')<Cr>j
+" }}} 
+
 " }}} 
 
 " lightline {{{
