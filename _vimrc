@@ -38,71 +38,74 @@ endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundleLazy 'Shougo/vimshell' 
-NeoBundle 'vim-jp/vimdoc-ja'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'fuenor/qfixgrep'
-NeoBundleLazy 'LeafCage/nebula.vim'
-NeoBundle 'nathanaelkane/vim-indent-guides'
-NeoBundleLazy 'sudo.vim'
-NeoBundle 'yonchu/accelerated-smooth-scroll'
-NeoBundle 'kana/vim-submode'
-NeoBundleLazy 'tyru/caw.vim'
-NeoBundle 'thinca/vim-prettyprint'
-NeoBundle 'surround.vim'
-NeoBundle 'thinca/vim-editvar'
-NeoBundleLazy 'scrooloose/nerdtree'
-NeoBundleLazy 'vim-scripts/ViewOutput'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundleLazy 'airblade/vim-gitgutter'
-NeoBundleLazy 'osyo-manga/vim-anzu'
-NeoBundleLazy 'LeafCage/yankround.vim'
-NeoBundleLazy 'kana/vim-operator-user'
-NeoBundleLazy 'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
-NeoBundle 'tpope/vim-abolish'
+NeoBundle      'Shougo/vimproc'
+NeoBundle      'Shougo/unite.vim'
+NeoBundle      'Shougo/neocomplete.vim'
+NeoBundle      'Shougo/neosnippet'
+NeoBundle      'Shougo/neosnippet-snippets'
+NeoBundleLazy  'Shougo/vimshell'
+NeoBundle      'vim-jp/vimdoc-ja'
+NeoBundle      'w0ng/vim-hybrid'
+NeoBundle      'fuenor/qfixgrep'
+NeoBundleLazy  'LeafCage/nebula.vim'
+NeoBundle      'nathanaelkane/vim-indent-guides'
+NeoBundleLazy  'sudo.vim'
+NeoBundle      'yonchu/accelerated-smooth-scroll'
+NeoBundle      'kana/vim-submode'
+NeoBundleLazy  'tyru/caw.vim'
+NeoBundle      'thinca/vim-prettyprint'
+NeoBundle      'surround.vim'
+NeoBundle      'thinca/vim-editvar'
+NeoBundleLazy  'scrooloose/nerdtree'
+NeoBundleLazy  'vim-scripts/ViewOutput'
+NeoBundle      'itchyny/lightline.vim'
+NeoBundle      'tpope/vim-fugitive'
+NeoBundleLazy  'airblade/vim-gitgutter'
+NeoBundleLazy  'osyo-manga/vim-anzu'
+NeoBundleLazy  'LeafCage/yankround.vim'
+NeoBundleLazy  'kana/vim-operator-user'
+NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
+NeoBundle      'tpope/vim-abolish'
+NeoBundleLazy  'junegunn/vim-easy-align'
+NeoBundle      'Lokaltog/vim-easymotion'
 " ctags
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'szw/vim-tags'
-NeoBundle 'thinca/vim-ref'
-NeoBundleLazy 'ynkdir/vim-vimlparser'
-NeoBundle 'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
-NeoBundleLazy 'osyo-manga/shabadou.vim'
-NeoBundle 'thinca/vim-quickrun', { 'depends' : 'osyo-manga/shabadou.vim'}
-NeoBundle "osyo-manga/unite-quickfix"
-NeoBundle 'osyo-manga/vim-watchdogs'
-NeoBundleLazy 'jceb/vim-hier'
-NeoBundleLazy 'scrooloose/syntastic' 
+NeoBundle      'majutsushi/tagbar'
+NeoBundle      'szw/vim-tags'
+NeoBundle      'thinca/vim-ref'
+NeoBundleLazy  'ynkdir/vim-vimlparser'
+NeoBundle      'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
+NeoBundleLazy  'osyo-manga/shabadou.vim'
+NeoBundle      'thinca/vim-quickrun', { 'depends' : 'osyo-manga/shabadou.vim'}
+NeoBundle      "osyo-manga/unite-quickfix"
+NeoBundle      'osyo-manga/vim-watchdogs'
+NeoBundleLazy  'jceb/vim-hier'
+NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy 'Flake8-vim'
-NeoBundleLazy 'davidhalter/jedi-vim'
-NeoBundleLazy 'hynek/vim-python-pep8-indent'
+NeoBundleLazy  'Flake8-vim'
+NeoBundleLazy  'davidhalter/jedi-vim'
+NeoBundleLazy  'hynek/vim-python-pep8-indent'
 " markdown
-NeoBundleLazy 'Markdown'
-NeoBundleLazy 'rcmdnk/vim-markdown'
+NeoBundleLazy  'Markdown'
+NeoBundleLazy  'rcmdnk/vim-markdown'
 " haskell
-NeoBundleLazy 'kana/vim-filetype-haskell' 
-NeoBundleLazy 'eagletmt/ghcmod-vim' 
-NeoBundleLazy 'ujihisa/neco-ghc'
-NeoBundleLazy 'dag/vim2hs'
-NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare'
-NeoBundleLazy 'ujihisa/ref-hoogle'
-NeoBundleLazy 'eagletmt/unite-haddock'
-NeoBundleLazy 'ujihisa/unite-haskellimport'
+NeoBundleLazy  'kana/vim-filetype-haskell'
+NeoBundleLazy  'eagletmt/ghcmod-vim'
+NeoBundleLazy  'ujihisa/neco-ghc'
+NeoBundleLazy  'dag/vim2hs'
+NeoBundleLazy  'pbrisbin/vim-syntax-shakespeare'
+NeoBundleLazy  'ujihisa/ref-hoogle'
+NeoBundleLazy  'eagletmt/unite-haddock'
+NeoBundleLazy  'ujihisa/unite-haskellimport'
 " c c++用 
-NeoBundleLazy 'osyo-manga/vim-marching'
-NeoBundleLazy 'vim-scripts/c.vim'
-NeoBundleLazy 'vim-jp/cpp-vim'
-NeoBundleLazy 'vim-scripts/gtags.vim'
-NeoBundleLazy '5t111111/alt-gtags.vim'
-NeoBundleLazy 'rhysd/vim-clang-format'
+NeoBundleLazy  'osyo-manga/vim-marching'
+NeoBundleLazy  'vim-scripts/c.vim'
+NeoBundleLazy  'vim-jp/cpp-vim'
+NeoBundleLazy  'vim-scripts/gtags.vim'
+NeoBundleLazy  '5t111111/alt-gtags.vim'
+NeoBundleLazy  'rhysd/vim-clang-format'
 " scala
-NeoBundleLazy 'derekwyatt/vim-scala'
+NeoBundleLazy  'derekwyatt/vim-scala'
+
 call neobundle#end()
 " }}}
 
@@ -350,6 +353,19 @@ endif
 if neobundle#tap('ViewOutput') "{{{
     " :で始まるやつ :mapとか)バッファする :VO map
     call neobundle#config({'autoload': {'commands': ['VO']}})
+endif
+"}}}
+
+if neobundle#tap('vim-easy-align') "{{{
+    call neobundle#config({
+                \    'autoload': {
+                \        'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], 
+                \                    ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 
+                \        'commands': ['EasyAlign', 'LiveEasyAlign']}})
+    "start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+    vmap <Enter> <Plug>(EasyAlign)
+    " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+    nmap <Leader>a <Plug>(EasyAlign)
 endif
 "}}}
 
@@ -832,6 +848,8 @@ nnoremap qqq? <Esc>q?
 nnoremap q: <Nop>
 nnoremap q/ <Nop>
 nnoremap q? <Nop>
+vnoremap < <gv 
+vnoremap > >gv 
 
 " }}} 
 
