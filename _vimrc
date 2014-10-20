@@ -24,6 +24,7 @@ set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
+    autocmd!
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
                 \ exe "normal g`\"" | endif
 augroup END
@@ -70,7 +71,7 @@ NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-use
 NeoBundle      'tpope/vim-abolish'
 NeoBundleLazy 'junegunn/vim-easy-align'
 NeoBundle     'Lokaltog/vim-easymotion'
-NeoBundle     'tpope/vim-repeat' 
+NeoBundle     'tpope/vim-repeat'
 NeoBundle     'kana/vim-textobj-user'
 NeoBundle     'kana/vim-textobj-syntax' "ay, iy
 NeoBundle     'kana/vim-textobj-indent' "al, il
@@ -103,7 +104,7 @@ NeoBundleLazy  'pbrisbin/vim-syntax-shakespeare'
 NeoBundleLazy  'ujihisa/ref-hoogle'
 NeoBundleLazy  'eagletmt/unite-haddock'
 NeoBundleLazy  'ujihisa/unite-haskellimport'
-" c c++用 
+" c c++用
 NeoBundleLazy  'osyo-manga/vim-marching'
 NeoBundleLazy  'vim-scripts/c.vim'
 NeoBundleLazy  'vim-jp/cpp-vim'
@@ -138,23 +139,26 @@ endif
 " }}}
 
 if neobundle#tap('vimshell') " {{{
+
     call neobundle#config({
-                \    'autoload': {
-                \    'unite_sources': ['vimshell_external_history', 'vimshell_history', 'vimshell_zsh_complete'], 
-                \    'mappings': [['n', '<Plug>(vimshell_']], 
+                \ 'augroup': 'setupAlias',
+                \ 'autoload': {
+                \    'unite_sources': ['vimshell_external_history', 'vimshell_history', 'vimshell_zsh_complete'],
+                \    'mappings': [['n', '<Plug>(vimshell_']],
                 \    'commands': [
-                \       'VimShellSendString', 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShell'}, 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellPop'}, 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCreate'}, 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCurrentDir'}, 
-                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellExecute'}, 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellBufferDir'}, 
-                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellTab'}, 
-                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellTerminal'}, 
-                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellInteractive'}, 
+                \       'VimShellSendString',
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShell'},
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellPop'},
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCreate'},
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellCurrentDir'},
+                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellExecute'},
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellBufferDir'},
+                \       {'complete': 'customlist,vimshell#complete', 'name': 'VimShellTab'},
+                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellTerminal'},
+                \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellInteractive'},
                 \       {'complete': 'buffer', 'name': 'VimShellSendBuffer'}]}
                 \ })
+
     function! neobundle#hooks.on_source(bundle)
     endfunction
     " シェルを起動
@@ -169,18 +173,19 @@ if neobundle#tap('vimshell') " {{{
     vmap <silent> ,ve :VimShellSendString<CR>
     " 選択範囲を非同期で開いたインタプリタに選択行を評価させる
     nnoremap <silent> ,ve <S-v>:VimShellSendString<CR>
+
     call neobundle#untap()
 endif
 " }}}
 
 if neobundle#tap('nerdtree') "{{{
     call neobundle#config({
-                \ 'augroup': 'NERDTreeHijackNetrw', 
+                \ 'augroup': 'NERDTreeHijackNetrw',
                 \ 'autoload': {'commands': [
                 \    'NERDTreeMirror', 'NERDTreeClose', 'NERDTreeFocus', 'NERDTreeCWD', 'NERDTreeFind',
-                \    {'complete': 'dir', 'name': 'NERDTree'}, 
-                \    {'complete': 'customlist,nerdtree#completeBookmarks', 'name': 'NERDTreeFromBookmark'}, 
-                \    {'complete': 'dir', 'name': 'NERDTreeToggle'}, 
+                \    {'complete': 'dir', 'name': 'NERDTree'},
+                \    {'complete': 'customlist,nerdtree#completeBookmarks', 'name': 'NERDTreeFromBookmark'},
+                \    {'complete': 'dir', 'name': 'NERDTreeToggle'},
                 \ ]}
                 \ })
     function! neobundle#hooks.on_source(bundle)
@@ -199,7 +204,7 @@ if neobundle#tap('caw.vim') "{{{
     " <Plug>(caw:i:toggle)というがcawに設定されている それを<Leader>cにここで割り当てている
     call neobundle#config({
                 \   'autoload' : {
-                \    'mappings': [['vn', '<Plug>(caw']], 
+                \    'mappings': [['vn', '<Plug>(caw']],
                 \   }
                 \ })
     function! neobundle#hooks.on_source(bundle)
@@ -219,9 +224,9 @@ if neobundle#tap('surround.vim') "{{{
     "プラグイン内部でコマンドを定義している場合はLazyできない
     " call neobundle#config({
     "             \ 'autoload': {
-    "             \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround', 
-    "             \         ['i', '<Plug>ISurround'], ['sx', '<Plug>VgSurround'], 
-    "             \         '<Plug>Yssurround', '<Plug>SurroundRepeat', '<Plug>Csurround', 
+    "             \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround',
+    "             \         ['i', '<Plug>ISurround'], ['sx', '<Plug>VgSurround'],
+    "             \         '<Plug>Yssurround', '<Plug>SurroundRepeat', '<Plug>Csurround',
     "             \         ['i', '<Plug>Isurround'], ['sx', '<Plug>VSurround']]}
     "             \ })
     " {motion}はwなど
@@ -259,8 +264,8 @@ endif
 
 if neobundle#tap('vim-indent-guides') "{{{
     call neobundle#config({
-                \ 'augroup': 'indent_guides', 
-                \ 'autoload': {'mappings': [['n', '<Plug>IndentGuides']], 
+                \ 'augroup': 'indent_guides',
+                \ 'autoload': {'mappings': [['n', '<Plug>IndentGuides']],
                 \ 'commands': ['IndentGuidesEnable', 'IndentGuidesToggle', 'IndentGuidesDisable']}
                 \ })
     function! neobundle#hooks.on_source(bundle)
@@ -276,7 +281,7 @@ endif
 if neobundle#tap('nebula.vim') " {{{
     call neobundle#config({
                 \   'autoload' : {
-                \     'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions', 
+                \     'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions',
                 \                  'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']
                 \   }
                 \ })
@@ -310,12 +315,12 @@ endif
 
 if neobundle#tap('vim-anzu') "{{{
     call neobundle#config({
-                \ 'autoload': 
-                \     {'unite_sources': ['anzu'], 
-                \     'mappings': [['sxno', '<Plug>(anzu-']], 
+                \ 'autoload':
+                \     {'unite_sources': ['anzu'],
+                \     'mappings': [['sxno', '<Plug>(anzu-']],
                 \     'commands': [
-                \             'AnzuUpdateSearchStatus', 'AnzuClearSearchCache', 
-                \             'AnzuUpdateSearchStatusOutput', 'AnzuClearSearchStatus', 
+                \             'AnzuUpdateSearchStatus', 'AnzuClearSearchCache',
+                \             'AnzuUpdateSearchStatusOutput', 'AnzuClearSearchStatus',
                 \             'AnzuSignMatchLine', 'AnzuClearSignMatchLine']}
                 \ })
     function! neobundle#hooks.on_source(bundle)
@@ -368,8 +373,8 @@ if neobundle#tap('vim-easy-align') "{{{
     " :EasyAlign!は Right, Left, Center
     call neobundle#config({
                 \    'autoload': {
-                \        'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'], 
-                \                    ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']], 
+                \        'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'],
+                \                    ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']],
                 \        'commands': ['EasyAlign', 'LiveEasyAlign']}})
 
     let g:easy_align_delimiters = {
@@ -494,7 +499,7 @@ if neobundle#tap('vim-vimlint') "{{{
                 \ 'EVL105': 1,
                 \ 'EVL201': 1,
                 \ 'EVL204': 1,
-                \ 'EVL205': 1 
+                \ 'EVL205': 1
                 \ }
 endif
 "}}}
@@ -502,7 +507,7 @@ endif
 if neobundle#tap('vim-quickrun') "{{{
     " :QuickRun か \rで実行
     " call neobundle#config({
-    "             \ 'autoload': {'mappings': [['sxn', '<Plug>(quickrun']], 
+    "             \ 'autoload': {'mappings': [['sxn', '<Plug>(quickrun']],
     "             \     'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}
     "             \ })
     function! neobundle#hooks.on_source(bundle)
@@ -585,7 +590,7 @@ endif
 " language {{{
 
 " markdown {{{
-if neobundle#tap('Markdown') 
+if neobundle#tap('Markdown')
     call neobundle#config({'autoload' : {'filetypes': ['markdown']}})
 endif
 if neobundle#tap('vim-markdown')
@@ -596,7 +601,7 @@ au BufNewFile,BufRead *.md :set filetype=markdown
 " }}}
 
 " c {{{
-if neobundle#tap('vim-marching') 
+if neobundle#tap('vim-marching')
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
     function! neobundle#hooks.on_source(bundle)
         let g:marching_clang_command = '/usr/bin/clang'
@@ -614,18 +619,18 @@ if neobundle#tap('vim-marching')
         " set updatetime=200
     endfunction
     " オムニ補完時に補完ワードを挿入したくない場合
-    autocmd FileType c,cpp,objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)            
+    autocmd FileType c,cpp,objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
     " キャッシュを削除してからオムに補完を行う
-    autocmd FileType c,cpp,objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete) 
+    autocmd FileType c,cpp,objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
     call neobundle#untap()
 endif
-if neobundle#tap('c.vim') 
+if neobundle#tap('c.vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['c'] }})
 endif
-if neobundle#tap('cpp-vim') 
+if neobundle#tap('cpp-vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['cpp'] }})
 endif
-if neobundle#tap('gtags.vim') 
+if neobundle#tap('gtags.vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
     function! neobundle#hooks.on_source(bundle)
     endfunction
@@ -637,7 +642,7 @@ if neobundle#tap('gtags.vim')
     nnoremap sgf <C-w>gf<CR> " ヘッダファイルをタブで開く
     call neobundle#untap()
 endif
-if neobundle#tap('alt-gtags.vim') 
+if neobundle#tap('alt-gtags.vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
     function! neobundle#hooks.on_source(bundle)
     endfunction
@@ -648,7 +653,7 @@ if neobundle#tap('alt-gtags.vim')
     nnoremap <Space>m :ClangFormat<CR>
     call neobundle#untap()
 endif
-if neobundle#tap('vim-clang-format') 
+if neobundle#tap('vim-clang-format')
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
     function! neobundle#hooks.on_source(bundle)
         let g:clang_format#command = 'clang-format-3.5'
@@ -668,14 +673,14 @@ if neobundle#tap('vim-clang-format')
     endfunction
     call neobundle#untap()
 endif
-" }}} 
+" }}}
 
 " haskell {{{
-if neobundle#tap('vim-filetype-haskell') 
-    " インデント   
+if neobundle#tap('vim-filetype-haskell')
+    " インデント
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
-if neobundle#tap('ghcmod-vim') 
+if neobundle#tap('ghcmod-vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
     function! neobundle#hooks.on_source(bundle)
         " 使うにはcabal install ghc-modが必要　
@@ -686,10 +691,10 @@ if neobundle#tap('ghcmod-vim')
     endfunction
     call neobundle#untap()
 endif
-if neobundle#tap('neco-ghc') 
+if neobundle#tap('neco-ghc')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
-if neobundle#tap('vim2hs') 
+if neobundle#tap('vim2hs')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
     function! neobundle#hooks.on_source(bundle)
         " \をラムダにするのをやめる
@@ -697,23 +702,23 @@ if neobundle#tap('vim2hs')
     endfunction
     call neobundle#untap()
 endif
-if neobundle#tap('vim-syntax-shakespeare') 
+if neobundle#tap('vim-syntax-shakespeare')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
-if neobundle#tap('ref-hoogle') 
+if neobundle#tap('ref-hoogle')
     " cabal install hoogleが必要 hoogle dataも必要(wgetコマンドが必要)
     " 調べたいキーワードにカーソルを合わせて sift k で hoogle の結果が表示
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
-if neobundle#tap('unite-haddock') 
+if neobundle#tap('unite-haddock')
     " haddockを開く
     " cabal install haddock
     " :Unite haddock
-    " :Unite hoogle 
+    " :Unite hoogle
     " :Unite hoogle:exact
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
-if neobundle#tap('unite-haskellimport') 
+if neobundle#tap('unite-haskellimport')
     " importを便利に Shougo/unite.vimに依存
     " :Unite haskellimport
     " iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
@@ -723,9 +728,9 @@ if neobundle#tap('unite-haskellimport')
     endfunction
     call neobundle#untap()
 endif
-" }}} 
+" }}}
 
-" scala {{{ 
+" scala {{{
 if neobundle#tap('vim-scala')
     call neobundle#config({'autoload' : {'filetypes': ['scala']}})
 endif
@@ -758,7 +763,7 @@ augroup END
 autocmd FileType scala nmap <F8> :TagbarToggle<CR>
 " vim-tags
 autocmd FileType scala nnoremap <C-]> g<C-]>
-au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command = 
+au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command =
             \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
 autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
 " }}}
@@ -808,7 +813,7 @@ endif
 if neobundle#tap('vim-python-pep8-indent')
     call neobundle#config({
                 \   'autoload' : {
-                \     'insert': 1, 
+                \     'insert': 1,
                 \     'filetypes': ['python', 'python3', 'djangohtml']
                 \   }
                 \ })
@@ -824,75 +829,75 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 " buffer {{{
 " バッファリストの一つ前のバッファを開く
-nnoremap <silent>bp :bprevious<CR> 
+nnoremap <silent>bp :bprevious<CR>
 " バッファリストの次のバッファを開く
-nnoremap <silent>bn :bnext<CR>     
+nnoremap <silent>bn :bnext<CR>
 " 直前のバッファを開く
-nnoremap <silent>bb :b#<CR>        
+nnoremap <silent>bb :b#<CR>
 " バッファリストの先頭を開く
-nnoremap <silent>bf :bf<CR>        
+nnoremap <silent>bf :bf<CR>
 " バッファリストの最後を開く
-nnoremap <silent>bl :bl<CR>        
+nnoremap <silent>bl :bl<CR>
 " 変更中の次のバッファへ移動
-nnoremap <silent>bm :bm<CR>        
+nnoremap <silent>bm :bm<CR>
 " カレントのバッファを閉じてバッファリストから削除
-nnoremap <silent>bd :bdelete<CR>   
+nnoremap <silent>bd :bdelete<CR>
 " }}}
 
 " 画面 {{{
 nnoremap s <Nop>
 " 下に移動
-nnoremap sj <C-w>j 
+nnoremap sj <C-w>j
 " 上に移動
-nnoremap sk <C-w>k 
+nnoremap sk <C-w>k
 " 右に移動
-nnoremap sl <C-w>l 
+nnoremap sl <C-w>l
 " 左に移動
-nnoremap sh <C-w>h 
-" 下に移動 
-nnoremap sJ <C-w>J 
+nnoremap sh <C-w>h
+" 下に移動
+nnoremap sJ <C-w>J
 " 上に移動
-nnoremap sK <C-w>K 
+nnoremap sK <C-w>K
 " 右に移動
-nnoremap sL <C-w>L 
+nnoremap sL <C-w>L
 " 左に移動
-nnoremap sH <C-w>H 
+nnoremap sH <C-w>H
 " 次のタブに切替
-nnoremap sn gt 
+nnoremap sn gt
 " 前のタブに切替
-nnoremap sp gT 
+nnoremap sp gT
 " 回転
-nnoremap sr <C-w>r       
+nnoremap sr <C-w>r
 " 大きさを揃える
-nnoremap s= <C-w>=       
+nnoremap s= <C-w>=
 " 次に移動
-nnoremap sw <C-w>w       
+nnoremap sw <C-w>w
 " 縦横最大化
-nnoremap so <C-w>_<C-w>| 
+nnoremap so <C-w>_<C-w>|
 " 大きさを揃える
-nnoremap sO <C-w>=       
+nnoremap sO <C-w>=
 nnoremap sN :<C-u>bn<CR>
 nnoremap sP :<C-u>bp<CR>
 " 新規タブ
-nnoremap st :<C-u>tabnew<CR>    
+nnoremap st :<C-u>tabnew<CR>
 " タブ一覧
-nnoremap sT :<C-u>Unite tab<CR> 
+nnoremap sT :<C-u>Unite tab<CR>
 " 水平分割
-nnoremap ss :<C-u>sp<CR>        
-" 垂直分割 
-nnoremap sv :<C-u>vs<CR>        
+nnoremap ss :<C-u>sp<CR>
+" 垂直分割
+nnoremap sv :<C-u>vs<CR>
 " ウィンドウを閉じる
-nnoremap sq :<C-u>q<CR>         
+nnoremap sq :<C-u>q<CR>
 " バッファを閉じる
-nnoremap sQ :<C-u>bd<CR>        
+nnoremap sQ :<C-u>bd<CR>
 " 現在のタブで開いたバッファ一覧
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR> 
+nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 " バッファ一覧
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>     
+nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 " Quickfixウィンドウのオープン/クローズ
-map s, <C-w>, 
+map s, <C-w>,
 " Quickfixウィンドウへ移動
-map s. <C-w>. 
+map s. <C-w>.
 " }}}
 
 " コマンドライン {{{
@@ -923,21 +928,21 @@ nnoremap <F4> :q<CR>
 inoremap <F2> <C-[>:w<CR>
 inoremap <F4> <C-[>:q<CR>
 
-" vimgrepの結果を検索 :vim main /home/clang/workspace/**.c 
+" vimgrepの結果を検索 :vim main /home/clang/workspace/**.c
 " 前へ
-nnoremap <C-p> :cprevious<CR>   
+nnoremap <C-p> :cprevious<CR>
 " 次へ
-nnoremap <C-n> :cnext<CR>       
-nnoremap [q :cprevious<CR>   
-nnoremap ]q :cnext<CR>       
+nnoremap <C-n> :cnext<CR>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
 " 最初へ
-nnoremap [Q :<C-u>cfirst<CR> 
+nnoremap [Q :<C-u>cfirst<CR>
 " 最後へ
-nnoremap ]Q :<C-u>clast<CR>  
+nnoremap ]Q :<C-u>clast<CR>
 " quickfix open
-nnoremap ]c :<C-u>copen<CR>  
+nnoremap ]c :<C-u>copen<CR>
 " quickfix close
-nnoremap [c :<C-u>cclose<CR> 
+nnoremap [c :<C-u>cclose<CR>
 
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -950,13 +955,13 @@ nnoremap qqq? <Esc>q?
 nnoremap q: <Nop>
 nnoremap q/ <Nop>
 nnoremap q? <Nop>
-vnoremap < <gv 
-vnoremap > >gv 
+vnoremap < <gv
+vnoremap > >gv
 nnoremap o :<C-u>call append(expand('.'), '')<Cr>j
 nnoremap O k:<C-u>call append(expand('.'), '')<Cr>j
-" }}} 
+" }}}
 
-" }}} 
+" }}}
 
 " lightline {{{
 let g:lightline = {
