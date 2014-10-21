@@ -71,6 +71,7 @@ NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-use
 NeoBundle      'tpope/vim-abolish'
 NeoBundleLazy 'junegunn/vim-easy-align'
 NeoBundle     'Lokaltog/vim-easymotion'
+NeoBundleLazy 'thinca/vim-qfreplace'
 NeoBundle     'tpope/vim-repeat'
 NeoBundle     'kana/vim-textobj-user'
 NeoBundle     'kana/vim-textobj-syntax' "ay, iy
@@ -163,12 +164,10 @@ if neobundle#tap('vimshell') " {{{
     endfunction
     " シェルを起動
     nnoremap <silent> ,vs :VimShell<CR>
-    " pythonを非同期で起動
-    autocmd FileType python  nnoremap <silent> ,vi :VimShellInteractive python<CR>
-    " irbを非同期で起動
-    autocmd FileType ruby nnoremap <silent> ,vi :VimShellInteractive irb<CR>
-    " scalaを非同期で起動
-    autocmd FileType scala nnoremap <silent> ,vi :VimShellInteractive scala<CR>
+    nnoremap <silent> ,vp :VimShellInteractive python<CR>
+    nnoremap <silent> ,vr :VimShellInteractive irb<CR>
+    nnoremap <silent> ,vs :VimShellInteractive scala<CR>
+    nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
     vmap <silent> ,ve :VimShellSendString<CR>
     " 選択範囲を非同期で開いたインタプリタに選択行を評価させる
@@ -259,6 +258,11 @@ endif
 if neobundle#tap('vim-operator-replace') "{{{
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
     map R  <Plug>(operator-replace)
+endif
+"}}}
+
+if neobundle#tap('vim-qfreplace') "{{{
+    call neobundle#config({'autoload': {'commands': ['Qfreplace']}})
 endif
 "}}}
 
