@@ -239,11 +239,14 @@ if neobundle#tap('surround.vim') "{{{
     " dst タグを除去(<b></b>など)
     " cs'"    ' を " に変える
     " cs'<b>  ' を <b>に変える
+    " vi'で'で囲われた中身を選択
+    " va'で'で囲われた全体を選択
 
 endif
 "}}}
 
 if neobundle#tap('yankround.vim') "{{{
+    " Vimのレジスタの履歴を取って再利用するプラグイン
     call neobundle#config({
                 \ 'autoload': {'unite_sources': ['yankround'], 'mappings': [['xn', '<Plug>(yankround-']]}})
     nmap p <Plug>(yankround-p)
@@ -256,6 +259,8 @@ endif
 "}}}
 
 if neobundle#tap('vim-operator-replace') "{{{
+    " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
+    " .を使うと同じ操作が他でもできる
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
     map R  <Plug>(operator-replace)
 endif
