@@ -41,7 +41,12 @@ endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle      'Shougo/vimproc'
+NeoBundle      'Shougo/vimproc' , {'build' : {
+            \  'windows' : 'make -f make_mingw32.mak',
+            \  'cygwin' : 'make -f make_cygwin.mak',
+            \  'mac' : 'make -f make_mac.mak',
+            \  'unix' : 'make -f make_unix.mak',
+            \ }}
 NeoBundle      'Shougo/unite.vim'
 NeoBundle      'Shougo/neocomplete.vim'
 NeoBundle      'Shougo/neosnippet'
@@ -125,19 +130,6 @@ NeoBundleCheck
 let g:hybrid_use_Xresources = 1
 colorscheme hybrid
 
-if neobundle#tap('vimproc') " {{{
-    call neobundle#config({
-                \ 'build' : {
-                \  'windows' : 'make -f make_mingw32.mak',
-                \  'cygwin' : 'make -f make_cygwin.mak',
-                \  'mac' : 'make -f make_mac.mak',
-                \  'unix' : 'make -f make_unix.mak',
-                \ }
-                \ })
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-endif
-" }}}
 
 if neobundle#tap('vimshell') " {{{
 
