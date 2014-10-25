@@ -8,7 +8,9 @@
 defbce on
 term xterm-256color
 shell $SHELL
-termcapinfo xterm* 'Co#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm:'
+# termcapinfo xterm-256color 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+# termcapinfo xterm 'Co#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo  xterm-256color hs@:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l\E[?1;4;6l
 
 # スクリーンコマンドモードに入るキーの変更
 escape ^Zz
