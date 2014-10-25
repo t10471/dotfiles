@@ -42,7 +42,12 @@ endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle      'Shougo/vimproc'
+NeoBundle      'Shougo/vimproc' , {'build' : {
+            \  'windows' : 'make -f make_mingw32.mak',
+            \  'cygwin' : 'make -f make_cygwin.mak',
+            \  'mac' : 'make -f make_mac.mak',
+            \  'unix' : 'make -f make_unix.mak',
+            \ }}
 NeoBundle      'Shougo/unite.vim'
 NeoBundle      'Shougo/neocomplete.vim'
 NeoBundle      'Shougo/neosnippet'
@@ -72,6 +77,7 @@ NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-use
 NeoBundle      'tpope/vim-abolish'
 NeoBundleLazy 'junegunn/vim-easy-align'
 NeoBundle     'Lokaltog/vim-easymotion'
+NeoBundleLazy 'thinca/vim-qfreplace'
 NeoBundle     'tpope/vim-repeat'
 NeoBundle     'kana/vim-textobj-user'
 NeoBundle     'kana/vim-textobj-syntax' "ay, iy
@@ -154,19 +160,6 @@ colorscheme hybrid
 " endif
 " }}}
 
-if neobundle#tap('vimproc') " {{{
-    call neobundle#config({
-                \ 'build' : {
-                \  'windows' : 'make -f make_mingw32.mak',
-                \  'cygwin' : 'make -f make_cygwin.mak',
-                \  'mac' : 'make -f make_mac.mak',
-                \  'unix' : 'make -f make_unix.mak',
-                \ }
-                \ })
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-endif
-" }}}
 
 if neobundle#tap('vimshell') " {{{
 
@@ -193,12 +186,10 @@ if neobundle#tap('vimshell') " {{{
     endfunction
     " シェルを起動
     nnoremap <silent> ,vs :VimShell<CR>
-    " pythonを非同期で起動
-    autocmd FileType python  nnoremap <silent> ,vi :VimShellInteractive python<CR>
-    " irbを非同期で起動
-    autocmd FileType ruby nnoremap <silent> ,vi :VimShellInteractive irb<CR>
-    " scalaを非同期で起動
-    autocmd FileType scala nnoremap <silent> ,vi :VimShellInteractive scala<CR>
+    nnoremap <silent> ,vp :VimShellInteractive python<CR>
+    nnoremap <silent> ,vr :VimShellInteractive irb<CR>
+    nnoremap <silent> ,vs :VimShellInteractive scala<CR>
+    nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
     vmap <silent> ,ve :VimShellSendString<CR>
     " 選択範囲を非同期で開いたインタプリタに選択行を評価させる
@@ -270,11 +261,14 @@ if neobundle#tap('surround.vim') "{{{
     " dst タグを除去(<b></b>など)
     " cs'"    ' を " に変える
     " cs'<b>  ' を <b>に変える
+    " vi'で'で囲われた中身を選択
+    " va'で'で囲われた全体を選択
 
 endif
 "}}}
 
 if neobundle#tap('yankround.vim') "{{{
+    " Vimのレジスタの履歴を取って再利用するプラグイン
     call neobundle#config({
                 \ 'autoload': {'unite_sources': ['yankround'], 'mappings': [['xn', '<Plug>(yankround-']]}})
     nmap p <Plug>(yankround-p)
@@ -287,8 +281,15 @@ endif
 "}}}
 
 if neobundle#tap('vim-operator-replace') "{{{
+    " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
+    " .を使うと同じ操作が他でもできる
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
     map R  <Plug>(operator-replace)
+endif
+"}}}
+
+if neobundle#tap('vim-qfreplace') "{{{
+    call neobundle#config({'autoload': {'commands': ['Qfreplace']}})
 endif
 "}}}
 
