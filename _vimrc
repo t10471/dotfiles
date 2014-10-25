@@ -4,6 +4,7 @@
 " set {{{
 scriptencoding utf-8
 set encoding=utf-8
+set t_Co=256
 set backspace=indent,eol,start
 set foldmethod=syntax
 set tabstop=4
@@ -75,7 +76,10 @@ NeoBundle     'tpope/vim-repeat'
 NeoBundle     'kana/vim-textobj-user'
 NeoBundle     'kana/vim-textobj-syntax' "ay, iy
 NeoBundle     'kana/vim-textobj-indent' "al, il
-NeoBundle     'kana/vim-textobj-fold' " az, iz
+NeoBundle     'kana/vim-textobj-fold'   "az, iz
+NeoBundleLazy 'kana/vim-smartinput'
+NeoBundleLazy 'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
+
 "ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
@@ -122,7 +126,33 @@ filetype plugin indent on     " required!
 syntax on
 NeoBundleCheck
 let g:hybrid_use_Xresources = 1
+
 colorscheme hybrid
+" colorscheme default
+
+" xterm {{{
+" " let &t_SI .= '\e[3 q'
+" " let &t_EI .= '\e[1 q'
+" let &t_SI .= '\eP\e[3 q\e\\'
+" let &t_EI .= '\eP\e[1 q\e\\'
+" if &term =~ 'xterm'
+"     " let &t_ti .= '\e[?2004h'
+"     " let &t_te .= '\e[?2004l'
+"     let &t_ti .=  '\eP\e[?2004h\e\\'
+"     let &t_te .=  '\eP\e[?2004l\e\\'
+"     let &pastetoggle = '\e[201~'
+"
+"     function! XTermPasteBegin(ret)
+"         set paste
+"         return a:ret
+"     endfunction
+"
+"     noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+"     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+"     cnoremap <special> <Esc>[200~ <nop>
+"     cnoremap <special> <Esc>[201~ <nop>
+" endif
+" }}}
 
 if neobundle#tap('vimproc') " {{{
     call neobundle#config({
@@ -273,7 +303,8 @@ if neobundle#tap('vim-indent-guides') "{{{
     let g:indent_guides_auto_colors=0
     let g:indent_guides_enable_on_vim_startup=1
     let g:indent_guides_guide_size=1
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
+    " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
 endif
 "}}}
@@ -408,24 +439,6 @@ if neobundle#tap('vim-easy-align') "{{{
 endif
 "}}}
 
-if neobundle#tap('neosnippet') "{{{
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    "   For snippet_complete marker.
-    if has('conceal')
-        set conceallevel=2 concealcursor=i
-    endif
-    let g:neosnippet#snippets_directory='~/.vim/snippets'
-    "   Plugin key-mappings.
-    imap <C-k> <Plug>(neosnippet_expand_or_jump)
-    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-    "   SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    call neobundle#untap()
-endif
-" }}}
-
 if neobundle#tap('vim-submode') "{{{
     function! neobundle#hooks.on_source(bundle)
     endfunction
@@ -437,6 +450,30 @@ if neobundle#tap('vim-submode') "{{{
     call submode#map('bufmove', 'n', '', '<', '<C-w><')
     call submode#map('bufmove', 'n', '', '+', '<C-w>+')
     call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+    call neobundle#untap()
+endif
+" }}}
+
+if neobundle#tap('neosnippet') "{{{
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+    "
+    "" SuperTab like snippets behavior.
+    " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    "             \ "\<Plug>(neosnippet_expand_or_jump)"
+    "             \: "\<TAB>"
+    
+    " For snippet_complete marker.
+    if has('conceal')
+      set conceallevel=2 concealcursor=i
+      endif"
     call neobundle#untap()
 endif
 " }}}
@@ -469,12 +506,12 @@ if neobundle#tap('neocomplete.vim') "{{{
 
     " Recommended key-mappings.
     " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
-        " return neocomplete#close_popup() . "\<CR>"
-        " For no inserting <CR> key.
-        return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-    endfunction
+    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    " function! s:my_cr_function()
+    "     " return neocomplete#close_popup() . "\<CR>"
+    "     " For no inserting <CR> key.
+    "     return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+    " endfunction
     " <TAB>: completion.
     inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
@@ -503,6 +540,36 @@ if neobundle#tap('vim-vimlint') "{{{
                 \ }
 endif
 "}}}
+
+if neobundle#tap('vim-smartinput') "{{{
+    call neobundle#config({
+                \   'autoload' : {
+                \     'insert' : 1
+                \   }
+                \ })
+
+    function! neobundle#tapped.hooks.on_post_source(bundle)
+        call smartinput_endwise#define_default_rules()
+        call s:setup_smartinput()
+    endfunction
+
+    call neobundle#untap()
+endif
+" }}}
+
+if neobundle#tap('vim-smartinput-endwise') "{{{
+    function! neobundle#tapped.hooks.on_post_source(bundle)
+        " neosnippet and neocomplete compatible
+        call smartinput#map_to_trigger('i', '<Plug>(vimrc_cr)', '<Enter>', '<Enter>')
+        imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" :
+                    \ neocomplete#close_popup()
+        " imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" :
+        "             \ neosnippet#expandable() ? "\<Plug>(neosnippet_expand)" :
+        "             \ neocomplete#close_popup()
+    endfunction
+    call neobundle#untap()
+endif
+" }}}
 
 if neobundle#tap('vim-quickrun') "{{{
     " :QuickRun か \rで実行
@@ -957,8 +1024,18 @@ nnoremap q/ <Nop>
 nnoremap q? <Nop>
 vnoremap < <gv
 vnoremap > >gv
-nnoremap o :<C-u>call append(expand('.'), '')<Cr>j
-nnoremap O k:<C-u>call append(expand('.'), '')<Cr>j
+" 空行挿入
+function! s:cmd_cr_n(count)
+    if !&modifiable
+        noremap <CR> <CR>
+        return ''
+    endif
+    for _ in range(a:count)
+        call append('.', '')
+    endfor
+    execute 'normal!' a:count.'j'
+endfunction
+nnoremap <silent><CR> :<C-u>call <SID>cmd_cr_n(v:count1)<CR>
 " }}}
 
 " }}}
@@ -1211,3 +1288,251 @@ function! s:vimrc_int_sbt()
 endfunction
 " }}}
 
+" smartinput {{{
+function! s:setup_smartinput() 
+    " 括弧内のスペース
+    call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
+    call smartinput#define_rule({
+                \   'at'    : '(\%#)',
+                \   'char'  : '<Space>',
+                \   'input' : '<Space><Space><Left>',
+                \   })
+
+    call smartinput#map_to_trigger('i', '<BS>', '<BS>', '<BS>')
+    call smartinput#define_rule({
+                \   'at'    : '( \%# )',
+                \   'char'  : '<BS>',
+                \   'input' : '<Del><BS>',
+                \   })
+
+    call smartinput#define_rule({
+                \   'at'    : '{\%#}',
+                \   'char'  : '<Space>',
+                \   'input' : '<Space><Space><Left>',
+                \   })
+
+    call smartinput#define_rule({
+                \   'at'    : '{ \%# }',
+                \   'char'  : '<BS>',
+                \   'input' : '<Del><BS>',
+                \   })
+
+    call smartinput#define_rule({
+                \   'at'    : '\[\%#\]',
+                \   'char'  : '<Space>',
+                \   'input' : '<Space><Space><Left>',
+                \   })
+
+    call smartinput#define_rule({
+                \   'at'    : '\[ \%# \]',
+                \   'char'  : '<BS>',
+                \   'input' : '<Del><BS>',
+                \   })
+
+    call smartinput#map_to_trigger('i', '<Plug>(physical_key_return)', '<CR>', '<CR>')
+    " 行末のスペースを削除する
+    call smartinput#define_rule({
+                \   'at'    : '\s\+\%#',
+                \   'char'  : '<CR>',
+                \   'input' : "<C-o>:call setline('.', substitute(getline('.'), '\\s\\+$', '', '')) <Bar> echo 'delete trailing spaces'<CR><CR>",
+                \   })
+
+    " Ruby 文字列内変数埋め込み
+    call smartinput#map_to_trigger('i', '#', '#', '#')
+    call smartinput#define_rule({
+                \   'at'       : '\%#',
+                \   'char'     : '#',
+                \   'input'    : '#{}<Left>',
+                \   'filetype' : ['ruby'],
+                \   'syntax'   : ['Constant', 'Special'],
+                \   })
+
+    " Ruby ブロック引数 ||
+    call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar>')
+    call smartinput#define_rule({
+                \   'at' : '\%({\|\<do\>\)\s*\%#',
+                \   'char' : '|',
+                \   'input' : '||<Left>',
+                \   'filetype' : ['ruby', 'dachs'],
+                \    })
+
+    " テンプレート内のスペース
+    call smartinput#define_rule({
+                \   'at' :       '<\%#>',
+                \   'char' :     '<Space>',
+                \   'input' :    '<Space><Space><Left>',
+                \   'filetype' : ['cpp'],
+                \   })
+    call smartinput#define_rule({
+                \   'at' :       '< \%# >',
+                \   'char' :     '<BS>',
+                \   'input' :    '<Del><BS>',
+                \   'filetype' : ['cpp'],
+                \   })
+
+    " ブロックコメント
+    call smartinput#map_to_trigger('i', '*', '*', '*')
+    call smartinput#define_rule({
+                \   'at'       : '\/\%#',
+                \   'char'     : '*',
+                \   'input'    : '**/<Left><Left>',
+                \   'filetype' : ['c', 'cpp'],
+                \   })
+    call smartinput#define_rule({
+                \   'at'       : '/\*\%#\*/',
+                \   'char'     : '<Space>',
+                \   'input'    : '<Space><Space><Left>',
+                \   'filetype' : ['c', 'cpp'],
+                \   })
+    call smartinput#define_rule({
+                \   'at'       : '/* \%# */',
+                \   'char'     : '<BS>',
+                \   'input'    : '<Del><BS>',
+                \   'filetype' : ['c', 'cpp'],
+                \   })
+
+    " セミコロンの挙動
+    call smartinput#map_to_trigger('i', ';', ';', ';')
+    " 2回押しで :: の代わり（待ち時間無し）
+    call smartinput#define_rule({
+                \   'at'       : ';\%#',
+                \   'char'     : ';',
+                \   'input'    : '<BS>::',
+                \   'filetype' : ['cpp'],
+                \   })
+    " boost:: の補完
+    call smartinput#define_rule({
+                \   'at'       : '\<b;\%#',
+                \   'char'     : ';',
+                \   'input'    : '<BS>oost::',
+                \   'filetype' : ['cpp'],
+                \   })
+    " std:: の補完
+    call smartinput#define_rule({
+                \   'at'       : '\<s;\%#',
+                \   'char'     : ';',
+                \   'input'    : '<BS>td::',
+                \   'filetype' : ['cpp'],
+                \   })
+    " detail:: の補完
+    call smartinput#define_rule({
+                \   'at'       : '\%(\s\|::\)d;\%#',
+                \   'char'     : ';',
+                \   'input'    : '<BS>etail::',
+                \   'filetype' : ['cpp'],
+                \   })
+    " クラス定義や enum 定義の場合は末尾に;を付け忘れないようにする
+    call smartinput#define_rule({
+                \   'at'       : '\%(\<struct\>\|\<class\>\|\<enum\>\)\s*\w\+.*\%#',
+                \   'char'     : '{',
+                \   'input'    : '{};<Left><Left>',
+                \   'filetype' : ['cpp'],
+                \   })
+    " template に続く <> を補完
+    call smartinput#define_rule({
+                \   'at'       : '\<template\>\s*\%#',
+                \   'char'     : '<',
+                \   'input'    : '<><Left>',
+                \   'filetype' : ['cpp'],
+                \   })
+
+    " Vim の正規表現内で \( が入力されたときの \) の補完
+    call smartinput#define_rule({
+                \   'at'       : '\\\%(\|%\|z\)\%#',
+                \   'char'     : '(',
+                \   'input'    : '(\)<Left><Left>',
+                \   'filetype' : ['vim'],
+                \   'syntax'   : ['String'],
+                \   })
+    call smartinput#define_rule({
+                \   'at'       : '\\[%z](\%#\\)',
+                \   'char'     : '<BS>',
+                \   'input'    : '<Del><Del><BS><BS><BS>',
+                \   'filetype' : ['vim'],
+                \   'syntax'   : ['String'],
+                \   })
+    call smartinput#define_rule({
+                \   'at'       : '\\(\%#\\)',
+                \   'char'     : '<BS>',
+                \   'input'    : '<Del><Del><BS><BS>',
+                \   'filetype' : ['vim'],
+                \   'syntax'   : ['String'],
+                \   })
+
+    " \s= を入力したときに空白を挟む
+    call smartinput#map_to_trigger('i', '=', '=', '=')
+    call smartinput#define_rule(
+                \ { 'at'    : '\s\%#'
+                \ , 'char'  : '='
+                \ , 'input' : '= '
+                \ , 'filetype' : ['c', 'cpp', 'vim', 'ruby']
+                \ })
+
+    " でも連続した == となる場合には空白は挟まない
+    call smartinput#define_rule(
+                \ { 'at'    : '=\s\%#'
+                \ , 'char'  : '='
+                \ , 'input' : '<BS>= '
+                \ , 'filetype' : ['c', 'cpp', 'vim', 'ruby']
+                \ })
+
+    " でも連続した =~ となる場合には空白は挟まない
+    call smartinput#map_to_trigger('i', '~', '~', '~')
+    call smartinput#define_rule(
+                \ { 'at'    : '=\s\%#'
+                \ , 'char'  : '~'
+                \ , 'input' : '<BS>~ '
+                \ , 'filetype' : ['c', 'cpp', 'vim', 'ruby']
+                \ })
+
+    " Vim は ==# と =~# がある
+    call smartinput#map_to_trigger('i', '#', '#', '#')
+    call smartinput#define_rule(
+                \ { 'at'    : '=[~=]\s\%#'
+                \ , 'char'  : '#'
+                \ , 'input' : '<BS># '
+                \ , 'filetype' : ['vim']
+                \ })
+    " Vim help
+    call smartinput#define_rule(
+                \ { 'at'    : '\%#'
+                \ , 'char'  : '|'
+                \ , 'input' : '||<Left>'
+                \ , 'filetype' : ['help']
+                \ })
+    call smartinput#define_rule(
+                \ { 'at'    : '|\%#|'
+                \ , 'char'  : '<BS>'
+                \ , 'input' : '<Del><BS>'
+                \ , 'filetype' : ['help']
+                \ })
+    call smartinput#map_to_trigger('i', '*', '*', '*')
+    call smartinput#define_rule(
+                \ { 'at'    : '\%#'
+                \ , 'char'  : '*'
+                \ , 'input' : '**<Left>'
+                \ , 'filetype' : ['help']
+                \ })
+    call smartinput#define_rule(
+                \ { 'at'    : '\*\%#\*'
+                \ , 'char'  : '<BS>'
+                \ , 'input' : '<Del><BS>'
+                \ , 'filetype' : ['help']
+                \ })
+endfunction
+" }}}
+
+" カーソル下のhighlight情報を表示する {{{
+function! s:get_syn_id(transparent)
+    let synid = synID(line('.'), col('.'), 1)
+    return a:transparent ? synIDtrans(synid) : synid
+endfunction
+function! s:get_syn_name(synid)
+    return synIDattr(a:synid, 'name')
+endfunction
+function! s:get_highlight_info()
+    execute "highlight " . s:get_syn_name(s:get_syn_id(0))
+    execute "highlight " . s:get_syn_name(s:get_syn_id(1))
+endfunction
+command! HighlightInfo call s:get_highlight_info()
+" }}}
