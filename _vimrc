@@ -47,7 +47,7 @@ NeoBundle      'Shougo/vimproc' , {'build' : {
             \  'cygwin' : 'make -f make_cygwin.mak',
             \  'mac' : 'make -f make_mac.mak',
             \  'unix' : 'make -f make_unix.mak',
-            \ }}
+            \  }}
 NeoBundle      'Shougo/unite.vim'
 NeoBundle      'Shougo/neocomplete.vim'
 NeoBundle      'Shougo/neosnippet'
@@ -75,16 +75,17 @@ NeoBundleLazy  'LeafCage/yankround.vim'
 NeoBundleLazy  'kana/vim-operator-user'
 NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
 NeoBundle      'tpope/vim-abolish'
-NeoBundleLazy 'junegunn/vim-easy-align'
-NeoBundle     'Lokaltog/vim-easymotion'
-NeoBundleLazy 'thinca/vim-qfreplace'
-NeoBundle     'tpope/vim-repeat'
-NeoBundle     'kana/vim-textobj-user'
-NeoBundle     'kana/vim-textobj-syntax' "ay, iy
-NeoBundle     'kana/vim-textobj-indent' "al, il
-NeoBundle     'kana/vim-textobj-fold'   "az, iz
-NeoBundleLazy 'kana/vim-smartinput'
-NeoBundleLazy 'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
+NeoBundleLazy  'junegunn/vim-easy-align'
+NeoBundle      'Lokaltog/vim-easymotion'
+NeoBundleLazy  'thinca/vim-qfreplace'
+NeoBundle      'tpope/vim-repeat'
+NeoBundle      'kana/vim-textobj-user'
+NeoBundle      'kana/vim-textobj-syntax' "ay, iy
+NeoBundle      'kana/vim-textobj-indent' "al, il
+NeoBundle      'kana/vim-textobj-fold'   "az, iz
+NeoBundleLazy  'kana/vim-smartinput'
+NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
+NeoBundleLazy  'glidenote/memolist.vim'
 
 "ctags
 NeoBundle      'majutsushi/tagbar'
@@ -94,7 +95,7 @@ NeoBundleLazy  'ynkdir/vim-vimlparser'
 NeoBundle      'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
 NeoBundleLazy  'osyo-manga/shabadou.vim'
 NeoBundle      'thinca/vim-quickrun', { 'depends' : 'osyo-manga/shabadou.vim'}
-NeoBundle      "osyo-manga/unite-quickfix"
+NeoBundle      'osyo-manga/unite-quickfix'
 NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
@@ -160,7 +161,6 @@ colorscheme hybrid
 " endif
 " }}}
 
-
 if neobundle#tap('vimshell') " {{{
 
     call neobundle#config({
@@ -188,7 +188,7 @@ if neobundle#tap('vimshell') " {{{
     nnoremap <silent> ,vs :VimShell<CR>
     nnoremap <silent> ,vp :VimShellInteractive python<CR>
     nnoremap <silent> ,vr :VimShellInteractive irb<CR>
-    nnoremap <silent> ,vs :VimShellInteractive scala<CR>
+    nnoremap <silent> ,vl :VimShellInteractive scala<CR>
     nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
     vmap <silent> ,ve :VimShellSendString<CR>
@@ -571,6 +571,22 @@ if neobundle#tap('vim-smartinput-endwise') "{{{
     call neobundle#untap()
 endif
 " }}}
+
+if neobundle#tap('memolist.vim') "{{{
+    call neobundle#config({'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}})
+    function! neobundle#tapped.hooks.on_post_source(bundle)
+        let g:memolist_path = '~/memolist'
+        let g:memolist_prompt_tags = 1
+        let g:memolist_prompt_categories = 1
+        let g:memolist_unite = 1
+        let g:memolist_ex_cmd = 'NERDTree'
+    endfunction
+    nnoremap <Leader>mn  :MemoNew<CR>
+    nnoremap <Leader>ml  :MemoList<CR>
+    nnoremap <Leader>mg  :MemoGrep<CR>
+    call neobundle#untap()
+endif
+"}}}
 
 if neobundle#tap('vim-quickrun') "{{{
     " :QuickRun か \rで実行
@@ -986,6 +1002,7 @@ cnoremap <C-P> <Up>
 cnoremap <C-K> <S-Left>
 " 次の単語へ移動
 cnoremap <C-L> <S-Right>
+cnoremap <C-V> <C-R>"
 " }}}
 
 " etc {{{
@@ -998,10 +1015,8 @@ inoremap <F4> <C-[>:q<CR>
 
 " vimgrepの結果を検索 :vim main /home/clang/workspace/**.c
 " 前へ
-nnoremap <C-p> :cprevious<CR>
-" 次へ
-nnoremap <C-n> :cnext<CR>
 nnoremap [q :cprevious<CR>
+" 次へ
 nnoremap ]q :cnext<CR>
 " 最初へ
 nnoremap [Q :<C-u>cfirst<CR>
@@ -1523,7 +1538,8 @@ function! s:setup_smartinput()
 endfunction
 " }}}
 
-" カーソル下のhighlight情報を表示する {{{
+" HighlightInfo {{{
+" カーソル下のhighlight情報を表示する
 function! s:get_syn_id(transparent)
     let synid = synID(line('.'), col('.'), 1)
     return a:transparent ? synIDtrans(synid) : synid
