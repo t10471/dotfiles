@@ -21,6 +21,7 @@ set splitright
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f
 set grepprg=grep\ -In
 set laststatus=2
+set showtabline=2 " 常にタブラインを表示
 set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
@@ -928,7 +929,7 @@ nnoremap <silent>bm :bm<CR>
 nnoremap <silent>bd :bdelete<CR>
 " }}}
 
-" 画面 {{{
+" ウィンドウ {{{
 nnoremap s <Nop>
 " 下に移動
 nnoremap sj <C-w>j
@@ -946,10 +947,6 @@ nnoremap sK <C-w>K
 nnoremap sL <C-w>L
 " 左に移動
 nnoremap sH <C-w>H
-" 次のタブに切替
-nnoremap sn gt
-" 前のタブに切替
-nnoremap sp gT
 " 回転
 nnoremap sr <C-w>r
 " 大きさを揃える
@@ -962,26 +959,69 @@ nnoremap so <C-w>_<C-w>|
 nnoremap sO <C-w>=
 nnoremap sN :<C-u>bn<CR>
 nnoremap sP :<C-u>bp<CR>
-" 新規タブ
-nnoremap st :<C-u>tabnew<CR>
-" タブ一覧
-nnoremap sT :<C-u>Unite tab<CR>
 " 水平分割
 nnoremap ss :<C-u>sp<CR>
 " 垂直分割
 nnoremap sv :<C-u>vs<CR>
 " ウィンドウを閉じる
 nnoremap sq :<C-u>q<CR>
+" }}}
+
+" バッファ {{{
 " バッファを閉じる
 nnoremap sQ :<C-u>bd<CR>
 " 現在のタブで開いたバッファ一覧
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 " バッファ一覧
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
-" Quickfixウィンドウのオープン/クローズ
-map s, <C-w>,
-" Quickfixウィンドウへ移動
-map s. <C-w>.
+" }}}
+
+" タブ {{{
+" 新規タブをつぎに作る
+nnoremap st :<C-u>tabnew<CR>
+" sc 新しいタブを一番右に作る
+map <silent> sc :tablast <bar> tabnew<CR>
+" sx タブを閉じる
+map <silent> sx :tabclose<CR>
+" 次のタブに切替
+nnoremap sn gt
+" 前のタブに切替
+nnoremap sp gT
+" タブ一覧
+nnoremap sT :<C-u>Unite tab<CR>
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" Set tabline.
+function! s:my_tabline()  "{{{
+  let s = ''
+  for i in range(1, tabpagenr('$'))
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let no = i  " display 0-origin tabpagenr.
+    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+    let title = fnamemodify(bufname(bufnr), ':t')
+    let title = '[' . title . ']'
+    let s .= '%'.i.'T'
+    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let s .= no . ':' . title
+    let s .= mod
+    let s .= '%#TabLineFill# '
+  endfor
+  let s .= '%#TabLineFill#%T%=%#TabLine#'
+  return s
+endfunction "}}}
+let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'
+
+" The prefix key.
+" Tab jump
+" s1 で1番左のタブ、s2 で1番左から2番目のタブにジャンプ
+for n in range(1, 9)
+  execute 'nnoremap <silent> s'.n  ':<C-u>tabnext'.n.'<CR>'
+endfor
+
 " }}}
 
 " コマンドライン {{{
@@ -1026,6 +1066,10 @@ nnoremap ]Q :<C-u>clast<CR>
 nnoremap ]c :<C-u>copen<CR>
 " quickfix close
 nnoremap [c :<C-u>cclose<CR>
+" Quickfixウィンドウのオープン/クローズ
+map ], <C-w>,
+" Quickfixウィンドウへ移動
+map ]. <C-w>.
 
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -1052,6 +1096,7 @@ function! s:cmd_cr_n(count)
     execute 'normal!' a:count.'j'
 endfunction
 nnoremap <silent><CR> :<C-u>call <SID>cmd_cr_n(v:count1)<CR>
+nnoremap <silent><C-C><C-D> :lcd %:h<CR>
 " }}}
 
 " }}}
