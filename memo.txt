@@ -1,0 +1,89 @@
+,vs
+:VimShell<CR>
+
+zi  折り畳みの有効無効の切り替え
+zM
+ZR
+
+<C-R>"でヤンクを貼り付け
+
+submode
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+call submode#map('bufmove', 'n', '', '<', '<C-w><')
+call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+
+sudo.vimの使い方
+:w sudo:%
+
+全オプション
+http://www15.ocn.ne.jp/~tusr/vim/options.html
+
+helpを検索
+:helpgrep localset
+
+vimgrep
+:vimgrep /hoge/j **/*.txt | cw
+jフラグで最初にマッチしたファイルを開かない
+再帰的に検索するために **(starstar) を使う
+「| cw」で検索結果をQuickfixに表示させる。
+
+引数を変数化する方法
+:ar path/to/search/dir/**
+:vim foo ##
+:vim bar ##
+
+インデントをくずさないでペースト
+a!
+貼り付け
+.
+
+easy-motion
+以下など
+\\w
+\\W
+
+sudo apt-get remove -y --force-yes --no-install-recommends\
+      vim \
+      vim-runtime \
+      gvim \
+      vim-tiny \
+      vim-common \
+      vim-gui-common
+      
+./configure --with-features=huge \
+            --disable-darwin \
+            --disable-selinux \
+            --enable-luainterp \
+            --enable-pythoninterp \
+            --enable-python3interp \
+            --enable-rubyinterp \
+            --enable-multibyte \
+            --enable-xim \
+            --enable-fontset\
+            --enable-gui=no
+            
+checkinstall \
+            --type=debian \
+            --install=yes \
+            --pkgname="vim" \
+            --maintainer="ubuntu-devel-discuss@lists.ubuntu.com" \
+            --nodoc \
+            --default
+            
+echo vim hold | dpkg --set-selections
+echo vim-runtime hold | dpkg --set-selections
+echo vim-tiny hold | dpkg --set-selections
+echo vim-common hold | dpkg --set-selections
+
+:QuickRun -args "-d now Anchovies Pineapple"
+:QuickRun -args "100 200"
+:QuickRun -src "encrypt.c multi_files.c"
+:QuickRun scons
+
+:! grep -r struct ../../ |grep -v 'Binary file'|cut -d':' -f1 |sort -u
+

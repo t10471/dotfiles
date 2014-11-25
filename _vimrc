@@ -25,6 +25,7 @@ set showtabline=2 " 常にタブラインを表示
 set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
+set directory=~/.vim/tmp
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
     autocmd!
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -125,6 +126,13 @@ NeoBundleLazy  '5t111111/alt-gtags.vim'
 NeoBundleLazy  'rhysd/vim-clang-format'
 " scala
 NeoBundleLazy  'derekwyatt/vim-scala'
+"ruby用
+NeoBundle      'alpaca-tc/alpaca_tags'
+NeoBundle      'AndrewRadev/switch.vim'
+NeoBundle      'yuku-t/vim-ref-ri'
+NeoBundle      'tpope/vim-rails'
+NeoBundle      'basyura/unite-rails'
+NeoBundle      'vim-scripts/ruby-matchit'
 
 call neobundle#end()
 " }}}
@@ -185,6 +193,7 @@ if neobundle#tap('vimshell') " {{{
 
     function! neobundle#hooks.on_source(bundle)
     endfunction
+    let g:vimshell_split_command = 'split'
     " シェルを起動
     nnoremap <silent> ,vs :VimShell<CR>
     nnoremap <silent> ,vp :VimShellInteractive python<CR>
@@ -285,7 +294,7 @@ if neobundle#tap('vim-operator-replace') "{{{
     " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
     " .を使うと同じ操作が他でもできる
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
-    map R  <Plug>(operator-replace)
+    map <Leader>r  <Plug>(operator-replace)
 endif
 "}}}
 
@@ -374,12 +383,12 @@ endif
 
 if neobundle#tap('sudo.vim') "{{{
     function! neobundle#hooks.on_source(bundle)
-        "右のようにつかう :w sudo:%
-        " root権限で今開いているファイルを開き直す
-        command! ES :e sudo:%<CR><C-^>:bd!
-        " root権限で保存
-        command! WS :w sudo:%
     endfunction
+    "右のようにつかう :w sudo:%
+    " root権限で今開いているファイルを開き直す
+    command! ES :e sudo:%<CR><C-^>:bd!
+    " root権限で保存
+    command! WS :w sudo:%
     call neobundle#untap()
 endif
 "}}}
@@ -619,7 +628,7 @@ if neobundle#tap('vim-quickrun') "{{{
                 \   },
                 \   'watchdogs_checker/ghc-mod' : {
                 \       'command' : 'ghc-mod',
-                \       'exec'    : '%c %o --hlintOpt="--language=XmlSyntax" check -g -Wall -g -fno-warn-type-defaults %s:p ',
+                \       'exec'    : '%c %o check -g -Wall -g -fno-warn-type-defaults %s:p ',
                 \   },
                 \   'haskell/watchdogs_checker' : {
                 \       'type' : 'watchdogs_checker/ghc-mod'
@@ -809,10 +818,54 @@ if neobundle#tap('unite-haskellimport')
     " iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
     function! neobundle#hooks.on_source(bundle)
-        nnoremap <Space>i :Unite haskellimport<CR>
+        nnoremap <Space>p :Unite haskellimport<CR>
     endfunction
     call neobundle#untap()
 endif
+" tagbar
+autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
+" vim-tags
+autocmd FileType haskell nnoremap <C-]> g<C-]>
+au BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command =
+            \ 'find  ~/workspace/ | egrep "\.hs$" | xargs hothasktags > ~/workspace/.git/tags 2>/dev/null'
+autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
+function! s:vimrc_lushtags()
+    set iskeyword=a-z,A-Z,_,.,39
+    if executable('lushtags')
+        let g:tagbar_type_haskell = {
+                    \ 'ctagsbin' : 'lushtags',
+                    \ 'ctagsargs' : '--ignore-parse-error --',
+                    \ 'kinds' : [
+                    \ 'm:module:0',
+                    \ 'e:exports:1',
+                    \ 'i:imports:1',
+                    \ 't:declarations:0',
+                    \ 'd:declarations:1',
+                    \ 'n:declarations:1',
+                    \ 'f:functions:0',
+                    \ 'c:constructors:0'
+                    \ ],
+                    \ 'sro' : '.',
+                    \ 'kind2scope' : {
+                    \ 'd' : 'data',
+                    \ 'n' : 'newtype',
+                    \ 'c' : 'constructor',
+                    \ 't' : 'type'
+                    \ },
+                    \ 'scope2kind' : {
+                    \ 'data' : 'd',
+                    \ 'newtype' : 'n',
+                    \ 'constructor' : 'c',
+                    \ 'type' : 't'
+                    \ }
+                    \ }
+    endif
+endfunction
+
+augroup vimrc_lushtags
+    autocmd!
+    autocmd FileType haskell call s:vimrc_lushtags()
+augroup END
 " }}}
 
 " scala {{{
@@ -960,7 +1013,7 @@ nnoremap sO <C-w>=
 nnoremap sN :<C-u>bn<CR>
 nnoremap sP :<C-u>bp<CR>
 " 水平分割
-nnoremap ss :<C-u>sp<CR>
+nnoremap sd :<C-u>sp<CR>
 " 垂直分割
 nnoremap sv :<C-u>vs<CR>
 " ウィンドウを閉じる
@@ -1097,6 +1150,24 @@ function! s:cmd_cr_n(count)
 endfunction
 nnoremap <silent><CR> :<C-u>call <SID>cmd_cr_n(v:count1)<CR>
 nnoremap <silent><C-C><C-D> :lcd %:h<CR>
+
+:imap <F11> <nop>
+:set pastetoggle=<F11>
+" }}}
+
+" 折りたたみ{{{
+" よく使うコマンド
+" zi  折り畳みの有効無効の切り替え
+" zf  折り畳みを作成する
+" za  折り畳みの開け閉め
+" zd  折り畳みを削除する
+
+" 時々使うコマンド
+" zA  折り畳みの開け閉め（再帰）
+" zD  折り畳みを削除する（再帰）
+" zE  全ての折り畳みを削除
+" zR  全ての折り畳みを開く
+" zM  全ての折り畳みを閉じる
 " }}}
 
 " }}}
