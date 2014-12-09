@@ -88,7 +88,7 @@ NeoBundle      'kana/vim-textobj-fold'   "az, iz
 NeoBundleLazy  'kana/vim-smartinput'
 NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
 NeoBundleLazy  'glidenote/memolist.vim'
-
+NeoBundleLazy  'bkad/CamelCaseMotion'
 "ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
@@ -294,7 +294,15 @@ if neobundle#tap('vim-operator-replace') "{{{
     " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
     " .を使うと同じ操作が他でもできる
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
-    map <Leader>r  <Plug>(operator-replace)
+    map <Leader>l  <Plug>(operator-replace)
+endif
+"}}}
+
+
+if neobundle#tap('CamelCaseMotion') "{{{
+    map <S-W> <Plug>CamelCaseMotion_w
+    map <S-B> <Plug>CamelCaseMotion_b
+    map <S-E> <Plug>CamelCaseMotion_e
 endif
 "}}}
 
@@ -410,7 +418,15 @@ if neobundle#tap('ViewOutput') "{{{
 endif
 "}}}
 
+if neobundle#tap('vim-easymotion') "{{{
+    " :で始まるやつ :mapとか)バッファする :VO map
+    let g:EasyMotion_do_mapping = 0 "Disable default mappings
+    nmap m <Plug>(easymotion-s2)
+endif
+"}}}
+"
 if neobundle#tap('vim-easy-align') "{{{
+    " 特定の区切り文字を整列する
     " :EasyAlignは  Left, Right, Center
     " :EasyAlign!は Right, Left, Center
     call neobundle#config({
@@ -475,16 +491,18 @@ if neobundle#tap('neosnippet') "{{{
     "
     "" SuperTab like snippets behavior.
     " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    "             \ "\<Plug>(neosnippet_expand_or_jump)"
-    "             \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    "             \ '\<Plug>(neosnippet_expand_or_jump)'
+    "             \: pumvisible() ? '\<C-n>' : '\<TAB>'
     " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    "             \ "\<Plug>(neosnippet_expand_or_jump)"
-    "             \: "\<TAB>"
+    "             \ '\<Plug>(neosnippet_expand_or_jump)'
+    "             \: '\<TAB>'
     
     " For snippet_complete marker.
     if has('conceal')
       set conceallevel=2 concealcursor=i
-      endif"
+    endif
+    let s:my_snippet = '~/.vim/snippets'
+    let g:neosnippet#snippets_directory = s:my_snippet
     call neobundle#untap()
 endif
 " }}}
@@ -733,7 +751,8 @@ if neobundle#tap('gtags.vim')
     nnoremap wl :Gtags -f %<CR>
     nnoremap wj :Gtags <C-r><C-w><CR>
     nnoremap wk :Gtags -r <C-r><C-w><CR>
-    nnoremap sgf <C-w>gf<CR> " ヘッダファイルをタブで開く
+    " ヘッダファイルをタブで開く
+    nnoremap sgf <C-w>gf<CR> 
     call neobundle#untap()
 endif
 if neobundle#tap('alt-gtags.vim')
@@ -826,8 +845,18 @@ endif
 autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
 " vim-tags
 autocmd FileType haskell nnoremap <C-]> g<C-]>
+autocmd FileType haskell nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
 au BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command =
-            \ 'find  ~/workspace/ | egrep "\.hs$" | xargs hothasktags > ~/workspace/.git/tags 2>/dev/null'
+            \ 'find ~/workspace/ | ' .
+            \ 'egrep "\.hs$" | ' .
+            \ 'xargs hothasktags -c --noline -c --strip ' .
+            \ '-c -I/root/workspace/headers ' .
+            \ '-c -I/root/workspace/tmp/cpphs-1.18.6/tests ' .
+            \ '-c --include=/root/workspace/headers/dummy.h ' .
+            \ '-c --include=/root/workspace/parconc-examples-0.3.4/dist/build/autogen/cabal_macros.h ' .
+            \ '> ~/workspace/.git/tags ' .
+            \ '2>/dev/null'
+
 autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
 function! s:vimrc_lushtags()
     set iskeyword=a-z,A-Z,_,.,39
@@ -901,6 +930,7 @@ augroup END
 autocmd FileType scala nmap <F8> :TagbarToggle<CR>
 " vim-tags
 autocmd FileType scala nnoremap <C-]> g<C-]>
+autocmd FileType scala nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
 au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command =
             \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
 autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
@@ -965,23 +995,6 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 " keymapping  {{{
 
-" buffer {{{
-" バッファリストの一つ前のバッファを開く
-nnoremap <silent>bp :bprevious<CR>
-" バッファリストの次のバッファを開く
-nnoremap <silent>bn :bnext<CR>
-" 直前のバッファを開く
-nnoremap <silent>bb :b#<CR>
-" バッファリストの先頭を開く
-nnoremap <silent>bf :bf<CR>
-" バッファリストの最後を開く
-nnoremap <silent>bl :bl<CR>
-" 変更中の次のバッファへ移動
-nnoremap <silent>bm :bm<CR>
-" カレントのバッファを閉じてバッファリストから削除
-nnoremap <silent>bd :bdelete<CR>
-" }}}
-
 " ウィンドウ {{{
 nnoremap s <Nop>
 " 下に移動
@@ -1027,6 +1040,20 @@ nnoremap sQ :<C-u>bd<CR>
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 " バッファ一覧
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+" バッファリストの一つ前のバッファを開く
+nnoremap <silent>sbp :bprevious<CR>
+" バッファリストの次のバッファを開く
+nnoremap <silent>sbn :bnext<CR>
+" 直前のバッファを開く
+nnoremap <silent>sbb :b#<CR>
+" バッファリストの先頭を開く
+nnoremap <silent>sbf :bf<CR>
+" バッファリストの最後を開く
+nnoremap <silent>sbl :bl<CR>
+" 変更中の次のバッファへ移動
+nnoremap <silent>sbm :bm<CR>
+" カレントのバッファを閉じてバッファリストから削除
+nnoremap <silent>sbd :bdelete<CR>
 " }}}
 
 " タブ {{{
@@ -1099,12 +1126,8 @@ cnoremap <C-V> <C-R>"
 " }}}
 
 " etc {{{
-nnoremap ~ $
-vnoremap ~ $
 nnoremap <F2> :w<CR>
-nnoremap <F4> :q<CR>
 inoremap <F2> <C-[>:w<CR>
-inoremap <F4> <C-[>:q<CR>
 
 " vimgrepの結果を検索 :vim main /home/clang/workspace/**.c
 " 前へ
