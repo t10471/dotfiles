@@ -8,3 +8,4 @@ git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
 
 bash screen.sh
 bash scala.sh
+bash snip.sh
