@@ -44,11 +44,11 @@ endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle      'Shougo/vimproc' , {'build' : {
-            \  'windows' : 'make -f make_mingw32.mak',
-            \  'cygwin' : 'make -f make_cygwin.mak',
-            \  'mac' : 'make -f make_mac.mak',
-            \  'unix' : 'make -f make_unix.mak',
+NeoBundle      'Shougo/vimproc'                 , {'build'  : {
+            \  'windows'                        : 'make -f make_mingw32.mak',
+            \  'cygwin'                         : 'make -f make_cygwin.mak',
+            \  'mac'                            : 'make -f make_mac.mak',
+            \  'unix'                           : 'make -f make_unix.mak',
             \  }}
 NeoBundle      'Shougo/unite.vim'
 NeoBundle      'Shougo/neocomplete.vim'
@@ -75,16 +75,16 @@ NeoBundleLazy  'airblade/vim-gitgutter'
 NeoBundleLazy  'osyo-manga/vim-anzu'
 NeoBundleLazy  'LeafCage/yankround.vim'
 NeoBundleLazy  'kana/vim-operator-user'
-NeoBundleLazy  'kana/vim-operator-replace', { 'depends' : 'kana/vim-operator-user'}
+NeoBundleLazy  'kana/vim-operator-replace',     { 'depends' : 'kana/vim-operator-user'}
 NeoBundle      'tpope/vim-abolish'
 NeoBundleLazy  'junegunn/vim-easy-align'
 NeoBundle      'Lokaltog/vim-easymotion'
 NeoBundleLazy  'thinca/vim-qfreplace'
 NeoBundle      'tpope/vim-repeat'
 NeoBundle      'kana/vim-textobj-user'
-NeoBundle      'kana/vim-textobj-syntax' "ay, iy
-NeoBundle      'kana/vim-textobj-indent' "al, il
-NeoBundle      'kana/vim-textobj-fold'   "az, iz
+NeoBundle      'kana/vim-textobj-syntax'        "ay, iy
+NeoBundle      'kana/vim-textobj-indent'        "al, il
+NeoBundle      'kana/vim-textobj-fold'          "az, iz
 NeoBundleLazy  'kana/vim-smartinput'
 NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
 NeoBundleLazy  'glidenote/memolist.vim'
@@ -94,9 +94,9 @@ NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
 NeoBundle      'thinca/vim-ref'
 NeoBundleLazy  'ynkdir/vim-vimlparser'
-NeoBundle      'syngan/vim-vimlint', { 'depends' : 'ynkdir/vim-vimlparser'}
+NeoBundle      'syngan/vim-vimlint',            { 'depends' : 'ynkdir/vim-vimlparser'}
 NeoBundleLazy  'osyo-manga/shabadou.vim'
-NeoBundle      'thinca/vim-quickrun', { 'depends' : 'osyo-manga/shabadou.vim'}
+NeoBundle      'thinca/vim-quickrun',           { 'depends' : 'osyo-manga/shabadou.vim'}
 NeoBundle      'osyo-manga/unite-quickfix'
 NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
@@ -127,12 +127,12 @@ NeoBundleLazy  'rhysd/vim-clang-format'
 " scala
 NeoBundleLazy  'derekwyatt/vim-scala'
 "ruby用
-NeoBundle      'alpaca-tc/alpaca_tags'
-NeoBundle      'AndrewRadev/switch.vim'
-NeoBundle      'yuku-t/vim-ref-ri'
-NeoBundle      'tpope/vim-rails'
-NeoBundle      'basyura/unite-rails'
-NeoBundle      'vim-scripts/ruby-matchit'
+NeoBundleLazy  'alpaca-tc/alpaca_tags'
+NeoBundleLazy  'AndrewRadev/switch.vim'
+NeoBundleLazy  'yuku-t/vim-ref-ri'
+NeoBundleLazy  'tpope/vim-rails'
+NeoBundleLazy  'basyura/unite-rails'
+NeoBundleLazy  'vim-scripts/ruby-matchit'
 
 call neobundle#end()
 " }}}
@@ -297,7 +297,6 @@ if neobundle#tap('vim-operator-replace') "{{{
     map <Leader>l  <Plug>(operator-replace)
 endif
 "}}}
-
 
 if neobundle#tap('CamelCaseMotion') "{{{
     map <S-W> <Plug>CamelCaseMotion_w
@@ -991,6 +990,27 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 " }}}
 
+"ruby {{{
+NeoBundle      'vim-scripts/ruby-matchit'
+if neobundle#tap('alpaca_tags')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+if neobundle#tap('switch.vim')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+if neobundle#tap('vim-ref-ri')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+if neobundle#tap('vim-rails')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+if neobundle#tap('unite-rails')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+if neobundle#tap('ruby-matchit')
+    call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+endif
+" }}}
 " }}}
 
 " keymapping  {{{
