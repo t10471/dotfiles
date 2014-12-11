@@ -5,8 +5,11 @@ snippet ie
 snippet id
     import MyDebug
 
-snippet trace
+snippet tr
     (trace (show (${1:TARGET})) $1)
 
-snippet debug
-    (debug " = " (${1:TARGET}))
+snippet dg
+    (debug " ${1:TARGET} = " ($1))
+
+snippet dx
+    (debux " ${1:TARGET} = " ($1))
