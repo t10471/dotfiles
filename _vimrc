@@ -25,7 +25,9 @@ set showtabline=2 " 常にタブラインを表示
 set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
+set ambiwidth=double
 set directory=~/.vim/tmp
+set viminfo='50,\"1000,:0,n~/.vim/viminfo
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
     autocmd!
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -56,17 +58,17 @@ NeoBundle      'Shougo/neosnippet'
 NeoBundle      'Shougo/neosnippet-snippets'
 NeoBundleLazy  'Shougo/vimshell'
 NeoBundle      'vim-jp/vimdoc-ja'
-NeoBundle      'w0ng/vim-hybrid'
+NeoBundle      'w0ng/vim-hybrid' " color theme
 NeoBundle      'fuenor/qfixgrep'
-NeoBundleLazy  'LeafCage/nebula.vim'
+NeoBundleLazy  'LeafCage/nebula.vim' " NeoBundleの補助
 NeoBundle      'nathanaelkane/vim-indent-guides'
 NeoBundleLazy  'sudo.vim'
 NeoBundle      'yonchu/accelerated-smooth-scroll'
 NeoBundle      'kana/vim-submode'
-NeoBundleLazy  'tyru/caw.vim'
+NeoBundleLazy  'tyru/caw.vim' " コメントアウト
 NeoBundle      'thinca/vim-prettyprint'
 NeoBundle      'surround.vim'
-NeoBundle      'thinca/vim-editvar'
+NeoBundle      'thinca/vim-editvar' " vim変数の書き換え
 NeoBundleLazy  'scrooloose/nerdtree'
 NeoBundleLazy  'vim-scripts/ViewOutput'
 NeoBundle      'itchyny/lightline.vim'
@@ -76,9 +78,9 @@ NeoBundleLazy  'osyo-manga/vim-anzu'
 NeoBundleLazy  'LeafCage/yankround.vim'
 NeoBundleLazy  'kana/vim-operator-user'
 NeoBundleLazy  'kana/vim-operator-replace',     { 'depends' : 'kana/vim-operator-user'}
-NeoBundle      'tpope/vim-abolish'
-NeoBundleLazy  'junegunn/vim-easy-align'
-NeoBundle      'Lokaltog/vim-easymotion'
+NeoBundle      'tpope/vim-abolish' " キャメルケース変換、賢い検索・置換
+NeoBundleLazy  'junegunn/vim-easy-align' " 整列
+NeoBundle      'Lokaltog/vim-easymotion' " 移動
 NeoBundleLazy  'thinca/vim-qfreplace'
 NeoBundle      'tpope/vim-repeat'
 NeoBundle      'kana/vim-textobj-user'
@@ -89,6 +91,9 @@ NeoBundleLazy  'kana/vim-smartinput'
 NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
 NeoBundleLazy  'glidenote/memolist.vim'
 NeoBundleLazy  'bkad/CamelCaseMotion'
+NeoBundleLazy  'jacquesbh/vim-showmarks'
+NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
+
 "ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      'szw/vim-tags'
@@ -117,6 +122,7 @@ NeoBundleLazy  'pbrisbin/vim-syntax-shakespeare'
 NeoBundleLazy  'ujihisa/ref-hoogle'
 NeoBundleLazy  'eagletmt/unite-haddock'
 NeoBundleLazy  'ujihisa/unite-haskellimport'
+NeoBundleLazy  'wting/lhaskell.vim'
 " c c++用
 NeoBundleLazy  'osyo-manga/vim-marching'
 NeoBundleLazy  'vim-scripts/c.vim'
@@ -204,6 +210,7 @@ if neobundle#tap('vimshell') " {{{
     vmap <silent> ,ve :VimShellSendString<CR>
     " 選択範囲を非同期で開いたインタプリタに選択行を評価させる
     nnoremap <silent> ,ve <S-v>:VimShellSendString<CR>
+    inoremap <C-v> <C-r>"
 
     call neobundle#untap()
 endif
@@ -282,11 +289,14 @@ if neobundle#tap('yankround.vim') "{{{
     call neobundle#config({
                 \ 'autoload': {'unite_sources': ['yankround'], 'mappings': [['xn', '<Plug>(yankround-']]}})
     nmap p <Plug>(yankround-p)
+    xmap p <Plug>(yankround-p)
     nmap P <Plug>(yankround-P)
     nmap gp <Plug>(yankround-gp)
+    xmap gp <Plug>(yankround-gp)
     nmap gP <Plug>(yankround-gP)
     nmap <C-p> <Plug>(yankround-prev)
     nmap <C-n> <Plug>(yankround-next)
+    nnoremap <leader>p :Unite yankround<CR> 
 endif
 "}}}
 
@@ -294,7 +304,8 @@ if neobundle#tap('vim-operator-replace') "{{{
     " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
     " .を使うと同じ操作が他でもできる
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
-    map <Leader>l  <Plug>(operator-replace)
+    " map <Leader>l  <Plug>(operator-replace)
+    vmap <C-v>  <Plug>(operator-replace)
 endif
 "}}}
 
@@ -302,6 +313,49 @@ if neobundle#tap('CamelCaseMotion') "{{{
     map <S-W> <Plug>CamelCaseMotion_w
     map <S-B> <Plug>CamelCaseMotion_b
     map <S-E> <Plug>CamelCaseMotion_e
+endif
+"}}}
+
+
+if neobundle#tap('vim-showmarks') "{{{
+    call neobundle#config('vim-showmarks', {'autoload': {'commands': ['ShowMarksOnce', 'NoShowMarks', 'DoShowMarks', 'PreviewMarks']}})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    let g:showmarks_marks_notime = 1
+    let g:unite_source_mark_marks = '01abcABCDEFGHIJKLNMOPQRSTUVWXYZ'
+    let g:showmarks_enable       = 0
+    " 現在位置をマーク
+    if !exists('g:markrement_char')
+        let g:markrement_char = [
+        \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        \     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        \ ]
+    endif
+    function! s:AutoMarkrement()
+        if !exists('b:markrement_pos')
+            let b:markrement_pos = 0
+        else
+            let b:markrement_pos = (b:markrement_pos + 1) % len(g:markrement_char)
+        endif
+        exe 'mark' g:markrement_char[b:markrement_pos]
+        echo 'marked' g:markrement_char[b:markrement_pos]
+    endfunction
+
+    augroup show-marks-sync
+            autocmd!
+            autocmd BufReadPost * sil! ShowMarksOnce
+    augroup END
+    nnoremap [Mark] <Nop>
+    nmap <leader>m [Mark]
+    nnoremap <silent> [Mark]m :Unite mark<CR>
+    nnoremap [Mark] :<C-u>call <SID>AutoMarkrement()<CR><CR>:ShowMarksOnce<CR>
+    command! -bar MarksDelete sil :delm! | :delm 0-9A-Z | :wv! | :ShowMarksOnce
+    nnoremap <silent>[Mark]d :MarksDelete<CR>
+
+
+    call neobundle#untap()
 endif
 "}}}
 
@@ -478,7 +532,7 @@ if neobundle#tap('vim-submode') "{{{
     call submode#map('bufmove', 'n', '', '-', '<C-w>-')
     call neobundle#untap()
 endif
-" }}}
+ " }}}
 
 if neobundle#tap('neosnippet') "{{{
     function! neobundle#hooks.on_source(bundle)
@@ -805,6 +859,10 @@ if neobundle#tap('ghcmod-vim')
 endif
 if neobundle#tap('neco-ghc')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    function! neobundle#hooks.on_source(bundle)
+        setlocal omnifunc=necoghc#omnifunc
+    endfunction
+    call neobundle#untap()
 endif
 if neobundle#tap('vim2hs')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
@@ -815,6 +873,9 @@ if neobundle#tap('vim2hs')
     call neobundle#untap()
 endif
 if neobundle#tap('vim-syntax-shakespeare')
+    call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+endif
+if neobundle#tap('lhaskell.vim')
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
 endif
 if neobundle#tap('ref-hoogle')
@@ -845,16 +906,7 @@ autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
 " vim-tags
 autocmd FileType haskell nnoremap <C-]> g<C-]>
 autocmd FileType haskell nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-au BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command =
-            \ 'find ~/workspace/ | ' .
-            \ 'egrep "\.hs$" | ' .
-            \ 'xargs hothasktags -c --noline -c --strip ' .
-            \ '-c -I/root/workspace/headers ' .
-            \ '-c -I/root/workspace/tmp/cpphs-1.18.6/tests ' .
-            \ '-c --include=/root/workspace/headers/dummy.h ' .
-            \ '-c --include=/root/workspace/parconc-examples-0.3.4/dist/build/autogen/cabal_macros.h ' .
-            \ '> ~/workspace/.git/tags ' .
-            \ '2>/dev/null'
+au BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
 
 autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
 function! s:vimrc_lushtags()
@@ -961,6 +1013,8 @@ if neobundle#tap('jedi-vim')
     function! neobundle#hooks.on_source(bundle)
         let g:jedi#auto_vim_configuration = 0
         let g:jedi#completions_enabled = 0
+        let g:jedi#rename_command = '<Leader>R'
+
     endfunction
     call neobundle#untap()
 endif
@@ -1195,7 +1249,13 @@ nnoremap <silent><CR> :<C-u>call <SID>cmd_cr_n(v:count1)<CR>
 nnoremap <silent><C-C><C-D> :lcd %:h<CR>
 
 :imap <F11> <nop>
+:imap <F12> <C-O>:set paste<CR>
 :set pastetoggle=<F11>
+" insetモードから抜けるときにペーストモード解除
+" autocmd InsertLeave * set nopaste
+
+" 挿入モード時 Ctr + v でペースト
+inoremap <C-v> <C-r>"
 " }}}
 
 " 折りたたみ{{{
