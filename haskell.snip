@@ -13,3 +13,17 @@ snippet dg
 
 snippet dx
     (debux " ${1:TARGET} = " ($1))
+
+snippet ds
+    debugShow " ${1:TARGET} = " ($1)
+
+snippet pr
+    print $ 
+
+snippet mi 
+    main :: IO ()
+    main = do
+      putStrLn "end"
+
+snippet ln
+    {-# LANGUAGE ${1:TARGET} #-}
