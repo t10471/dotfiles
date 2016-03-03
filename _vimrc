@@ -107,7 +107,7 @@ NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy  'Flake8-vim'
+NeoBundleLazy  'andviro/flake8-vim'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 " markdown
@@ -144,13 +144,6 @@ call neobundle#end()
 " }}}
 
 " plugin seeting {{{
-filetype plugin indent on     " required!
-syntax on
-NeoBundleCheck
-let g:hybrid_use_Xresources = 1
-
-colorscheme hybrid
-" colorscheme default
 
 " xterm {{{
 " " let &t_SI .= '\e[3 q'
@@ -177,7 +170,7 @@ colorscheme hybrid
 " }}}
 
 if neobundle#tap('vimshell') " {{{
-
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'augroup': 'setupAlias',
                 \ 'autoload': {
@@ -196,7 +189,7 @@ if neobundle#tap('vimshell') " {{{
                 \       {'complete': 'customlist,vimshell#helpers#vimshell_execute_complete', 'name': 'VimShellInteractive'},
                 \       {'complete': 'buffer', 'name': 'VimShellSendBuffer'}]}
                 \ })
-
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     let g:vimshell_split_command = 'split'
@@ -217,6 +210,7 @@ endif
 " }}}
 
 if neobundle#tap('nerdtree') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'augroup': 'NERDTreeHijackNetrw',
                 \ 'autoload': {'commands': [
@@ -226,6 +220,7 @@ if neobundle#tap('nerdtree') "{{{
                 \    {'complete': 'dir', 'name': 'NERDTreeToggle'},
                 \ ]}
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
         let g:NERDTreeShowHidden=1
@@ -240,11 +235,13 @@ endif
 if neobundle#tap('caw.vim') "{{{
     " コメントアウト \c
     " <Plug>(caw:i:toggle)というがcawに設定されている それを<Leader>cにここで割り当てている
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \    'mappings': [['vn', '<Plug>(caw']],
                 \   }
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     nmap <Leader>c <Plug>(caw:i:toggle)
@@ -254,12 +251,15 @@ endif
 "}}}
 
 if neobundle#tap('sudo.vim') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload': {'commands': ['SudoRead', 'SudoWrite']}})
+    call neobundle#end()
 endif
 "}}}
 
 if neobundle#tap('surround.vim') "{{{
     "プラグイン内部でコマンドを定義している場合はLazyできない
+    " call neobundle#begin(expand('~/.vim/bundle/'))
     " call neobundle#config({
     "             \ 'autoload': {
     "             \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround',
@@ -267,6 +267,7 @@ if neobundle#tap('surround.vim') "{{{
     "             \         '<Plug>Yssurround', '<Plug>SurroundRepeat', '<Plug>Csurround',
     "             \         ['i', '<Plug>Isurround'], ['sx', '<Plug>VSurround']]}
     "             \ })
+    " call neobundle#end()
     " {motion}はwなど
     " ys{motion}) {motion} で指定される範囲を () で囲む
     " yS{motion}) {motion} で指定される範囲を () で囲みインデント
@@ -286,8 +287,10 @@ endif
 
 if neobundle#tap('yankround.vim') "{{{
     " Vimのレジスタの履歴を取って再利用するプラグイン
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'autoload': {'unite_sources': ['yankround'], 'mappings': [['xn', '<Plug>(yankround-']]}})
+    call neobundle#end()
     nmap p <Plug>(yankround-p)
     xmap p <Plug>(yankround-p)
     nmap P <Plug>(yankround-P)
@@ -303,7 +306,9 @@ endif
 if neobundle#tap('vim-operator-replace') "{{{
     " Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
     " .を使うと同じ操作が他でもできる
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config('vim-operator-replace', {'autoload': {'mappings': [['nx', '<Plug>(operator-replace']]}})
+    call neobundle#end()
     " map <Leader>l  <Plug>(operator-replace)
     vmap <C-v>  <Plug>(operator-replace)
 endif
@@ -318,7 +323,9 @@ endif
 
 
 if neobundle#tap('vim-showmarks') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config('vim-showmarks', {'autoload': {'commands': ['ShowMarksOnce', 'NoShowMarks', 'DoShowMarks', 'PreviewMarks']}})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     let g:showmarks_marks_notime = 1
@@ -360,16 +367,20 @@ endif
 "}}}
 
 if neobundle#tap('vim-qfreplace') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload': {'commands': ['Qfreplace']}})
+    call neobundle#end()
 endif
 "}}}
 
 if neobundle#tap('vim-indent-guides') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'augroup': 'indent_guides',
                 \ 'autoload': {'mappings': [['n', '<Plug>IndentGuides']],
                 \ 'commands': ['IndentGuidesEnable', 'IndentGuidesToggle', 'IndentGuidesDisable']}
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     let g:indent_guides_auto_colors=0
@@ -382,12 +393,14 @@ endif
 "}}}
 
 if neobundle#tap('nebula.vim') " {{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \     'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions',
                 \                  'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']
                 \   }
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     nnoremap <silent>,bl    :<C-u>NebulaPutLazy<CR>
@@ -400,8 +413,10 @@ endif
 
 if neobundle#tap('vim-hier') "{{{
     " エラーのハイライトを行う 'osyo-manga/vim-watchdogs'で使用する
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'autoload': {'commands': ['HierStart', 'HierUpdate', 'HierClear', 'HierStop']}})
+    call neobundle#end()
 endif
 "}}}
 
@@ -417,6 +432,7 @@ endif
 "}}}
 
 if neobundle#tap('vim-anzu') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \ 'autoload':
                 \     {'unite_sources': ['anzu'],
@@ -426,6 +442,7 @@ if neobundle#tap('vim-anzu') "{{{
                 \             'AnzuUpdateSearchStatusOutput', 'AnzuClearSearchStatus',
                 \             'AnzuSignMatchLine', 'AnzuClearSignMatchLine']}
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     nmap n <Plug>(anzu-n)
@@ -467,7 +484,9 @@ endif
 
 if neobundle#tap('ViewOutput') "{{{
     " :で始まるやつ :mapとか)バッファする :VO map
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload': {'commands': ['VO']}})
+    call neobundle#end()
 endif
 "}}}
 
@@ -482,12 +501,13 @@ if neobundle#tap('vim-easy-align') "{{{
     " 特定の区切り文字を整列する
     " :EasyAlignは  Left, Right, Center
     " :EasyAlign!は Right, Left, Center
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \    'autoload': {
                 \        'mappings': ['<Plug>(EasyAlignOperator)', ['sxn', '<Plug>(EasyAlign)'],
                 \                    ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']],
                 \        'commands': ['EasyAlign', 'LiveEasyAlign']}})
-
+    call neobundle#end()
     let g:easy_align_delimiters = {
                 \ '>': { 'pattern': '>>\|=>\|>' },
                 \ '/': {
@@ -608,10 +628,12 @@ endif
 " }}}
 
 if neobundle#tap('vim-vimlint') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config('vim-vimlint', {
                 \ 'autoload' : {
                 \   'functions' : 'vimlint#vimlint'}
                 \ })
+    call neobundle#end()
     let g:vimlint#config = {
                 \ 'EVL102': 1,
                 \ 'EVL103': 1,
@@ -624,11 +646,13 @@ endif
 "}}}
 
 if neobundle#tap('vim-smartinput') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \     'insert' : 1
                 \   }
                 \ })
+    call neobundle#end()
 
     function! neobundle#tapped.hooks.on_post_source(bundle)
         call smartinput_endwise#define_default_rules()
@@ -654,7 +678,9 @@ endif
 " }}}
 
 if neobundle#tap('memolist.vim') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}})
+    call neobundle#end()
     function! neobundle#tapped.hooks.on_post_source(bundle)
         let g:memolist_path = '~/memolist'
         let g:memolist_prompt_tags = 1
@@ -671,10 +697,12 @@ endif
 
 if neobundle#tap('vim-quickrun') "{{{
     " :QuickRun か \rで実行
+    " call neobundle#begin()
     " call neobundle#config({
     "             \ 'autoload': {'mappings': [['sxn', '<Plug>(quickrun']],
     "             \     'commands': [{'complete': 'customlist,quickrun#complete', 'name': 'QuickRun'}]}
     "             \ })
+    " call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
                 " \       'hook/vim_vimlint/enable' : 1,
@@ -756,18 +784,24 @@ endif
 
 " markdown {{{
 if neobundle#tap('Markdown')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : {'filetypes': ['markdown']}})
+    call neobundle#end()
 endif
 if neobundle#tap('vim-markdown')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : {'filetypes': ['markdown']}})
+    call neobundle#end()
 endif
 " README.md以外のmdファイルもmarkdownに関連づける
-au BufNewFile,BufRead *.md :set filetype=markdown
+autocmd BufNewFile,BufRead *.md :set filetype=markdown
 " }}}
 
 " c {{{
 if neobundle#tap('vim-marching')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:marching_clang_command = '/usr/bin/clang'
         " オプションを追加する
@@ -784,19 +818,27 @@ if neobundle#tap('vim-marching')
         " set updatetime=200
     endfunction
     " オムニ補完時に補完ワードを挿入したくない場合
+    autocmd BufNewFile,BufRead *.c,*.cpp,*.objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
     autocmd FileType c,cpp,objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
     " キャッシュを削除してからオムに補完を行う
+    autocmd BufNewFile,BufRead *.c,*.cpp,*.objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
     autocmd FileType c,cpp,objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
     call neobundle#untap()
 endif
 if neobundle#tap('c.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['c'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('cpp-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['cpp'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('gtags.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     nnoremap wq <C-w><C-w><C-w>q
@@ -809,7 +851,9 @@ if neobundle#tap('gtags.vim')
     call neobundle#untap()
 endif
 if neobundle#tap('alt-gtags.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
     nnoremap <Space>a :AltGtags<CR>
@@ -820,7 +864,9 @@ if neobundle#tap('alt-gtags.vim')
     call neobundle#untap()
 endif
 if neobundle#tap('vim-clang-format')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['c', 'cpp'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:clang_format#command = 'clang-format-3.5'
         " ========== vim-clang-format の設定 ============
@@ -844,10 +890,14 @@ endif
 " haskell {{{
 if neobundle#tap('vim-filetype-haskell')
     " インデント
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('ghcmod-vim')
+    call neobundle#begin()
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         " 使うにはcabal install ghc-modが必要　
         " :GhcModTypeでカーソルがあるところの型が表示され
@@ -858,14 +908,18 @@ if neobundle#tap('ghcmod-vim')
     call neobundle#untap()
 endif
 if neobundle#tap('neco-ghc')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         setlocal omnifunc=necoghc#omnifunc
     endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('vim2hs')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         " \をラムダにするのをやめる
         let g:haskell_conceal = 0
@@ -873,15 +927,21 @@ if neobundle#tap('vim2hs')
     call neobundle#untap()
 endif
 if neobundle#tap('vim-syntax-shakespeare')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('lhaskell.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('ref-hoogle')
     " cabal install hoogleが必要 hoogle dataも必要(wgetコマンドが必要)
     " 調べたいキーワードにカーソルを合わせて sift k で hoogle の結果が表示
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('unite-haddock')
     " haddockを開く
@@ -889,26 +949,35 @@ if neobundle#tap('unite-haddock')
     " :Unite haddock
     " :Unite hoogle
     " :Unite hoogle:exact
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('unite-haskellimport')
     " importを便利に Shougo/unite.vimに依存
     " :Unite haskellimport
     " iで挿入モードになるのでそれから、モジュール名を入力すると補完されるので、決まったらenter
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['haskell'] }})
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         nnoremap <Space>p :Unite haskellimport<CR>
     endfunction
     call neobundle#untap()
 endif
 " tagbar
+autocmd BufNewFile,BufRead *.hs nmap <F8> :TagbarToggle<CR>
 autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
 " vim-tags
+autocmd BufNewFile,BufRead *.hs  nnoremap <C-]> g<C-]>
 autocmd FileType haskell nnoremap <C-]> g<C-]>
+autocmd BufNewFile,BufRead *.hs  nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
 autocmd FileType haskell nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-au BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
-
+autocmd BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
+autocmd FileType haskell let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
+autocmd BufNewFile,BufRead *.hs  nnoremap  <Space>t :TagsGenerate<CR>
 autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
+
 function! s:vimrc_lushtags()
     set iskeyword=a-z,A-Z,_,.,39
     if executable('lushtags')
@@ -944,13 +1013,16 @@ endfunction
 
 augroup vimrc_lushtags
     autocmd!
+    autocmd BufNewFile,BufRead *.hs  call s:vimrc_lushtags()
     autocmd FileType haskell call s:vimrc_lushtags()
 augroup END
 " }}}
 
 " scala {{{
 if neobundle#tap('vim-scala')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : {'filetypes': ['scala']}})
+    call neobundle#end()
 endif
 function! s:vimrc_scala()
     nnoremap <buffer> <Space>s :<C-u>write<Cr>:call <SID>sbt_run()<Cr>
@@ -958,12 +1030,21 @@ endfunction
 
 augroup vimrc_scala
     autocmd!
+    autocmd BufNewFile,BufRead *.scala call s:vimrc_scala()
     autocmd FileType scala call s:vimrc_scala()
 augroup END
 
 augroup vimrc-scala-switch
     autocmd!
-    autocmd FileType scala let b:switch_custom_definitions =
+    autocmd BufNewFile,BufRead *.scala let b:switch_custom_definitions =
+                \ [{
+                \   '\(log[ \.]\+\)info\>': '\1warn',
+                \   '\(log[ \.]\+\)warn\>': '\1error',
+                \   '\(log[ \.]\+\)error\>': '\1info'},
+                \  {
+                \   '\<extends\>': 'with',
+                \   '\<with\>': 'extends'}]
+    autocmd FileType scala  let b:switch_custom_definitions =
                 \ [{
                 \   '\(log[ \.]\+\)info\>': '\1warn',
                 \   '\(log[ \.]\+\)warn\>': '\1error',
@@ -978,38 +1059,48 @@ augroup vimrc-int-sbt
     autocmd FileType int-sbt call <SID>vimrc_int_sbt()
 augroup END
 " tagbar
-autocmd FileType scala nmap <F8> :TagbarToggle<CR>
+autocmd BufNewFile,BufRead *.scala nmap <F8> :TagbarToggle<CR>
+autocmd FileType scala  nmap <F8> :TagbarToggle<CR>
 " vim-tags
-autocmd FileType scala nnoremap <C-]> g<C-]>
-autocmd FileType scala nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-au BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command =
+autocmd BufNewFile,BufRead *.scala nnoremap <C-]> g<C-]>
+autocmd FileType scala  nnoremap <C-]> g<C-]>
+autocmd BufNewFile,BufRead *.scala nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
+autocmd FileType scala  nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
+autocmd BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command =
             \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
-autocmd FileType scala nnoremap  <Space>t :TagsGenerate<CR>
+autocmd FileType scala  let g:vim_tags_project_tags_command =
+            \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
+autocmd BufNewFile,BufRead *.scala nnoremap  <Space>t :TagsGenerate<CR>
+autocmd FileType scala  nnoremap  <Space>t :TagsGenerate<CR>
 " }}}
 
 " php {{{
-" autocmd FileType php compiler php
+" autocmd BufNewFile,BufRead *.php compiler php
 " autocmd BufWritePost *.php silent make %
 " }}}
 
 "python {{{
 if neobundle#tap('syntastic')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \     'filetypes': ['python', 'python3', 'djangohtml', 'php']
                 \   }
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:syntastic_python_checkers = ['pyflakes', 'pep8']
     endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('jedi-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \     'filetypes': ['python']
                 \   }
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:jedi#auto_vim_configuration = 0
         let g:jedi#completions_enabled = 0
@@ -1018,51 +1109,69 @@ if neobundle#tap('jedi-vim')
     endfunction
     call neobundle#untap()
 endif
-if neobundle#tap('Flake8-vim')
+if neobundle#tap('flake8-vim')
+    call neobundle#begin()
     call neobundle#config({
                 \   'autoload' : {
                 \     'filetypes': ['python']
                 \   }
                 \ })
+    call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:PyFlakeOnWrite = 1
         let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
         let g:PyFlakeDefaultComplexity=10
+        let g:PyFlakeDisabledMessages='E222,E231,E221,E203,E301,E302,E501'
+        let g:PyFlakeMaxLineLength = 100
     endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('vim-python-pep8-indent')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
                 \     'insert': 1,
                 \     'filetypes': ['python', 'python3', 'djangohtml']
                 \   }
                 \ })
+    call neobundle#end()
     call neobundle#untap()
 endif
 autocmd FileType python setlocal omnifunc=jedi#completions
+autocmd BufRead,BufNewFile *.py setlocal omnifunc=jedi#completions
 
 " }}}
 
 "ruby {{{
-NeoBundle      'vim-scripts/ruby-matchit'
 if neobundle#tap('alpaca_tags')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('switch.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('vim-ref-ri')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('vim-rails')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('unite-rails')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 if neobundle#tap('ruby-matchit')
+    call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
+    call neobundle#end()
 endif
 " }}}
 " }}}
@@ -1771,4 +1880,16 @@ function! s:get_highlight_info()
     execute "highlight " . s:get_syn_name(s:get_syn_id(1))
 endfunction
 command! HighlightInfo call s:get_highlight_info()
+" }}}
+
+" set {{{
+filetype plugin indent on     " required!
+syntax on
+NeoBundleCheck
+" let g:hybrid_use_Xresources = 1
+let g:hybrid_custom_term_colors = 1
+" let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette."
+set background=dark
+colorscheme hybrid
+" colorscheme default
 " }}}
