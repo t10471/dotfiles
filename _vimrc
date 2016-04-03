@@ -386,9 +386,11 @@ if neobundle#tap('vim-indent-guides') "{{{
     let g:indent_guides_auto_colors=0
     let g:indent_guides_enable_on_vim_startup=1
     let g:indent_guides_guide_size=1
-    " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
+    augroup vim-indent-guides 
+        autocmd!
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
+        autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
+    augroup END
 endif
 "}}}
 
@@ -426,7 +428,10 @@ if neobundle#tap('vim-gitgutter') "{{{
         let g:gitgutter_sign_modified = '➜'
         let g:gitgutter_sign_removed = '✘'
     endfunction
-    autocmd BufNewFile,BufRead * NeoBundleSource vim-gitgutter
+    augroup vim-gitgutter 
+        autocmd!
+        autocmd BufNewFile,BufRead * NeoBundleSource vim-gitgutter
+    augroup END
     call neobundle#untap()
 endif
 "}}}
@@ -818,10 +823,8 @@ if neobundle#tap('vim-marching')
         " set updatetime=200
     endfunction
     " オムニ補完時に補完ワードを挿入したくない場合
-    autocmd BufNewFile,BufRead *.c,*.cpp,*.objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
     autocmd FileType c,cpp,objc imap <buffer> <C-x><C-o> <Plug>(marching_start_omni_complete)
     " キャッシュを削除してからオムに補完を行う
-    autocmd BufNewFile,BufRead *.c,*.cpp,*.objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
     autocmd FileType c,cpp,objc imap <buffer> <C-x><C-x><C-o> <Plug>(marching_force_start_omni_complete)
     call neobundle#untap()
 endif
@@ -965,57 +968,7 @@ if neobundle#tap('unite-haskellimport')
     endfunction
     call neobundle#untap()
 endif
-" tagbar
-autocmd BufNewFile,BufRead *.hs nmap <F8> :TagbarToggle<CR>
-autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
-" vim-tags
-autocmd BufNewFile,BufRead *.hs  nnoremap <C-]> g<C-]>
-autocmd FileType haskell nnoremap <C-]> g<C-]>
-autocmd BufNewFile,BufRead *.hs  nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-autocmd FileType haskell nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-autocmd BufNewFile,BufRead *.hs let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
-autocmd FileType haskell let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
-autocmd BufNewFile,BufRead *.hs  nnoremap  <Space>t :TagsGenerate<CR>
-autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
 
-function! s:vimrc_lushtags()
-    set iskeyword=a-z,A-Z,_,.,39
-    if executable('lushtags')
-        let g:tagbar_type_haskell = {
-                    \ 'ctagsbin' : 'lushtags',
-                    \ 'ctagsargs' : '--ignore-parse-error --',
-                    \ 'kinds' : [
-                    \ 'm:module:0',
-                    \ 'e:exports:1',
-                    \ 'i:imports:1',
-                    \ 't:declarations:0',
-                    \ 'd:declarations:1',
-                    \ 'n:declarations:1',
-                    \ 'f:functions:0',
-                    \ 'c:constructors:0'
-                    \ ],
-                    \ 'sro' : '.',
-                    \ 'kind2scope' : {
-                    \ 'd' : 'data',
-                    \ 'n' : 'newtype',
-                    \ 'c' : 'constructor',
-                    \ 't' : 'type'
-                    \ },
-                    \ 'scope2kind' : {
-                    \ 'data' : 'd',
-                    \ 'newtype' : 'n',
-                    \ 'constructor' : 'c',
-                    \ 'type' : 't'
-                    \ }
-                    \ }
-    endif
-endfunction
-
-augroup vimrc_lushtags
-    autocmd!
-    autocmd BufNewFile,BufRead *.hs  call s:vimrc_lushtags()
-    autocmd FileType haskell call s:vimrc_lushtags()
-augroup END
 " }}}
 
 " scala {{{
@@ -1024,54 +977,6 @@ if neobundle#tap('vim-scala')
     call neobundle#config({'autoload' : {'filetypes': ['scala']}})
     call neobundle#end()
 endif
-function! s:vimrc_scala()
-    nnoremap <buffer> <Space>s :<C-u>write<Cr>:call <SID>sbt_run()<Cr>
-endfunction
-
-augroup vimrc_scala
-    autocmd!
-    autocmd BufNewFile,BufRead *.scala call s:vimrc_scala()
-    autocmd FileType scala call s:vimrc_scala()
-augroup END
-
-augroup vimrc-scala-switch
-    autocmd!
-    autocmd BufNewFile,BufRead *.scala let b:switch_custom_definitions =
-                \ [{
-                \   '\(log[ \.]\+\)info\>': '\1warn',
-                \   '\(log[ \.]\+\)warn\>': '\1error',
-                \   '\(log[ \.]\+\)error\>': '\1info'},
-                \  {
-                \   '\<extends\>': 'with',
-                \   '\<with\>': 'extends'}]
-    autocmd FileType scala  let b:switch_custom_definitions =
-                \ [{
-                \   '\(log[ \.]\+\)info\>': '\1warn',
-                \   '\(log[ \.]\+\)warn\>': '\1error',
-                \   '\(log[ \.]\+\)error\>': '\1info'},
-                \  {
-                \   '\<extends\>': 'with',
-                \   '\<with\>': 'extends'}]
-augroup END
-
-augroup vimrc-int-sbt
-    autocmd!
-    autocmd FileType int-sbt call <SID>vimrc_int_sbt()
-augroup END
-" tagbar
-autocmd BufNewFile,BufRead *.scala nmap <F8> :TagbarToggle<CR>
-autocmd FileType scala  nmap <F8> :TagbarToggle<CR>
-" vim-tags
-autocmd BufNewFile,BufRead *.scala nnoremap <C-]> g<C-]>
-autocmd FileType scala  nnoremap <C-]> g<C-]>
-autocmd BufNewFile,BufRead *.scala nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-autocmd FileType scala  nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-autocmd BufNewFile,BufRead *.scala let g:vim_tags_project_tags_command =
-            \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
-autocmd FileType scala  let g:vim_tags_project_tags_command =
-            \ "ctags -R --languages=scala -f ~/workspace/.git/tags `pwd` 2>/dev/null"
-autocmd BufNewFile,BufRead *.scala nnoremap  <Space>t :TagsGenerate<CR>
-autocmd FileType scala  nnoremap  <Space>t :TagsGenerate<CR>
 " }}}
 
 " php {{{
@@ -1137,8 +1042,7 @@ if neobundle#tap('vim-python-pep8-indent')
     call neobundle#end()
     call neobundle#untap()
 endif
-autocmd FileType python setlocal omnifunc=jedi#completions
-autocmd BufRead,BufNewFile *.py setlocal omnifunc=jedi#completions
+
 
 " }}}
 
@@ -1529,106 +1433,6 @@ augroup END
 function! s:syntastic()
     SyntasticCheck
     call lightline#update()
-endfunction
-" }}}
-
-" sbt {{{
-function! s:start_sbt()
-    if !has_key(t:, 'vsm_cmds')
-        "let t:vsm_cmds = [input('t:vsm_cmds[0] = ')]
-        let t:vsm_cmds = ['compile']
-    endif
-    execute 'normal' "\<Plug>(vimshell_split_switch)\<Plug>(vimshell_hide)"
-    execute 'VimShellInteractive sbt'
-    stopinsert
-    let t:sbt_bufname = bufname('%')
-    wincmd L
-    wincmd p
-endfunction
-
-function! s:sbt_run()
-    let sbt_bufname = get(t:, 'sbt_bufname', '*not-found*')
-    if sbt_bufname == '*not-found*'
-        call s:start_sbt()
-    else
-        if !has_key(t:, 'vsm_cmds')
-            echoerr 'please give t:vsm_cmds a list'
-            return
-        endif
-
-        " go to the window
-        let wn = bufwinnr(sbt_bufname)
-        if wn == -1
-            echo "buffer exists but window doesn't exist. opening it."
-            execute 'sbuffer' sbt_bufname
-            wincmd L
-        else
-            execute wn . 'wincmd w'
-        endif
-
-        " make sure if it's vimshell
-        if !has_key(b:, 'interactive')
-            close
-            unlet t:sbt_bufname
-            call s:sbt_run()
-            return
-        endif
-
-        normal! Gzt
-        " go back to the previous window
-        wincmd p
-
-        call vimshell#interactive#set_send_buffer(sbt_bufname)
-        call vimshell#interactive#clear()
-        call vimshell#interactive#send(t:vsm_cmds)
-        " explosion
-        "call vimproc#system_bg('curl -s http://localhost:8080/requests/status.xml?command=pl_play')
-    endif
-endfunction
-
-function! s:vimrc_int_sbt()
-    nunmap  <buffer> j
-    nunmap  <buffer> k
-
-    syntax case ignore
-
-    syntax match intsbtPrompt /^> .*/ contains=intsbtPromptBody,intsbtPromptHead
-    syntax match intsbtPromptBody /.*/ contained
-    syntax match intsbtPromptHead /^> / contained
-
-    syntax match intsbtDebug /^\[debug\] .*/ contains=intsbtDebugHead,intsbtDebugBody
-    syntax match intsbtDebugBody /.*/ contained
-    syntax match intsbtDebugHead /\[debug\]/ contained
-
-    syntax match intsbtInfo /^\[info\] .*/ contains=intsbtInfoHead,intsbtInfoBody
-    syntax match intsbtInfoBody /.*/ contained
-    syntax match intsbtInfoHead /\[info\]/ contained
-
-    syntax match intsbtWarn /^\[warn\] .*/ contains=intsbtWarnHead,intsbtWarnBody
-    syntax match intsbtWarnBody /.*/ contained
-    syntax match intsbtWarnHead /\[warn\]/ contained
-
-    syntax match intsbtError /^\[error\] .*/ contains=intsbtErrorHead,intsbtErrorBody
-    syntax match intsbtErrorBody /.*/ contained
-    syntax match intsbtErrorHead /\[error\]/ contained
-
-    syntax match intsbtSuccess /^\[success\] .*/
-
-    hi def link intsbtPromptBody Statement
-    hi def link intsbtPromptHead Operator
-
-    hi def link intsbtDebugBody Comment
-    hi def link intsbtDebugHead LineNr
-
-    hi def link intsbtInfoBody Comment
-    hi def link intsbtInfoHead LineNr
-    " intsbtWarnBody: something easy to read and doesn't look too strong
-    hi def link intsbtWarnBody String
-    hi def link intsbtWarnHead LineNr
-    " intsbtErrorBody: something easy to read and does look strong
-    hi def link intsbtErrorBody Normal
-    hi def link intsbtErrorHead LineNr
-    hi def link intsbtSuccess LineNr
 endfunction
 " }}}
 
