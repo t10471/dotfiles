@@ -632,6 +632,11 @@ if neobundle#tap('neocomplete.vim') "{{{
 endif
 " }}}
 
+if neobundle#tap('tagbar') "{{{
+    nmap <F8> :TagbarToggle<CR>
+endif
+"}}}
+
 if neobundle#tap('vim-vimlint') "{{{
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config('vim-vimlint', {
