@@ -62,7 +62,7 @@ NeoBundle      'w0ng/vim-hybrid' " color theme
 NeoBundle      'fuenor/qfixgrep'
 NeoBundleLazy  'LeafCage/nebula.vim' " NeoBundleの補助
 NeoBundle      'nathanaelkane/vim-indent-guides'
-NeoBundleLazy  'sudo.vim'
+NeoBundle      'sudo.vim'
 NeoBundle      'yonchu/accelerated-smooth-scroll'
 NeoBundle      'kana/vim-submode'
 NeoBundleLazy  'tyru/caw.vim' " コメントアウト
