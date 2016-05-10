@@ -93,6 +93,8 @@ NeoBundleLazy  'glidenote/memolist.vim'
 NeoBundleLazy  'bkad/CamelCaseMotion'
 NeoBundleLazy  'jacquesbh/vim-showmarks'
 NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
+NeoBundle      'Konfekt/FastFold'
+
 
 "ctags
 NeoBundle      'majutsushi/tagbar'
@@ -110,6 +112,7 @@ NeoBundleLazy  'scrooloose/syntastic'
 NeoBundleLazy  'andviro/flake8-vim'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
+NeoBundleLazy  'python_fold'
 " markdown
 NeoBundleLazy  'Markdown'
 NeoBundleLazy  'rcmdnk/vim-markdown'
@@ -121,6 +124,7 @@ NeoBundleLazy  'dag/vim2hs'
 NeoBundleLazy  'pbrisbin/vim-syntax-shakespeare'
 NeoBundleLazy  'ujihisa/ref-hoogle'
 NeoBundleLazy  'eagletmt/unite-haddock'
+
 NeoBundleLazy  'ujihisa/unite-haskellimport'
 NeoBundleLazy  'wting/lhaskell.vim'
 " c c++用
@@ -244,16 +248,21 @@ if neobundle#tap('caw.vim') "{{{
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
     endfunction
-    nmap <Leader>c <Plug>(caw:i:toggle)
-    vmap <Leader>c <Plug>(caw:i:toggle)
+    nmap <Leader>c <Plug>(caw:hatpos:toggle)
+    vmap <Leader>c <Plug>(caw:hatpos:toggle)
     call neobundle#untap()
 endif
 "}}}
 
 if neobundle#tap('sudo.vim') "{{{
     call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload': {'commands': ['SudoRead', 'SudoWrite']}})
     call neobundle#end()
+    "右のようにつかう :w sudo:%
+    " root権限で今開いているファイルを開き直す
+    command! ES :e sudo:%<CR><C-^>:bd!
+    " root権限で保存
+    command! WS :w sudo:%
+    call neobundle#untap()
 endif
 "}}}
 
@@ -460,18 +469,6 @@ if neobundle#tap('vim-anzu') "{{{
         autocmd!
         autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
     augroup END
-    call neobundle#untap()
-endif
-"}}}
-
-if neobundle#tap('sudo.vim') "{{{
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    "右のようにつかう :w sudo:%
-    " root権限で今開いているファイルを開き直す
-    command! ES :e sudo:%<CR><C-^>:bd!
-    " root権限で保存
-    command! WS :w sudo:%
     call neobundle#untap()
 endif
 "}}}
@@ -990,6 +987,8 @@ endif
 " }}}
 
 "python {{{
+let s:ignores =  'E203,E221,E222,E226,E231,E301,E302,E402,E501'
+
 if neobundle#tap('syntastic')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
@@ -999,7 +998,10 @@ if neobundle#tap('syntastic')
                 \ })
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
-        let g:syntastic_python_checkers = ['pyflakes', 'pep8']
+        let g:syntastic_python_checkers = ['frosted', 'pep8']
+        let g:syntastic_python_frosted_args = '--ignore="' . s:ignores . '"'
+        let g:syntastic_python_pep8_args = '--ignore="' . s:ignores . '"'
+        let g:syntastic_python_pep8_post_args="--max-line-length=100"
     endfunction
     call neobundle#untap()
 endif
@@ -1007,7 +1009,7 @@ if neobundle#tap('jedi-vim')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
                 \   'autoload' : {
-                \     'filetypes': ['python']
+                \     'filetypes': ['python', 'python3', 'djangohtml']
                 \   }
                 \ })
     call neobundle#end()
@@ -1029,9 +1031,9 @@ if neobundle#tap('flake8-vim')
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:PyFlakeOnWrite = 1
-        let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
+        let g:PyFlakeCheckers = 'pep8,mccabe,frosted'
         let g:PyFlakeDefaultComplexity=10
-        let g:PyFlakeDisabledMessages='E222,E231,E221,E203,E301,E302,E501'
+        let g:PyFlakeDisabledMessages=s:ignores
         let g:PyFlakeMaxLineLength = 100
     endfunction
     call neobundle#untap()
@@ -1048,6 +1050,15 @@ if neobundle#tap('vim-python-pep8-indent')
     call neobundle#untap()
 endif
 
+if neobundle#tap('python_fold')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({
+                \   'autoload' : {
+                \     'filetypes': ['python', 'python3', 'djangohtml']
+                \   }
+                \ })
+    call neobundle#end()
+endif
 
 " }}}
 
@@ -1231,13 +1242,15 @@ nnoremap [Q :<C-u>cfirst<CR>
 " 最後へ
 nnoremap ]Q :<C-u>clast<CR>
 " quickfix open
-nnoremap ]c :<C-u>copen<CR>
+" nnoremap ]c :<C-u>copen<CR>
 " quickfix close
-nnoremap [c :<C-u>cclose<CR>
+" nnoremap [c :<C-u>cclose<CR>
 " Quickfixウィンドウのオープン/クローズ
 map ], <C-w>,
 " Quickfixウィンドウへ移動
 map ]. <C-w>.
+" 末尾スペースを削除
+nnoremap <Leader>s :%s/\s\+$//ge<CR>
 
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
