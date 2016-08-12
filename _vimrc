@@ -94,6 +94,8 @@ NeoBundleLazy  'bkad/CamelCaseMotion'
 NeoBundleLazy  'jacquesbh/vim-showmarks'
 NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
 NeoBundle      'Konfekt/FastFold'
+" NeoBundleLazy  'KazuakiM/vim-sqlfix'
+NeoBundle  'KazuakiM/vim-sqlfix'
 
 
 "ctags
@@ -136,13 +138,16 @@ NeoBundleLazy  '5t111111/alt-gtags.vim'
 NeoBundleLazy  'rhysd/vim-clang-format'
 " scala
 NeoBundleLazy  'derekwyatt/vim-scala'
-"ruby用
+"ruby
 NeoBundleLazy  'alpaca-tc/alpaca_tags'
 NeoBundleLazy  'AndrewRadev/switch.vim'
 NeoBundleLazy  'yuku-t/vim-ref-ri'
 NeoBundleLazy  'tpope/vim-rails'
 NeoBundleLazy  'basyura/unite-rails'
 NeoBundleLazy  'vim-scripts/ruby-matchit'
+" javascript jsx 
+NeoBundleLazy 'pangloss/vim-javascript'
+NeoBundleLazy 'mxw/vim-jsx'
 
 call neobundle#end()
 " }}}
@@ -268,7 +273,7 @@ endif
 
 if neobundle#tap('surround.vim') "{{{
     "プラグイン内部でコマンドを定義している場合はLazyできない
-    " call neobundle#begin(expand('~/.vim/bundle/'))
+    " call neobundle#beginexpand('~/.vim/bundle/'))
     " call neobundle#config({
     "             \ 'autoload': {
     "             \     'mappings': ['<Plug>Ysurround', '<Plug>YSsurround', '<Plug>YSurround', '<Plug>Dsurround',
@@ -785,6 +790,18 @@ if neobundle#tap('vim-watchdogs') "{{{
 endif
 " }}}
 
+" if neobundle#tap('vim-sqlfix') "{{{
+"     call neobundle#begin(expand('~/.vim/bundle/'))
+"     call neobundle#config({
+"                 \    'autoload': {
+"                 \        'mappings': ['<Plug>(sqlfix_', ['v', '<Plug>(sqlfix#Visual())'], ['n', '<Plug>(sqlfix#Normal())']],
+"                 \        'commands': ['Sqlfix', 'SqlfixFile']}})
+"     call neobundle#end()
+"     vmap <Leader>sq <Plug>(sqlfix#Visual())
+"     nmap <Leader>sq <Plug>(sqlfix#Normal())
+" endif
+" " }}}
+
 " }}}
 
 " language {{{
@@ -987,7 +1004,7 @@ endif
 " }}}
 
 "python {{{
-let s:ignores =  'E203,E221,E222,E226,E231,E301,E302,E402,E501'
+let s:ignores =  'E203,E221,E222,E226,E231,E301,E302,E309,E402,E501,E731'
 
 if neobundle#tap('syntastic')
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -1094,6 +1111,24 @@ if neobundle#tap('ruby-matchit')
     call neobundle#end()
 endif
 " }}}
+
+"javascript jsx {{{
+if neobundle#tap('vim-javascript')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['javascript', 'jsx', 'javascript.jsx'] }})
+    call neobundle#end()
+endif
+if neobundle#tap('vim-jsx')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['javascript', 'jsx', 'javascript.jsx'] }})
+    function! neobundle#hooks.on_source(bundle)
+        let g:jsx_ext_required = 0
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+" }}}
+
 " }}}
 
 " keymapping  {{{
@@ -1161,6 +1196,7 @@ nnoremap <silent>sbd :bdelete<CR>
 
 " タブ {{{
 " 新規タブをつぎに作る
+nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
 nnoremap st :<C-u>tabnew<CR>
 " sc 新しいタブを一番右に作る
 map <silent> sc :tablast <bar> tabnew<CR>
@@ -1287,6 +1323,8 @@ nnoremap <silent><C-C><C-D> :lcd %:h<CR>
 
 " 挿入モード時 Ctr + v でペースト
 inoremap <C-v> <C-r>"
+" Exモードに入らないようにする
+nnoremap Q <nop>
 " }}}
 
 " 折りたたみ{{{
