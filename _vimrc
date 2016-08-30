@@ -1345,6 +1345,10 @@ nnoremap Q <nop>
 " }}}
 
 " lightline {{{
+
+let g:gitgutter_sign_added = '✚'
+let g:gitgutter_sign_modified = '➜'
+let g:gitgutter_sign_removed = '✘'
 let g:lightline = {
             \ 'colorscheme': 'landscape',
             \ 'mode_map': {'c': 'NORMAL'},
@@ -1364,6 +1368,14 @@ let g:lightline = {
             \ },
             \ 'component_type': {
             \   'syntastic': 'error'
+            \ },
+            \ 'separator': {
+            \   'left': "⮀",
+            \   'right': "⮂" 
+            \ },
+            \ 'subseparator': {
+            \    'left': "⮁",
+            \    'right': "⮃"
             \ },
             \ 'component_function': {
             \   'modified': 'MyModified',
@@ -1385,7 +1397,7 @@ function! MyModified()
 endfunction
 
 function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\|gundo' && &ro ? 'ro' : ''
+    return &ft !~? 'help\|vimfiler\|gundo' && &ro ? '⭤' : ''
 endfunction
 
 function! MyFilename()
@@ -1401,7 +1413,7 @@ function! MyFugitive()
     try
         if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
             let _ = fugitive#head()
-            return strlen(_) ? 'b '._ : ''
+            return strlen(_) ? '⭠ '._ : ''
         endif
     catch
     endtry
@@ -1751,5 +1763,6 @@ let g:hybrid_custom_term_colors = 1
 " let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette."
 set background=dark
 colorscheme hybrid
+autocmd BufRead,BufNewFile *.yml.tmpl set filetype=yaml 
 " colorscheme default
 " }}}
