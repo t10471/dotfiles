@@ -33,6 +33,7 @@ augroup vimrcEx " vimでファイルをひらいたとき最後にカーソル�
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
                 \ exe "normal g`\"" | endif
 augroup END
+let g:is_bash = 1
 
 filetype off
 " }}}
@@ -148,6 +149,10 @@ NeoBundleLazy  'vim-scripts/ruby-matchit'
 " javascript jsx 
 NeoBundleLazy 'pangloss/vim-javascript'
 NeoBundleLazy 'mxw/vim-jsx'
+
+" yaml
+NeoBundleLazy 'chase/vim-ansible-yaml'
+NeoBundleLazy 'stephpy/vim-yaml'
 
 call neobundle#end()
 " }}}
@@ -1129,6 +1134,25 @@ if neobundle#tap('vim-jsx')
 endif
 " }}}
 
+
+"yaml {{{
+if neobundle#tap('vim-ansible-yaml')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['yaml'] }})
+    function! neobundle#hooks.on_source(bundle)
+        let g:ansible_options = {'ignore_blank_lines': 0}
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-yaml')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['yaml'] }})
+    call neobundle#end()
+endif
+" }}}
+
 " }}}
 
 " keymapping  {{{
@@ -1278,9 +1302,9 @@ nnoremap [Q :<C-u>cfirst<CR>
 " 最後へ
 nnoremap ]Q :<C-u>clast<CR>
 " quickfix open
-" nnoremap ]c :<C-u>copen<CR>
+nnoremap ]c :<C-u>copen<CR>
 " quickfix close
-" nnoremap [c :<C-u>cclose<CR>
+nnoremap [c :<C-u>cclose<CR>
 " Quickfixウィンドウのオープン/クローズ
 map ], <C-w>,
 " Quickfixウィンドウへ移動
