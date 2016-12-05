@@ -96,7 +96,9 @@ NeoBundleLazy  'jacquesbh/vim-showmarks'
 NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
 NeoBundle      'Konfekt/FastFold'
 " NeoBundleLazy  'KazuakiM/vim-sqlfix'
-NeoBundle  'KazuakiM/vim-sqlfix'
+NeoBundle      'KazuakiM/vim-sqlfix'
+NeoBundleLazy  'elzr/vim-json'
+NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
 
 
 "ctags
@@ -116,6 +118,7 @@ NeoBundleLazy  'andviro/flake8-vim'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
+NeoBundleLazy  'tshirtman/vim-cython'
 " markdown
 NeoBundleLazy  'Markdown'
 NeoBundleLazy  'rcmdnk/vim-markdown'
@@ -570,9 +573,9 @@ if neobundle#tap('neosnippet') "{{{
     function! neobundle#hooks.on_source(bundle)
     endfunction
     " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
+    imap <C-m>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-m>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-m>     <Plug>(neosnippet_expand_target)
     "
     "" SuperTab like snippets behavior.
     " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
@@ -791,6 +794,25 @@ if neobundle#tap('vim-watchdogs') "{{{
     endfunction
 "    call watchdogs#setup(g:quickrun_config)
     nnoremap <Space>w :WatchdogsRun<CR>
+    call neobundle#untap()
+endif
+" }}}
+
+if neobundle#tap('vim-json') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['json'] }})
+    call neobundle#end()
+    function! neobundle#hooks.on_source(bundle)
+        let g:vim_json_syntax_conceal = 0
+    endfunction
+    call neobundle#untap()
+endif
+" }}}
+
+if neobundle#tap('Vim-Jinja2-Syntax') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['jinja'] }})
+    call neobundle#end()
     call neobundle#untap()
 endif
 " }}}
@@ -1047,7 +1069,7 @@ if neobundle#tap('flake8-vim')
     call neobundle#begin()
     call neobundle#config({
                 \   'autoload' : {
-                \     'filetypes': ['python']
+                \     'filetypes': ['python', 'python3', 'djangohtml']
                 \   }
                 \ })
     call neobundle#end()
@@ -1082,6 +1104,16 @@ if neobundle#tap('python_fold')
     call neobundle#end()
 endif
 
+if neobundle#tap('vim-cython')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({
+                \   'autoload' : {
+                \     'filetypes': ['cython']
+                \   }
+                \ })
+    call neobundle#end()
+endif
+au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
 " }}}
 
 "ruby {{{
