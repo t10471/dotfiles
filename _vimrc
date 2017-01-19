@@ -114,7 +114,7 @@ NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy  'andviro/flake8-vim'
+NeoBundleLazy  'nvie/vim-flake8'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
@@ -160,7 +160,7 @@ NeoBundleLazy 'stephpy/vim-yaml'
 call neobundle#end()
 " }}}
 
-" plugin seeting {{{
+" plugin setting {{{
 
 " xterm {{{
 " " let &t_SI .= '\e[3 q'
@@ -342,7 +342,6 @@ if neobundle#tap('CamelCaseMotion') "{{{
     map <S-E> <Plug>CamelCaseMotion_e
 endif
 "}}}
-
 
 if neobundle#tap('vim-showmarks') "{{{
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -574,8 +573,8 @@ if neobundle#tap('neosnippet') "{{{
     endfunction
     " Plugin key-mappings.
     imap <C-m>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-m>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-m>     <Plug>(neosnippet_expand_target)
+    " smap <C-m>     <Plug>(neosnippet_expand_or_jump)
+    " xmap <C-m>     <Plug>(neosnippet_expand_target)
     "
     "" SuperTab like snippets behavior.
     " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
@@ -1031,8 +1030,6 @@ endif
 " }}}
 
 "python {{{
-let s:ignores =  'E203,E221,E222,E226,E231,E301,E302,E309,E402,E501,E731'
-
 if neobundle#tap('syntastic')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
@@ -1041,12 +1038,6 @@ if neobundle#tap('syntastic')
                 \   }
                 \ })
     call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-        let g:syntastic_python_checkers = ['frosted', 'pep8']
-        let g:syntastic_python_frosted_args = '--ignore="' . s:ignores . '"'
-        let g:syntastic_python_pep8_args = '--ignore="' . s:ignores . '"'
-        let g:syntastic_python_pep8_post_args="--max-line-length=100"
-    endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('jedi-vim')
@@ -1061,11 +1052,10 @@ if neobundle#tap('jedi-vim')
         let g:jedi#auto_vim_configuration = 0
         let g:jedi#completions_enabled = 0
         let g:jedi#rename_command = '<Leader>R'
-
     endfunction
     call neobundle#untap()
 endif
-if neobundle#tap('flake8-vim')
+if neobundle#tap('vim-flake8')
     call neobundle#begin()
     call neobundle#config({
                 \   'autoload' : {
@@ -1074,11 +1064,7 @@ if neobundle#tap('flake8-vim')
                 \ })
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
-        let g:PyFlakeOnWrite = 1
-        let g:PyFlakeCheckers = 'pep8,mccabe,frosted'
-        let g:PyFlakeDefaultComplexity=10
-        let g:PyFlakeDisabledMessages=s:ignores
-        let g:PyFlakeMaxLineLength = 100
+        let g:flake8_show_in_gutter=1
     endfunction
     call neobundle#untap()
 endif
@@ -1113,6 +1099,8 @@ if neobundle#tap('vim-cython')
                 \ })
     call neobundle#end()
 endif
+let no_flake8_maps=1
+autocmd BufWritePost *.py call Flake8()
 au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
 " }}}
 
