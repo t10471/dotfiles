@@ -33,6 +33,8 @@ ENHANCD_FILTER=fzy
 # ENHANCD_FILTER=peco
 export ENHANCD_FILTER
 source ~/dotfiles/enhancd/init.sh
+# autojump setting
+[[ -s `brew --prefix`/etc/autojump.sh  ]] && . `brew --prefix`/etc/autojump.sh
 
 export KUBE_EDITOR="vim"
 export EDITOR="/usr/local/bin/vim"
