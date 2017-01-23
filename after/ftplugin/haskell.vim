@@ -5,8 +5,9 @@ autocmd FileType haskell nmap <F8> :TagbarToggle<CR>
 autocmd FileType haskell nnoremap <C-]> g<C-]>
 " " カーソル下の単語でタグジャンプをした結果を新規タブで開く"
 autocmd FileType haskell nnoremap <F3> :<C-u>tab stj <C-R>=expand('<cword>')<CR><CR>
-autocmd FileType haskell let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
+" autocmd FileType haskell let g:vim_tags_project_tags_command = '~/workspace/createtags.py'
 autocmd FileType haskell nnoremap  <Space>t :TagsGenerate<CR>
+autocmd FileType haskell setlocal shiftwidth=2
 
 function! s:vimrc_lushtags()
     set iskeyword=a-z,A-Z,_,.,39

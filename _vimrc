@@ -119,6 +119,7 @@ NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
 NeoBundleLazy  'tshirtman/vim-cython'
+NeoBundleLazy  'nvie/vim-flake8'
 " markdown
 NeoBundleLazy  'Markdown'
 NeoBundleLazy  'rcmdnk/vim-markdown'
@@ -574,8 +575,8 @@ if neobundle#tap('neosnippet') "{{{
     endfunction
     " Plugin key-mappings.
     imap <C-m>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-m>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-m>     <Plug>(neosnippet_expand_target)
+    " smap <C-m>     <Plug>(neosnippet_expand_or_jump)
+    " xmap <C-m>     <Plug>(neosnippet_expand_target)
     "
     "" SuperTab like snippets behavior.
     " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
@@ -1041,12 +1042,6 @@ if neobundle#tap('syntastic')
                 \   }
                 \ })
     call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-        let g:syntastic_python_checkers = ['frosted', 'pep8']
-        let g:syntastic_python_frosted_args = '--ignore="' . s:ignores . '"'
-        let g:syntastic_python_pep8_args = '--ignore="' . s:ignores . '"'
-        let g:syntastic_python_pep8_post_args="--max-line-length=100"
-    endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('jedi-vim')
@@ -1065,7 +1060,7 @@ if neobundle#tap('jedi-vim')
     endfunction
     call neobundle#untap()
 endif
-if neobundle#tap('flake8-vim')
+if neobundle#tap('vim-flake8')
     call neobundle#begin()
     call neobundle#config({
                 \   'autoload' : {
@@ -1074,11 +1069,7 @@ if neobundle#tap('flake8-vim')
                 \ })
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
-        let g:PyFlakeOnWrite = 1
-        let g:PyFlakeCheckers = 'pep8,mccabe,frosted'
-        let g:PyFlakeDefaultComplexity=10
-        let g:PyFlakeDisabledMessages=s:ignores
-        let g:PyFlakeMaxLineLength = 100
+        let g:no_flake8_maps = 1
     endfunction
     call neobundle#untap()
 endif
@@ -1114,6 +1105,7 @@ if neobundle#tap('vim-cython')
     call neobundle#end()
 endif
 au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
+autocmd BufWritePost *.py call Flake8()
 " }}}
 
 "ruby {{{
