@@ -114,7 +114,7 @@ NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy  'andviro/flake8-vim'
+NeoBundleLazy  'nvie/vim-flake8'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
@@ -161,7 +161,7 @@ NeoBundleLazy 'stephpy/vim-yaml'
 call neobundle#end()
 " }}}
 
-" plugin seeting {{{
+" plugin setting {{{
 
 " xterm {{{
 " " let &t_SI .= '\e[3 q'
@@ -343,7 +343,6 @@ if neobundle#tap('CamelCaseMotion') "{{{
     map <S-E> <Plug>CamelCaseMotion_e
 endif
 "}}}
-
 
 if neobundle#tap('vim-showmarks') "{{{
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -1032,8 +1031,6 @@ endif
 " }}}
 
 "python {{{
-let s:ignores =  'E203,E221,E222,E226,E231,E301,E302,E309,E402,E501,E731'
-
 if neobundle#tap('syntastic')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({
@@ -1056,7 +1053,6 @@ if neobundle#tap('jedi-vim')
         let g:jedi#auto_vim_configuration = 0
         let g:jedi#completions_enabled = 0
         let g:jedi#rename_command = '<Leader>R'
-
     endfunction
     call neobundle#untap()
 endif
@@ -1070,6 +1066,7 @@ if neobundle#tap('vim-flake8')
     call neobundle#end()
     function! neobundle#hooks.on_source(bundle)
         let g:no_flake8_maps = 1
+        let g:flake8_show_in_gutter=1
     endfunction
     call neobundle#untap()
 endif
@@ -1104,8 +1101,8 @@ if neobundle#tap('vim-cython')
                 \ })
     call neobundle#end()
 endif
-au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
 autocmd BufWritePost *.py call Flake8()
+au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
 " }}}
 
 "ruby {{{

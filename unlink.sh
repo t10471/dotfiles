@@ -5,4 +5,4 @@ rm ~/.vimshrc
 rm -rf ~/.vim/bundle
 rm -rf ~/.Xresources
 rm -rf ~/.vim/after
-
+rm ~/.bash_profile
