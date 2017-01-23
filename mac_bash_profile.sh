@@ -22,15 +22,12 @@ export PATH="$HOME/.local/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/bin:$PATH" 
 export PATH="$HOME/dotfiles/bin:$PATH" 
 
-export PG_PWD="DptLbPRos8Z3XNepaZ"
 source ~/.airtrack_env
 source ~/.user_topics_env
 source ~/.potage_env
 source ~/.gcp_commands.sh
 source ~/.python.sh
-# ENHANCD_FILTER=fzf
 ENHANCD_FILTER=fzy
-# ENHANCD_FILTER=peco
 export ENHANCD_FILTER
 source ~/dotfiles/enhancd/init.sh
 # autojump setting
