@@ -8,6 +8,8 @@ alias kd='kubectl describe'
 alias sudo='sudo '
 alias syncon='tmux set-window-option synchronize-panes on'
 alias syncoff='tmux set-window-option synchronize-panes off'
+alias mon='eval $(minikube docker-env)'
+alias moff='eval $(minikube docker-env -u)'
 
 source /usr/local/etc/bash_completion.d/git-prompt.sh
 source /usr/local/etc/bash_completion.d/git-completion.bash
@@ -45,6 +47,10 @@ source '/Users/a14332/google-cloud-sdk/completion.bash.inc'
 
 source '/Users/a14332/.minikube_completion.bash.inc'
 
+# git clone git://github.com/mazgi/sbtenv.git ~/.sbtenv
+export PATH="${HOME}/.sbtenv/bin:${PATH}"
+eval "$(sbtenv init -)"
+
 function _update_ps1() {
     export PS1="$(~/powerline-shell.py $? 2> /dev/null)"
 }
@@ -55,4 +61,5 @@ peco-select-history() {
     READLINE_POINT=${#l}
 }
 bind -x '"\C-r": peco-select-history'
+
 

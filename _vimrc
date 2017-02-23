@@ -217,6 +217,7 @@ if neobundle#tap('vimshell') " {{{
     nnoremap <silent> ,vr :VimShellInteractive irb<CR>
     nnoremap <silent> ,vl :VimShellInteractive scala<CR>
     nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
+    nnoremap <silent> ,vsg :VimShellInteractive stack ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
     vmap <silent> ,ve :VimShellSendString<CR>
     " 選択範囲を非同期で開いたインタプリタに選択行を評価させる

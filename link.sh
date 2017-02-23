@@ -2,8 +2,10 @@
 PWD=$(cd $(dirname $0) && pwd)
 # ln -s ${PWD}/_screenrc ~/.screenrc
 # ln -s ${PWD}/_vimrc ~/.vimrc
+# ln -s ${PWD}/_ideavimrc ~/.ideavimrc
 # ln -s ${PWD}/_inputrc ~/.inputrc
 # ln -s ${PWD}/_tmux.conf ~/.tmux.conf
+# ln -s ${PWD}/mac_bash_profile.sh ~/.bash_profile
 #
 # case "${OSTYPE}" in
 # darwin*)
@@ -23,4 +25,3 @@ PWD=$(cd $(dirname $0) && pwd)
 # mkdir -p ~/.vim/snippets
 # bash snip.sh
 # mkdir -p ~/.vim/tmp
-ln -s ${PWD}/mac_bash_profile.sh ~/.bash_profile
