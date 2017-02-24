@@ -1347,6 +1347,7 @@ nnoremap q/ <Nop>
 nnoremap q? <Nop>
 vnoremap < <gv
 vnoremap > >gv
+noremap <F1> <ESC>
 " 空行挿入
 function! s:cmd_cr_n(count)
     if !&modifiable
