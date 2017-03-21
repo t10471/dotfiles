@@ -158,6 +158,14 @@ NeoBundleLazy 'mxw/vim-jsx'
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
 
+" typescript
+NeoBundleLazy 'Quramy/tsuquyomi'
+NeoBundleLazy 'leafgarland/typescript-vim'
+NeoBundleLazy 'Quramy/vim-js-pretty-template'
+NeoBundleLazy 'jason0x43/vim-js-indent'
+NeoBundleLazy 'Quramy/vim-dtsm'
+NeoBundleLazy 'mhartington/vim-typings'
+
 call neobundle#end()
 " }}}
 
@@ -830,6 +838,16 @@ endif
 " endif
 " " }}}
 
+if neobundle#tap('vim-tags') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#end()
+    function! neobundle#hooks.on_source(bundle)
+        let g:vim_tags_ignore_files = []
+    endfunction
+    call neobundle#untap()
+endif
+" }}}
+
 " }}}
 
 " language {{{
@@ -1156,7 +1174,6 @@ if neobundle#tap('vim-jsx')
 endif
 " }}}
 
-
 "yaml {{{
 if neobundle#tap('vim-ansible-yaml')
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -1174,6 +1191,50 @@ if neobundle#tap('vim-yaml')
     call neobundle#end()
 endif
 " }}}
+
+"typescript {{{
+if neobundle#tap('tsuquyomi')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('typescript-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-js-pretty-template')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-js-indent')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-dtsm')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-typings')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-typings')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+"}}}
 
 " }}}
 

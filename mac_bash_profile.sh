@@ -1,3 +1,11 @@
+# 最初に実行する必要あり
+# git config --global alias.st status
+# git config --global alias.co checkout
+# git config --global alias.br branch
+# git config --global alias.cm commit
+# git config --global alias.df diff
+# git config --global alias.gr grep
+
 alias ls='/usr/local/bin/gls --color=auto'
 alias la='/usr/local/bin/gls -la --color=auto'
 alias ll='/usr/local/bin/gls -la --color=auto'
