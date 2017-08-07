@@ -7,13 +7,13 @@ set encoding=utf-8
 set t_Co=256
 set backspace=indent,eol,start
 set foldmethod=syntax
-set tabstop=4
+set tabstop=2
 set modeline
 set helplang=ja
 " set updatetime=4000
 set autoindent
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 " Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
 set splitbelow
 set splitright
@@ -100,6 +100,8 @@ NeoBundle      'KazuakiM/vim-sqlfix'
 NeoBundleLazy  'elzr/vim-json'
 NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
 
+" fish
+NeoBundleLazy  'dag/vim-fish'
 
 "ctags
 NeoBundle      'majutsushi/tagbar'
@@ -114,7 +116,6 @@ NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy  'nvie/vim-flake8'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
@@ -165,6 +166,9 @@ NeoBundleLazy 'Quramy/vim-js-pretty-template'
 NeoBundleLazy 'jason0x43/vim-js-indent'
 NeoBundleLazy 'Quramy/vim-dtsm'
 NeoBundleLazy 'mhartington/vim-typings'
+
+" docker
+NeoBundleLazy 'ekalinin/Dockerfile.vim'
 
 call neobundle#end()
 " }}}
@@ -1232,6 +1236,28 @@ endif
 if neobundle#tap('vim-typings')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+"}}}
+
+"fish {{{
+if neobundle#tap('vim-fish')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['fish'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+"}}}
+
+"docker {{{
+if neobundle#tap('Dockerfile')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['dockerfile'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
     call neobundle#end()
 endif
 "}}}
