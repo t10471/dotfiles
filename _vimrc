@@ -158,6 +158,12 @@ NeoBundleLazy 'mxw/vim-jsx'
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
 
+" fish
+NeoBundleLazy 'dag/vim-fish'
+
+" elm
+NeoBundleLazy 'elmcast/elm-vim'
+
 call neobundle#end()
 " }}}
 
@@ -1174,6 +1180,30 @@ if neobundle#tap('vim-yaml')
     call neobundle#end()
 endif
 " }}}
+
+"fish {{{
+if neobundle#tap('vim-fish')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['fish'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+" }}}
+
+
+"elm {{{
+if neobundle#tap('elm-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+" }}}
+
 
 " }}}
 
