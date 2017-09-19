@@ -105,7 +105,7 @@ NeoBundleLazy  'dag/vim-fish'
 
 "ctags
 NeoBundle      'majutsushi/tagbar'
-NeoBundle      'szw/vim-tags'
+NeoBundle      't10471/vim-tags'
 NeoBundle      'thinca/vim-ref'
 NeoBundleLazy  'ynkdir/vim-vimlparser'
 NeoBundle      'syngan/vim-vimlint',            { 'depends' : 'ynkdir/vim-vimlparser'}
@@ -169,6 +169,10 @@ NeoBundleLazy 'mhartington/vim-typings'
 
 " docker
 NeoBundleLazy 'ekalinin/Dockerfile.vim'
+
+" elm 
+NeoBundleLazy 'elmcast/elm-vim'
+NeoBundleLazy 'w0rp/ale'
 
 call neobundle#end()
 " }}}
@@ -1062,6 +1066,9 @@ if neobundle#tap('syntastic')
                 \   }
                 \ })
     call neobundle#end()
+    function! neobundle#hooks.on_source(bundle)
+      let g:syntastic_python_checkers = ['pyflakes']
+    endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('jedi-vim')
@@ -1232,12 +1239,6 @@ if neobundle#tap('vim-typings')
     call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
     call neobundle#end()
 endif
-
-if neobundle#tap('vim-typings')
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
-    call neobundle#end()
-endif
 "}}}
 
 "fish {{{
@@ -1260,6 +1261,29 @@ if neobundle#tap('Dockerfile')
     call neobundle#untap()
     call neobundle#end()
 endif
+
+"}}}
+
+"elm {{{
+if neobundle#tap('elm-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+
+if neobundle#tap('ale')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+
 "}}}
 
 " }}}

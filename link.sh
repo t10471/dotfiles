@@ -6,6 +6,7 @@ PWD=$(cd $(dirname $0) && pwd)
 # ln -s ${PWD}/_inputrc ~/.inputrc
 # ln -s ${PWD}/_tmux.conf ~/.tmux.conf
 # ln -s ${PWD}/mac_bash_profile.sh ~/.bash_profile
+ln -s ${PWD}/_config.fish ~/.config/fish/config.fish
 #
 # case "${OSTYPE}" in
 # darwin*)
