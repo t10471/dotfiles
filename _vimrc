@@ -7,13 +7,13 @@ set encoding=utf-8
 set t_Co=256
 set backspace=indent,eol,start
 set foldmethod=syntax
-set tabstop=4
+set tabstop=2
 set modeline
 set helplang=ja
 " set updatetime=4000
 set autoindent
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 " Quickrun 横分割時は下へ､ 縦分割時は右へ新しいウィンドウが開くようにする
 set splitbelow
 set splitright
@@ -100,10 +100,9 @@ NeoBundle      'KazuakiM/vim-sqlfix'
 NeoBundleLazy  'elzr/vim-json'
 NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
 
-
 "ctags
 NeoBundle      'majutsushi/tagbar'
-NeoBundle      'szw/vim-tags'
+NeoBundle      't10471/vim-tags'
 NeoBundle      'thinca/vim-ref'
 NeoBundleLazy  'ynkdir/vim-vimlparser'
 NeoBundle      'syngan/vim-vimlint',            { 'depends' : 'ynkdir/vim-vimlparser'}
@@ -114,7 +113,6 @@ NeoBundle      'osyo-manga/vim-watchdogs'
 NeoBundleLazy  'jceb/vim-hier'
 NeoBundleLazy  'scrooloose/syntastic'
 " python
-NeoBundleLazy  'nvie/vim-flake8'
 NeoBundleLazy  'davidhalter/jedi-vim'
 NeoBundleLazy  'hynek/vim-python-pep8-indent'
 NeoBundleLazy  'python_fold'
@@ -150,7 +148,7 @@ NeoBundleLazy  'yuku-t/vim-ref-ri'
 NeoBundleLazy  'tpope/vim-rails'
 NeoBundleLazy  'basyura/unite-rails'
 NeoBundleLazy  'vim-scripts/ruby-matchit'
-" javascript jsx 
+" javascript jsx
 NeoBundleLazy 'pangloss/vim-javascript'
 NeoBundleLazy 'mxw/vim-jsx'
 
@@ -158,11 +156,24 @@ NeoBundleLazy 'mxw/vim-jsx'
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
 
+
+" typescript
+NeoBundleLazy 'Quramy/tsuquyomi'
+NeoBundleLazy 'leafgarland/typescript-vim'
+NeoBundleLazy 'Quramy/vim-js-pretty-template'
+NeoBundleLazy 'jason0x43/vim-js-indent'
+NeoBundleLazy 'Quramy/vim-dtsm'
+NeoBundleLazy 'mhartington/vim-typings'
+
+" docker
+NeoBundleLazy 'ekalinin/Dockerfile.vim'
+
 " fish
 NeoBundleLazy 'dag/vim-fish'
 
 " elm
 NeoBundleLazy 'elmcast/elm-vim'
+NeoBundleLazy 'w0rp/ale'
 
 call neobundle#end()
 " }}}
@@ -329,7 +340,7 @@ if neobundle#tap('yankround.vim') "{{{
     nmap gP <Plug>(yankround-gP)
     nmap <C-p> <Plug>(yankround-prev)
     nmap <C-n> <Plug>(yankround-next)
-    nnoremap <leader>p :Unite yankround<CR> 
+    nnoremap <leader>p :Unite yankround<CR>
 endif
 "}}}
 
@@ -415,7 +426,7 @@ if neobundle#tap('vim-indent-guides') "{{{
     let g:indent_guides_auto_colors=0
     let g:indent_guides_enable_on_vim_startup=1
     let g:indent_guides_guide_size=1
-    augroup vim-indent-guides 
+    augroup vim-indent-guides
         autocmd!
         autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
         autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
@@ -457,7 +468,7 @@ if neobundle#tap('vim-gitgutter') "{{{
         let g:gitgutter_sign_modified = '➜'
         let g:gitgutter_sign_removed = '✘'
     endfunction
-    augroup vim-gitgutter 
+    augroup vim-gitgutter
         autocmd!
         autocmd BufNewFile,BufRead * NeoBundleSource vim-gitgutter
     augroup END
@@ -591,7 +602,7 @@ if neobundle#tap('neosnippet') "{{{
     " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     "             \ '\<Plug>(neosnippet_expand_or_jump)'
     "             \: '\<TAB>'
-    
+
     " For snippet_complete marker.
     if has('conceal')
       set conceallevel=2 concealcursor=i
@@ -836,6 +847,16 @@ endif
 " endif
 " " }}}
 
+if neobundle#tap('vim-tags') "{{{
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#end()
+    function! neobundle#hooks.on_source(bundle)
+        let g:vim_tags_ignore_files = []
+    endfunction
+    call neobundle#untap()
+endif
+" }}}
+
 " }}}
 
 " language {{{
@@ -903,7 +924,7 @@ if neobundle#tap('gtags.vim')
     nnoremap wj :Gtags <C-r><C-w><CR>
     nnoremap wk :Gtags -r <C-r><C-w><CR>
     " ヘッダファイルをタブで開く
-    nnoremap sgf <C-w>gf<CR> 
+    nnoremap sgf <C-w>gf<CR>
     call neobundle#untap()
 endif
 if neobundle#tap('alt-gtags.vim')
@@ -1046,6 +1067,9 @@ if neobundle#tap('syntastic')
                 \   }
                 \ })
     call neobundle#end()
+    function! neobundle#hooks.on_source(bundle)
+      let g:syntastic_python_checkers = ['pyflakes']
+    endfunction
     call neobundle#untap()
 endif
 if neobundle#tap('jedi-vim')
@@ -1162,7 +1186,6 @@ if neobundle#tap('vim-jsx')
 endif
 " }}}
 
-
 "yaml {{{
 if neobundle#tap('vim-ansible-yaml')
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -1181,6 +1204,44 @@ if neobundle#tap('vim-yaml')
 endif
 " }}}
 
+"typescript {{{
+if neobundle#tap('tsuquyomi')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('typescript-vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-js-pretty-template')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-js-indent')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-dtsm')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+
+if neobundle#tap('vim-typings')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
+    call neobundle#end()
+endif
+"}}}
+
 "fish {{{
 if neobundle#tap('vim-fish')
     call neobundle#begin(expand('~/.vim/bundle/'))
@@ -1192,6 +1253,16 @@ if neobundle#tap('vim-fish')
 endif
 " }}}
 
+"docker {{{
+if neobundle#tap('Dockerfile')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['dockerfile'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+"}}}
 
 "elm {{{
 if neobundle#tap('elm-vim')
@@ -1202,8 +1273,16 @@ if neobundle#tap('elm-vim')
     call neobundle#untap()
     call neobundle#end()
 endif
-" }}}
 
+if neobundle#tap('ale')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+" }}}
 
 " }}}
 
@@ -1448,7 +1527,7 @@ let g:lightline = {
             \ },
             \ 'separator': {
             \   'left': "⮀",
-            \   'right': "⮂" 
+            \   'right': "⮂"
             \ },
             \ 'subseparator': {
             \    'left': "⮁",
@@ -1582,7 +1661,7 @@ endfunction
 " }}}
 
 " smartinput {{{
-function! s:setup_smartinput() 
+function! s:setup_smartinput()
     " 括弧内のスペース
     call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
     call smartinput#define_rule({
@@ -1840,6 +1919,6 @@ let g:hybrid_custom_term_colors = 1
 " let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette."
 set background=dark
 colorscheme hybrid
-autocmd BufRead,BufNewFile *.yml.tmpl set filetype=yaml 
+autocmd BufRead,BufNewFile *.yml.tmpl set filetype=yaml
 " colorscheme default
 " }}}

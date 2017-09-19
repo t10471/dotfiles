@@ -1,3 +1,11 @@
+# 最初に実行する必要あり
+# git config --global alias.st status
+# git config --global alias.co checkout
+# git config --global alias.br branch
+# git config --global alias.cm commit
+# git config --global alias.df diff
+# git config --global alias.gr grep
+
 alias ls='/usr/local/bin/gls --color=auto'
 alias la='/usr/local/bin/gls -la --color=auto'
 alias ll='/usr/local/bin/gls -la --color=auto'
@@ -24,6 +32,11 @@ export PATH="$HOME/.local/bin:$GOPATH/bin:$PATH"
 export PATH="$HOME/bin:$PATH" 
 export PATH="$HOME/dotfiles/bin:$PATH" 
 
+export KUBE_EDITOR="vim"
+
+export EDITOR="/usr/local/bin/vim"
+export VISUAL="/usr/local/bin/vim"
+
 source ~/.airtrack_env
 source ~/.user_topics_env
 source ~/.potage_env
@@ -35,9 +48,6 @@ source ~/dotfiles/enhancd/init.sh
 # autojump setting
 [[ -s `brew --prefix`/etc/autojump.sh  ]] && . `brew --prefix`/etc/autojump.sh
 
-export KUBE_EDITOR="vim"
-export EDITOR="/usr/local/bin/vim"
-export VISUAL="/usr/local/bin/vim"
 
 # The next line updates PATH for the Google Cloud SDK.
 source '/Users/a14332/google-cloud-sdk/path.bash.inc'
@@ -52,7 +62,7 @@ export PATH="${HOME}/.sbtenv/bin:${PATH}"
 eval "$(sbtenv init -)"
 
 function _update_ps1() {
-    export PS1="$(~/powerline-shell.py $? 2> /dev/null)"
+    export PS1="$(~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell.py $? 2> /dev/null)"
 }
 export PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 peco-select-history() {
