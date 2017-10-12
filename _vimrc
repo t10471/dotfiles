@@ -100,9 +100,6 @@ NeoBundle      'KazuakiM/vim-sqlfix'
 NeoBundleLazy  'elzr/vim-json'
 NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
 
-" fish
-NeoBundleLazy  'dag/vim-fish'
-
 "ctags
 NeoBundle      'majutsushi/tagbar'
 NeoBundle      't10471/vim-tags'
@@ -151,13 +148,14 @@ NeoBundleLazy  'yuku-t/vim-ref-ri'
 NeoBundleLazy  'tpope/vim-rails'
 NeoBundleLazy  'basyura/unite-rails'
 NeoBundleLazy  'vim-scripts/ruby-matchit'
-" javascript jsx 
+" javascript jsx
 NeoBundleLazy 'pangloss/vim-javascript'
 NeoBundleLazy 'mxw/vim-jsx'
 
 " yaml
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
+
 
 " typescript
 NeoBundleLazy 'Quramy/tsuquyomi'
@@ -170,7 +168,10 @@ NeoBundleLazy 'mhartington/vim-typings'
 " docker
 NeoBundleLazy 'ekalinin/Dockerfile.vim'
 
-" elm 
+" fish
+NeoBundleLazy 'dag/vim-fish'
+
+" elm
 NeoBundleLazy 'elmcast/elm-vim'
 NeoBundleLazy 'w0rp/ale'
 
@@ -339,7 +340,7 @@ if neobundle#tap('yankround.vim') "{{{
     nmap gP <Plug>(yankround-gP)
     nmap <C-p> <Plug>(yankround-prev)
     nmap <C-n> <Plug>(yankround-next)
-    nnoremap <leader>p :Unite yankround<CR> 
+    nnoremap <leader>p :Unite yankround<CR>
 endif
 "}}}
 
@@ -425,7 +426,7 @@ if neobundle#tap('vim-indent-guides') "{{{
     let g:indent_guides_auto_colors=0
     let g:indent_guides_enable_on_vim_startup=1
     let g:indent_guides_guide_size=1
-    augroup vim-indent-guides 
+    augroup vim-indent-guides
         autocmd!
         autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
         autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
@@ -467,7 +468,7 @@ if neobundle#tap('vim-gitgutter') "{{{
         let g:gitgutter_sign_modified = '➜'
         let g:gitgutter_sign_removed = '✘'
     endfunction
-    augroup vim-gitgutter 
+    augroup vim-gitgutter
         autocmd!
         autocmd BufNewFile,BufRead * NeoBundleSource vim-gitgutter
     augroup END
@@ -601,7 +602,7 @@ if neobundle#tap('neosnippet') "{{{
     " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     "             \ '\<Plug>(neosnippet_expand_or_jump)'
     "             \: '\<TAB>'
-    
+
     " For snippet_complete marker.
     if has('conceal')
       set conceallevel=2 concealcursor=i
@@ -923,7 +924,7 @@ if neobundle#tap('gtags.vim')
     nnoremap wj :Gtags <C-r><C-w><CR>
     nnoremap wk :Gtags -r <C-r><C-w><CR>
     " ヘッダファイルをタブで開く
-    nnoremap sgf <C-w>gf<CR> 
+    nnoremap sgf <C-w>gf<CR>
     call neobundle#untap()
 endif
 if neobundle#tap('alt-gtags.vim')
@@ -1250,7 +1251,7 @@ if neobundle#tap('vim-fish')
     call neobundle#untap()
     call neobundle#end()
 endif
-"}}}
+" }}}
 
 "docker {{{
 if neobundle#tap('Dockerfile')
@@ -1261,14 +1262,12 @@ if neobundle#tap('Dockerfile')
     call neobundle#untap()
     call neobundle#end()
 endif
-
 "}}}
 
 "elm {{{
 if neobundle#tap('elm-vim')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
-
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()
@@ -1283,8 +1282,7 @@ if neobundle#tap('ale')
     call neobundle#untap()
     call neobundle#end()
 endif
-
-"}}}
+" }}}
 
 " }}}
 
@@ -1529,7 +1527,7 @@ let g:lightline = {
             \ },
             \ 'separator': {
             \   'left': "⮀",
-            \   'right': "⮂" 
+            \   'right': "⮂"
             \ },
             \ 'subseparator': {
             \    'left': "⮁",
@@ -1663,7 +1661,7 @@ endfunction
 " }}}
 
 " smartinput {{{
-function! s:setup_smartinput() 
+function! s:setup_smartinput()
     " 括弧内のスペース
     call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
     call smartinput#define_rule({
