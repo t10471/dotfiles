@@ -174,6 +174,8 @@ NeoBundleLazy 'dag/vim-fish'
 " elm
 NeoBundleLazy 'elmcast/elm-vim'
 NeoBundleLazy 'w0rp/ale'
+" go
+NeoBundleLazy 'fatih/vim-go'
 
 call neobundle#end()
 " }}}
@@ -1277,6 +1279,17 @@ endif
 if neobundle#tap('ale')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+" }}}
+
+"go {{{
+if neobundle#tap('vim-go')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['go'] }})
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()

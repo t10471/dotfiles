@@ -1,6 +1,7 @@
 set fish_greeting 
 
 set -x GOPATH $HOME/.gopath
+set -x GOENV_ROOT $HOME/.goenv
 set -x EDITOR vim
 set -x TERM xterm-256color
 set -x PATH $HOME/.stack/programs/x86_64-osx/ghcjs-0.2.1.9007002_ghc-8.0.1/bin $PATH
@@ -12,8 +13,10 @@ set -x PATH $HOME/.pyenv/shims $PATH
 set -x PATH /usr/local/bin $PATH
 set -x PATH /usr/local/bin $PATH
 set -x PATH $HOME/.local/bin $PATH
+set -x PATH $HOME/.goenv/bin $PATH
 
 . (pyenv init -| psub)
+goenv rehash >/dev/null ^&1
 
 balias diff colordiff
 balias g git
@@ -40,7 +43,9 @@ end
 set -U Z_CMD "z"
 set -U Z_DATA "$HOME/.z"
 
-set -x CLOUDSDK_PYTHON /Users/a14332/.pyenv/versions/anaconda3-2.5.0/envs/py27/bin/python
+set -x CLOUDSDK_PYTHON $HOME/.pyenv/versions/anaconda3-2.5.0/envs/py27/bin/python
+
+eval (direnv hook fish)
 
 . ~/google-cloud-sdk/path.fish.inc.fish
 . ~/.python.fish
