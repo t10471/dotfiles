@@ -33,7 +33,6 @@ augroup vimrcEx " vimでファイルをひらいたとき最後にカーソル�
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
                 \ exe "normal g`\"" | endif
 augroup END
-let g:is_bash = 1
 
 filetype off
 " }}}
@@ -61,7 +60,6 @@ NeoBundleLazy  'Shougo/vimshell'
 NeoBundle      'vim-jp/vimdoc-ja'
 NeoBundle      'w0ng/vim-hybrid' " color theme
 NeoBundle      'fuenor/qfixgrep'
-NeoBundleLazy  'LeafCage/nebula.vim' " NeoBundleの補助
 NeoBundle      'nathanaelkane/vim-indent-guides'
 NeoBundle      'sudo.vim'
 NeoBundle      'yonchu/accelerated-smooth-scroll'
@@ -92,12 +90,8 @@ NeoBundle      'kana/vim-textobj-indent'        "al, il
 NeoBundle      'kana/vim-textobj-fold'          "az, iz
 NeoBundleLazy  'kana/vim-smartinput'
 NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
-NeoBundleLazy  'glidenote/memolist.vim'
 NeoBundleLazy  'bkad/CamelCaseMotion'
-NeoBundleLazy  'jacquesbh/vim-showmarks'
-NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
 NeoBundle      'Konfekt/FastFold'
-" NeoBundleLazy  'KazuakiM/vim-sqlfix'
 NeoBundle      'KazuakiM/vim-sqlfix'
 NeoBundleLazy  'elzr/vim-json'
 NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
@@ -357,48 +351,6 @@ if neobundle#tap('CamelCaseMotion') "{{{
 endif
 "}}}
 
-if neobundle#tap('vim-showmarks') "{{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config('vim-showmarks', {'autoload': {'commands': ['ShowMarksOnce', 'NoShowMarks', 'DoShowMarks', 'PreviewMarks']}})
-    call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    let g:showmarks_marks_notime = 1
-    let g:unite_source_mark_marks = '01abcABCDEFGHIJKLNMOPQRSTUVWXYZ'
-    let g:showmarks_enable       = 0
-    " 現在位置をマーク
-    if !exists('g:markrement_char')
-        let g:markrement_char = [
-        \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        \     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-        \ ]
-    endif
-    function! s:AutoMarkrement()
-        if !exists('b:markrement_pos')
-            let b:markrement_pos = 0
-        else
-            let b:markrement_pos = (b:markrement_pos + 1) % len(g:markrement_char)
-        endif
-        exe 'mark' g:markrement_char[b:markrement_pos]
-        echo 'marked' g:markrement_char[b:markrement_pos]
-    endfunction
-
-    augroup show-marks-sync
-            autocmd!
-            autocmd BufReadPost * sil! ShowMarksOnce
-    augroup END
-    nnoremap [Mark] <Nop>
-    nmap <leader>m [Mark]
-    nnoremap <silent> [Mark]m :Unite mark<CR>
-    nnoremap [Mark] :<C-u>call <SID>AutoMarkrement()<CR><CR>:ShowMarksOnce<CR>
-    command! -bar MarksDelete sil :delm! | :delm 0-9A-Z | :wv! | :ShowMarksOnce
-    nnoremap <silent>[Mark]d :MarksDelete<CR>
-
-
-    call neobundle#untap()
-endif
 "}}}
 
 if neobundle#tap('vim-qfreplace') "{{{
@@ -429,23 +381,6 @@ if neobundle#tap('vim-indent-guides') "{{{
 endif
 "}}}
 
-if neobundle#tap('nebula.vim') " {{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({
-                \   'autoload' : {
-                \     'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions',
-                \                  'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']
-                \   }
-                \ })
-    call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    nnoremap <silent>,bl    :<C-u>NebulaPutLazy<CR>
-    nnoremap <silent>,bc    :<C-u>NebulaYankConfig<CR>
-    nnoremap <silent>,bp    :<C-u>NebulaPutFromClipboard<CR>
-    nnoremap <silent>,bt    :<C-u>NebulaYankTap!<CR>
-    call neobundle#untap()
-endif
 " }}}
 
 if neobundle#tap('vim-hier') "{{{
@@ -759,22 +694,6 @@ if neobundle#tap('vim-smartinput-endwise') "{{{
 endif
 " }}}
 
-if neobundle#tap('memolist.vim') "{{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}})
-    call neobundle#end()
-    function! neobundle#tapped.hooks.on_post_source(bundle)
-        let g:memolist_path = '~/memolist'
-        let g:memolist_prompt_tags = 1
-        let g:memolist_prompt_categories = 1
-        let g:memolist_unite = 1
-        let g:memolist_ex_cmd = 'NERDTree'
-    endfunction
-    nnoremap <Leader>mn  :MemoNew<CR>
-    nnoremap <Leader>ml  :MemoList<CR>
-    nnoremap <Leader>mg  :MemoGrep<CR>
-    call neobundle#untap()
-endif
 "}}}
 
 if neobundle#tap('vim-quickrun') "{{{
