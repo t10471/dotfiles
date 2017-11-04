@@ -27,6 +27,7 @@ set wildmode=longest:full,full
 set ambiwidth=double
 set directory=~/.vim/tmp
 set viminfo='50,\"1000,:0,n~/.vim/viminfo
+set spelllang=en,cjk
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
     autocmd!
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -152,12 +153,9 @@ NeoBundleLazy  'vim-scripts/ruby-matchit'
 " javascript jsx
 NeoBundleLazy 'pangloss/vim-javascript'
 NeoBundleLazy 'mxw/vim-jsx'
-
 " yaml
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
-
-
 " typescript
 NeoBundleLazy 'Quramy/tsuquyomi'
 NeoBundleLazy 'leafgarland/typescript-vim'
@@ -165,13 +163,10 @@ NeoBundleLazy 'Quramy/vim-js-pretty-template'
 NeoBundleLazy 'jason0x43/vim-js-indent'
 NeoBundleLazy 'Quramy/vim-dtsm'
 NeoBundleLazy 'mhartington/vim-typings'
-
 " docker
 NeoBundleLazy 'ekalinin/Dockerfile.vim'
-
 " fish
 NeoBundleLazy 'dag/vim-fish'
-
 " elm
 NeoBundleLazy 'elmcast/elm-vim'
 NeoBundleLazy 'w0rp/ale'
