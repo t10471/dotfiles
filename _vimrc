@@ -1,4 +1,3 @@
-
 " vim: set fdm=marker :
 
 " set {{{
@@ -82,6 +81,8 @@ NeoBundleLazy  'kana/vim-operator-replace',     { 'depends' : 'kana/vim-operator
 NeoBundle      'tpope/vim-abolish' " キャメルケース変換、賢い検索・置換
 NeoBundleLazy  'junegunn/vim-easy-align' " 整列
 NeoBundle      'Lokaltog/vim-easymotion' " 移動
+NeoBundle      'haya14busa/incsearch.vim' " 検索
+NeoBundle      'haya14busa/incsearch-easymotion.vim'
 NeoBundleLazy  'thinca/vim-qfreplace'
 NeoBundle      'tpope/vim-repeat'
 NeoBundle      'kana/vim-textobj-user'
@@ -528,9 +529,59 @@ endif
 if neobundle#tap('vim-easymotion') "{{{
     " :で始まるやつ :mapとか)バッファする :VO map
     let g:EasyMotion_do_mapping = 0 "Disable default mappings
-    nmap m <Plug>(easymotion-s2)
+    map <Leader> <Plug>(easymotion-prefix)
+    " <Leader>f{char} to move to {char}
+    map  <Leader>f <Plug>(easymotion-bd-f)
+    nmap <Leader>f <Plug>(easymotion-overwin-f)
+    " s{char}{char} to move to {char}{char}
+    nmap s <Plug>(easymotion-overwin-f2)
+    " Move to line
+    map <Leader>L <Plug>(easymotion-bd-jk)
+    nmap <Leader>L <Plug>(easymotion-overwin-line)
+    " Move to word
+    map  <Leader>w <Plug>(easymotion-bd-w)
+    nmap <Leader>w <Plug>(easymotion-overwin-w)
+endif
+if neobundle#tap('incsearch.vim') "{{{
+    set hlsearch
+    let g:incsearch#auto_nohlsearch = 1
+    map n  <Plug>(incsearch-nohl-n)
+    map N  <Plug>(incsearch-nohl-N)
+    map *  <Plug>(incsearch-nohl-*)
+    map #  <Plug>(incsearch-nohl-#)
+    map g* <Plug>(incsearch-nohl-g*)
+    map g# <Plug>(incsearch-nohl-g#)
+    map /  <Plug>(incsearch-forward)
+    map ?  <Plug>(incsearch-backward)
+    map g/ <Plug>(incsearch-stay)
+    augroup incsearch-keymap
+      autocmd!
+      autocmd VimEnter * call s:incsearch_keymap()
+    augroup END
+    function! s:incsearch_keymap()
+        IncSearchNoreMap <Right> <Over>(incsearch-next)
+        IncSearchNoreMap <Left>  <Over>(incsearch-prev)
+        IncSearchNoreMap <Down>  <Over>(incsearch-scroll-f)
+        IncSearchNoreMap <Up>    <Over>(incsearch-scroll-b)
+    endfunction
+endif
+if neobundle#tap('incsearch-easymotion.vim') "{{{
+    map z/ <Plug>(incsearch-easymotion-/)
+    map z? <Plug>(incsearch-easymotion-?)
+    map zg/ <Plug>(incsearch-easymotion-stay)
+    function! s:config_easyfuzzymotion(...) abort
+      return extend(copy({
+      \   'converters': [incsearch#config#fuzzy#converter()],
+      \   'modules': [incsearch#config#easymotion#module()],
+      \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+      \   'is_expr': 0,
+      \   'is_stay': 1
+      \ }), get(a:, 1, {}))
+    endfunction
+    noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 endif
 "}}}
+
 "
 if neobundle#tap('vim-easy-align') "{{{
     " 特定の区切り文字を整列する
