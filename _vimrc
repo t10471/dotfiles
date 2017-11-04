@@ -141,8 +141,6 @@ NeoBundleLazy  'vim-jp/cpp-vim'
 NeoBundleLazy  'vim-scripts/gtags.vim'
 NeoBundleLazy  '5t111111/alt-gtags.vim'
 NeoBundleLazy  'rhysd/vim-clang-format'
-" scala
-NeoBundleLazy  'derekwyatt/vim-scala'
 "ruby
 NeoBundleLazy  'alpaca-tc/alpaca_tags'
 NeoBundleLazy  'AndrewRadev/switch.vim'
@@ -230,7 +228,6 @@ if neobundle#tap('vimshell') " {{{
     nnoremap <silent> ,vs :VimShell<CR>
     nnoremap <silent> ,vp :VimShellInteractive python<CR>
     nnoremap <silent> ,vr :VimShellInteractive irb<CR>
-    nnoremap <silent> ,vl :VimShellInteractive scala<CR>
     nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
     nnoremap <silent> ,vsg :VimShellInteractive stack ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
@@ -666,7 +663,6 @@ if neobundle#tap('neocomplete.vim') "{{{
     endfunction
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default':    '',
-                \ 'scala':      $HOME.'/.vim/dict/scala.dict',
                 \ }
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
@@ -837,14 +833,7 @@ if neobundle#tap('vim-quickrun') "{{{
                 \       'outputter' : 'error:buffer:quickfix',
                 \       'runner' : 'vimproc',
                 \   },
-                \   'sbt' : {
-                \       'command'   : 'sbt',
-                \       'exec' : ['%c compile', '%c run'],
-                \       'outputter'                 : 'multi:buffer:quickfix',
-                \       'runner' : 'vimproc',
-                \   },
                 \}
-    let g:quickrun_config.scala = {'type': 'scala/process_manager'}
     " \     'tempfile': '%{tempname()}.c',
     " \     'hook/sweep/files': '%S:p:r',
     " quickfixを自動で閉じる
@@ -1093,13 +1082,6 @@ endif
 
 " }}}
 
-" scala {{{
-if neobundle#tap('vim-scala')
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload' : {'filetypes': ['scala']}})
-    call neobundle#end()
-endif
-" }}}
 
 " php {{{
 " autocmd BufNewFile,BufRead *.php compiler php
