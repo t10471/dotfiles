@@ -1,4 +1,3 @@
-
 " vim: set fdm=marker :
 
 " set {{{
@@ -28,12 +27,12 @@ set wildmode=longest:full,full
 set ambiwidth=double
 set directory=~/.vim/tmp
 set viminfo='50,\"1000,:0,n~/.vim/viminfo
+set spelllang=en,cjk
 augroup vimrcEx " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
     autocmd!
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
                 \ exe "normal g`\"" | endif
 augroup END
-let g:is_bash = 1
 
 filetype off
 " }}}
@@ -61,7 +60,6 @@ NeoBundleLazy  'Shougo/vimshell'
 NeoBundle      'vim-jp/vimdoc-ja'
 NeoBundle      'w0ng/vim-hybrid' " color theme
 NeoBundle      'fuenor/qfixgrep'
-NeoBundleLazy  'LeafCage/nebula.vim' " NeoBundleの補助
 NeoBundle      'nathanaelkane/vim-indent-guides'
 NeoBundle      'sudo.vim'
 NeoBundle      'yonchu/accelerated-smooth-scroll'
@@ -82,6 +80,8 @@ NeoBundleLazy  'kana/vim-operator-replace',     { 'depends' : 'kana/vim-operator
 NeoBundle      'tpope/vim-abolish' " キャメルケース変換、賢い検索・置換
 NeoBundleLazy  'junegunn/vim-easy-align' " 整列
 NeoBundle      'Lokaltog/vim-easymotion' " 移動
+NeoBundle      'haya14busa/incsearch.vim' " 検索
+NeoBundle      'haya14busa/incsearch-easymotion.vim'
 NeoBundleLazy  'thinca/vim-qfreplace'
 NeoBundle      'tpope/vim-repeat'
 NeoBundle      'kana/vim-textobj-user'
@@ -90,12 +90,8 @@ NeoBundle      'kana/vim-textobj-indent'        "al, il
 NeoBundle      'kana/vim-textobj-fold'          "az, iz
 NeoBundleLazy  'kana/vim-smartinput'
 NeoBundleLazy  'cohama/vim-smartinput-endwise', { 'depends' : 'kana/vim-smartinput'}
-NeoBundleLazy  'glidenote/memolist.vim'
 NeoBundleLazy  'bkad/CamelCaseMotion'
-NeoBundleLazy  'jacquesbh/vim-showmarks'
-NeoBundleLazy  'tacroe/unite-mark'            , { 'depends' : 'jacquesbh/vim-showmarks'}
 NeoBundle      'Konfekt/FastFold'
-" NeoBundleLazy  'KazuakiM/vim-sqlfix'
 NeoBundle      'KazuakiM/vim-sqlfix'
 NeoBundleLazy  'elzr/vim-json'
 NeoBundleLazy  'Glench/Vim-Jinja2-Syntax'
@@ -139,8 +135,6 @@ NeoBundleLazy  'vim-jp/cpp-vim'
 NeoBundleLazy  'vim-scripts/gtags.vim'
 NeoBundleLazy  '5t111111/alt-gtags.vim'
 NeoBundleLazy  'rhysd/vim-clang-format'
-" scala
-NeoBundleLazy  'derekwyatt/vim-scala'
 "ruby
 NeoBundleLazy  'alpaca-tc/alpaca_tags'
 NeoBundleLazy  'AndrewRadev/switch.vim'
@@ -151,12 +145,9 @@ NeoBundleLazy  'vim-scripts/ruby-matchit'
 " javascript jsx
 NeoBundleLazy 'pangloss/vim-javascript'
 NeoBundleLazy 'mxw/vim-jsx'
-
 " yaml
 NeoBundleLazy 'chase/vim-ansible-yaml'
 NeoBundleLazy 'stephpy/vim-yaml'
-
-
 " typescript
 NeoBundleLazy 'Quramy/tsuquyomi'
 NeoBundleLazy 'leafgarland/typescript-vim'
@@ -164,16 +155,15 @@ NeoBundleLazy 'Quramy/vim-js-pretty-template'
 NeoBundleLazy 'jason0x43/vim-js-indent'
 NeoBundleLazy 'Quramy/vim-dtsm'
 NeoBundleLazy 'mhartington/vim-typings'
-
 " docker
 NeoBundleLazy 'ekalinin/Dockerfile.vim'
-
 " fish
 NeoBundleLazy 'dag/vim-fish'
-
 " elm
 NeoBundleLazy 'elmcast/elm-vim'
 NeoBundleLazy 'w0rp/ale'
+" go
+NeoBundleLazy 'fatih/vim-go'
 
 " nginx
 NeoBundleLazy 'chr4/nginx.vim'
@@ -235,7 +225,6 @@ if neobundle#tap('vimshell') " {{{
     nnoremap <silent> ,vs :VimShell<CR>
     nnoremap <silent> ,vp :VimShellInteractive python<CR>
     nnoremap <silent> ,vr :VimShellInteractive irb<CR>
-    nnoremap <silent> ,vl :VimShellInteractive scala<CR>
     nnoremap <silent> ,vg :VimShellInteractive ghci<CR>
     nnoremap <silent> ,vsg :VimShellInteractive stack ghci<CR>
     " 非同期で開いたインタプリタに現在の行を評価させる
@@ -365,50 +354,6 @@ if neobundle#tap('CamelCaseMotion') "{{{
 endif
 "}}}
 
-if neobundle#tap('vim-showmarks') "{{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config('vim-showmarks', {'autoload': {'commands': ['ShowMarksOnce', 'NoShowMarks', 'DoShowMarks', 'PreviewMarks']}})
-    call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    let g:showmarks_marks_notime = 1
-    let g:unite_source_mark_marks = '01abcABCDEFGHIJKLNMOPQRSTUVWXYZ'
-    let g:showmarks_enable       = 0
-    " 現在位置をマーク
-    if !exists('g:markrement_char')
-        let g:markrement_char = [
-        \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        \     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        \     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        \     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-        \ ]
-    endif
-    function! s:AutoMarkrement()
-        if !exists('b:markrement_pos')
-            let b:markrement_pos = 0
-        else
-            let b:markrement_pos = (b:markrement_pos + 1) % len(g:markrement_char)
-        endif
-        exe 'mark' g:markrement_char[b:markrement_pos]
-        echo 'marked' g:markrement_char[b:markrement_pos]
-    endfunction
-
-    augroup show-marks-sync
-            autocmd!
-            autocmd BufReadPost * sil! ShowMarksOnce
-    augroup END
-    nnoremap [Mark] <Nop>
-    nmap <leader>m [Mark]
-    nnoremap <silent> [Mark]m :Unite mark<CR>
-    nnoremap [Mark] :<C-u>call <SID>AutoMarkrement()<CR><CR>:ShowMarksOnce<CR>
-    command! -bar MarksDelete sil :delm! | :delm 0-9A-Z | :wv! | :ShowMarksOnce
-    nnoremap <silent>[Mark]d :MarksDelete<CR>
-
-
-    call neobundle#untap()
-endif
-"}}}
-
 if neobundle#tap('vim-qfreplace') "{{{
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload': {'commands': ['Qfreplace']}})
@@ -435,25 +380,7 @@ if neobundle#tap('vim-indent-guides') "{{{
         autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
     augroup END
 endif
-"}}}
 
-if neobundle#tap('nebula.vim') " {{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({
-                \   'autoload' : {
-                \     'commands': ['NebulaPutLazy', 'NebulaPutFromClipboard', 'NebulaYankOptions',
-                \                  'NebulaYankConfig', 'NebulaPutConfig', 'NebulaYankTap']
-                \   }
-                \ })
-    call neobundle#end()
-    function! neobundle#hooks.on_source(bundle)
-    endfunction
-    nnoremap <silent>,bl    :<C-u>NebulaPutLazy<CR>
-    nnoremap <silent>,bc    :<C-u>NebulaYankConfig<CR>
-    nnoremap <silent>,bp    :<C-u>NebulaPutFromClipboard<CR>
-    nnoremap <silent>,bt    :<C-u>NebulaYankTap!<CR>
-    call neobundle#untap()
-endif
 " }}}
 
 if neobundle#tap('vim-hier') "{{{
@@ -529,9 +456,59 @@ endif
 if neobundle#tap('vim-easymotion') "{{{
     " :で始まるやつ :mapとか)バッファする :VO map
     let g:EasyMotion_do_mapping = 0 "Disable default mappings
-    nmap m <Plug>(easymotion-s2)
+    map <Leader> <Plug>(easymotion-prefix)
+    " <Leader>f{char} to move to {char}
+    map  <Leader>f <Plug>(easymotion-bd-f)
+    nmap <Leader>f <Plug>(easymotion-overwin-f)
+    " s{char}{char} to move to {char}{char}
+    nmap s <Plug>(easymotion-overwin-f2)
+    " Move to line
+    map <Leader>L <Plug>(easymotion-bd-jk)
+    nmap <Leader>L <Plug>(easymotion-overwin-line)
+    " Move to word
+    map  <Leader>w <Plug>(easymotion-bd-w)
+    nmap <Leader>w <Plug>(easymotion-overwin-w)
+endif
+if neobundle#tap('incsearch.vim') "{{{
+    set hlsearch
+    let g:incsearch#auto_nohlsearch = 1
+    map n  <Plug>(incsearch-nohl-n)
+    map N  <Plug>(incsearch-nohl-N)
+    map *  <Plug>(incsearch-nohl-*)
+    map #  <Plug>(incsearch-nohl-#)
+    map g* <Plug>(incsearch-nohl-g*)
+    map g# <Plug>(incsearch-nohl-g#)
+    map /  <Plug>(incsearch-forward)
+    map ?  <Plug>(incsearch-backward)
+    map g/ <Plug>(incsearch-stay)
+    augroup incsearch-keymap
+      autocmd!
+      autocmd VimEnter * call s:incsearch_keymap()
+    augroup END
+    function! s:incsearch_keymap()
+        IncSearchNoreMap <Right> <Over>(incsearch-next)
+        IncSearchNoreMap <Left>  <Over>(incsearch-prev)
+        IncSearchNoreMap <Down>  <Over>(incsearch-scroll-f)
+        IncSearchNoreMap <Up>    <Over>(incsearch-scroll-b)
+    endfunction
+endif
+if neobundle#tap('incsearch-easymotion.vim') "{{{
+    map z/ <Plug>(incsearch-easymotion-/)
+    map z? <Plug>(incsearch-easymotion-?)
+    map zg/ <Plug>(incsearch-easymotion-stay)
+    function! s:config_easyfuzzymotion(...) abort
+      return extend(copy({
+      \   'converters': [incsearch#config#fuzzy#converter()],
+      \   'modules': [incsearch#config#easymotion#module()],
+      \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+      \   'is_expr': 0,
+      \   'is_stay': 1
+      \ }), get(a:, 1, {}))
+    endfunction
+    noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 endif
 "}}}
+
 "
 if neobundle#tap('vim-easy-align') "{{{
     " 特定の区切り文字を整列する
@@ -621,7 +598,6 @@ if neobundle#tap('neocomplete.vim') "{{{
     endfunction
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default':    '',
-                \ 'scala':      $HOME.'/.vim/dict/scala.dict',
                 \ }
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
@@ -718,22 +694,6 @@ if neobundle#tap('vim-smartinput-endwise') "{{{
 endif
 " }}}
 
-if neobundle#tap('memolist.vim') "{{{
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload': {'commands': ['MemoList', 'MemoGrep', 'MemoNew']}})
-    call neobundle#end()
-    function! neobundle#tapped.hooks.on_post_source(bundle)
-        let g:memolist_path = '~/memolist'
-        let g:memolist_prompt_tags = 1
-        let g:memolist_prompt_categories = 1
-        let g:memolist_unite = 1
-        let g:memolist_ex_cmd = 'NERDTree'
-    endfunction
-    nnoremap <Leader>mn  :MemoNew<CR>
-    nnoremap <Leader>ml  :MemoList<CR>
-    nnoremap <Leader>mg  :MemoGrep<CR>
-    call neobundle#untap()
-endif
 "}}}
 
 if neobundle#tap('vim-quickrun') "{{{
@@ -792,14 +752,7 @@ if neobundle#tap('vim-quickrun') "{{{
                 \       'outputter' : 'error:buffer:quickfix',
                 \       'runner' : 'vimproc',
                 \   },
-                \   'sbt' : {
-                \       'command'   : 'sbt',
-                \       'exec' : ['%c compile', '%c run'],
-                \       'outputter'                 : 'multi:buffer:quickfix',
-                \       'runner' : 'vimproc',
-                \   },
                 \}
-    let g:quickrun_config.scala = {'type': 'scala/process_manager'}
     " \     'tempfile': '%{tempname()}.c',
     " \     'hook/sweep/files': '%S:p:r',
     " quickfixを自動で閉じる
@@ -861,6 +814,7 @@ endif
 " }}}
 
 " }}}
+"}}}
 
 " language {{{
 
@@ -1048,13 +1002,6 @@ endif
 
 " }}}
 
-" scala {{{
-if neobundle#tap('vim-scala')
-    call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload' : {'filetypes': ['scala']}})
-    call neobundle#end()
-endif
-" }}}
 
 " php {{{
 " autocmd BufNewFile,BufRead *.php compiler php
@@ -1290,7 +1237,7 @@ endif
 " nginx {{{
 if neobundle#tap('nginx.vim')
     call neobundle#begin(expand('~/.vim/bundle/'))
-    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    call neobundle#config({'autoload' : { 'filetypes' : ['nginx'] }})
     function! neobundle#hooks.on_source(bundle)
     endfunction
     call neobundle#untap()
@@ -1298,6 +1245,17 @@ if neobundle#tap('nginx.vim')
 endif
 autocmd BufNewFile,BufRead .*nginx.conf :set filetype=nginx
 autocmd BufNewFile,BufRead .*nginx.conf.tmpl :set filetype=nginx
+" }}}
+
+"go {{{
+if neobundle#tap('vim-go')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['go'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
 " }}}
 
 " }}}
