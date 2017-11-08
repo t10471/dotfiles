@@ -175,6 +175,9 @@ NeoBundleLazy 'dag/vim-fish'
 NeoBundleLazy 'elmcast/elm-vim'
 NeoBundleLazy 'w0rp/ale'
 
+" nginx
+NeoBundleLazy 'chr4/nginx.vim'
+
 call neobundle#end()
 " }}}
 
@@ -1136,7 +1139,7 @@ autocmd BufWritePost *.py call Flake8()
 au BufRead,BufNewFile *.pxd,*.pxi,*.pyx set filetype=cython
 " }}}
 
-"ruby {{{
+" ruby {{{
 if neobundle#tap('alpaca_tags')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ruby'] }})
@@ -1169,7 +1172,7 @@ if neobundle#tap('ruby-matchit')
 endif
 " }}}
 
-"javascript jsx {{{
+" javascript jsx {{{
 if neobundle#tap('vim-javascript')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['javascript', 'jsx', 'javascript.jsx'] }})
@@ -1186,7 +1189,7 @@ if neobundle#tap('vim-jsx')
 endif
 " }}}
 
-"yaml {{{
+" yaml {{{
 if neobundle#tap('vim-ansible-yaml')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['yaml'] }})
@@ -1204,7 +1207,7 @@ if neobundle#tap('vim-yaml')
 endif
 " }}}
 
-"typescript {{{
+" typescript {{{
 if neobundle#tap('tsuquyomi')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['ts', 'typescript'] }})
@@ -1242,7 +1245,7 @@ if neobundle#tap('vim-typings')
 endif
 "}}}
 
-"fish {{{
+" fish {{{
 if neobundle#tap('vim-fish')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['fish'] }})
@@ -1253,7 +1256,7 @@ if neobundle#tap('vim-fish')
 endif
 " }}}
 
-"docker {{{
+" docker {{{
 if neobundle#tap('Dockerfile')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['dockerfile'] }})
@@ -1264,7 +1267,7 @@ if neobundle#tap('Dockerfile')
 endif
 "}}}
 
-"elm {{{
+" elm {{{
 if neobundle#tap('elm-vim')
     call neobundle#begin(expand('~/.vim/bundle/'))
     call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
@@ -1282,6 +1285,19 @@ if neobundle#tap('ale')
     call neobundle#untap()
     call neobundle#end()
 endif
+" }}}
+
+" nginx {{{
+if neobundle#tap('nginx.vim')
+    call neobundle#begin(expand('~/.vim/bundle/'))
+    call neobundle#config({'autoload' : { 'filetypes' : ['elm'] }})
+    function! neobundle#hooks.on_source(bundle)
+    endfunction
+    call neobundle#untap()
+    call neobundle#end()
+endif
+autocmd BufNewFile,BufRead .*nginx.conf :set filetype=nginx
+autocmd BufNewFile,BufRead .*nginx.conf.tmpl :set filetype=nginx
 " }}}
 
 " }}}
