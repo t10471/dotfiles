@@ -16,7 +16,7 @@ set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/.goenv/bin $PATH
 
 . (pyenv init -| psub)
-goenv rehash >/dev/null ^&1
+. (goenv init -|psub)
 
 balias diff colordiff
 balias g git
