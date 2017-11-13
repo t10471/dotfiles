@@ -15,8 +15,9 @@ set -x PATH /usr/local/bin $PATH
 set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/.goenv/bin $PATH
 
+eval (direnv hook fish)
 . (pyenv init -| psub)
-. (goenv init -|psub)
+. (goenv init -| psub)
 
 balias diff colordiff
 balias g git
@@ -45,22 +46,14 @@ set -U Z_DATA "$HOME/.z"
 
 set -x CLOUDSDK_PYTHON $HOME/.pyenv/versions/anaconda3-2.5.0/envs/py27/bin/python
 
-eval (direnv hook fish)
-
 . ~/google-cloud-sdk/path.fish.inc.fish
 . ~/.python.fish
 . ~/.gcp_commands.fish
 
-set fish_plugins theme peco z tmux
+set fish_plugins theme peco z tmux goenv
 
 function fish_prompt
-    # if test "$fish_key_bindings" = "fish_vi_key_bindings"
-    #     ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --vi-mode $fish_bind_mode --shell bare ^/dev/null
-    # else
-    #     ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --shell bare ^/dev/null
-    # end
     ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --shell bare ^/dev/null
-
 end
 
 function peco
@@ -70,8 +63,6 @@ end
 function unset
     set --erase $argv
 end
-
-# fish_vi_key_bindings
 
 function fish_user_key_bindings
 

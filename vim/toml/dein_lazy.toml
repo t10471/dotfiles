@@ -1,0 +1,398 @@
+# base {{{
+# [[plugins]]
+# repo = 'Shougo/vimproc.vim'
+# build = 'make'
+# on_source = ['unite.vim', 'vimshell.vim']
+
+# quickfixウィンドウ内でrを押すと、各行のテキスト部分が別バッファに書き出される。
+# http://thinca.hatenablog.com/entry/20081107/1225997310
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
+on_cmd = ['Qfreplace']
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+augroup = 'NERDTreeHijackNetrw'
+hook_source = '''
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+  let g:NERDTreeShowHidden=1
+'''
+hook_post_source = '''
+  nmap <silent> <C-e> :NERDTreeToggle<CR>
+  vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+  omap <silent> <C-e> :NERDTreeToggle<CR>
+'''
+
+# :VO :set setの結果を確認するのに便利 http://nanasi.jp/articles/vim/viewoutput_vim.html
+[[plugins]]
+repo = 'vim-scripts/ViewOutput'
+on_cmd = ['VO']
+
+# 整列
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+on_map = [['n', '<Plug>(EasyAlignOperator)'], ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']]
+on_cmd = ['EasyAlign', 'LiveEasyAlign']
+hook_source = '''
+  let g:easy_align_delimiters = {
+              \ '>': { 'pattern': '>>\|=>\|>' },
+              \ '/': {
+              \     'pattern':         '//\+\|/\*\|\*/',
+              \     'delimiter_align': 'l',
+              \     'ignore_groups':   ['!Comment'] },
+              \ ']': {
+              \     'pattern':       '[[\]]',
+              \     'left_margin':   0,
+              \     'right_margin':  0,
+              \     'stick_to_left': 0
+              \   },
+              \ ')': {
+              \     'pattern':       '[()]',
+              \     'left_margin':   0,
+              \     'right_margin':  0,
+              \     'stick_to_left': 0
+              \   },
+              \ 'd': {
+              \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+              \     'left_margin':  0,
+              \     'right_margin': 0
+              \   }
+              \ }
+'''
+
+[[plugins]]
+repo = 'kana/vim-smartinput'
+on_i = 1
+hook_post_source = '''
+  call smartinput_endwise#define_default_rules()
+  call setup#smartinput#init()
+'''
+
+[[plugins]]
+repo = 'cohama/vim-smartinput-endwise'
+depends = 'kana/vim-smartinput'
+hook_post_source = '''
+  call smartinput#map_to_trigger('i', '<Plug>(vimrc_cr)', '<Enter>', '<Enter>')
+  imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" :
+              \ neocomplete#close_popup()
+'''
+
+# コメントアウト
+[[plugins]]
+repo = 'tyru/caw.vim'
+on_map = [['vn', '<Plug>(caw']]
+hook_post_source = '''
+  nmap <Leader>c <Plug>(caw:hatpos:toggle)
+  vmap <Leader>c <Plug>(caw:hatpos:toggle)
+'''
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+# Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
+# .を使うと同じ操作が他でもできる
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+depends = 'kana/vim-operator-user'
+on_map = [['nvx', '<Plug>(operator-replace']]
+hook_post_source = '''
+  nmap <Leader>l <Plug>(operator-replace)
+  vmap <C-v> <Plug>(operator-replace)
+'''
+# }}}
+
+# vim {{{
+[[plugins]]
+repo = 'ynkdir/vim-vimlparser'
+on_ft = ['vim']
+
+[[plugins]]
+repo = 'syngan/vim-vimlint'
+depends = 'ynkdir/vim-vimlparser'
+on_ft = ['vim']
+hook_source = '''
+  let g:vimlint#config = {
+              \ 'EVL102': 1,
+              \ 'EVL103': 1,
+              \ 'EVL105': 1,
+              \ 'EVL201': 1,
+              \ 'EVL204': 1,
+              \ 'EVL205': 1
+              \ }
+'''
+
+# http://thinca.hatenablog.com/entry/20090625/1245864363
+[[plugins]]
+repo = 'thinca/vim-prettyprint'
+on_ft = ['vim']
+
+# vim変数の書き換え
+[[plugins]]
+repo = 'thinca/vim-editvar'
+on_ft = ['vim']
+# }}}
+
+# haskell {{{
+[[plugins]]
+repo = 'kana/vim-filetype-haskell'
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'eagletmt/ghcmod-vim'
+hook_post_source = '''
+  " 使うにはcabal install ghc-modが必要
+  " :GhcModTypeでカーソルがあるところの型が表示され
+  " :GhcModTypeClearでハライトが消える
+  nnoremap <Space>g :GhcModType<CR>
+  nnoremap <Space>c :GhcModTypeClear<CR>
+'''
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'ujihisa/neco-ghc'
+on_ft = ['haskell']
+hook_source = '''
+  setlocal omnifunc=necoghc#omnifunc
+'''
+
+[[plugins]]
+repo = 'dag/vim2hs'
+hook_source = '''
+  " \をラムダにするのをやめる
+  let g:haskell_conceal = 0
+'''
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'pbrisbin/vim-syntax-shakespeare'
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'wting/lhaskell.vim'
+on_ft = ['haskell']
+# }}}}
+
+# c c++用 {{{
+[[plugins]]
+repo = 'osyo-manga/vim-marching'
+on_ft = ['c', 'cpp']
+hook_source = '''
+  let g:marching_clang_command = '/usr/bin/clang'
+  " オプションを追加する
+  " filetype=cpp に対して設定する場合
+  let g:marching#clang_command#options = {'cpp' : '-std=gnu++1y'}
+  " インクルードディレクトリのパスを設定
+  " let g:marching_include_paths = [
+  " \]
+  " neocomplete.vim と併用して使用する場合
+  let g:marching_enable_neocomplete = 1
+  " 処理のタイミングを制御する
+  " 短いほうがより早く補完ウィンドウが表示される
+  " ただし、marching.vim 以外の処理にも影響するので注意する
+  " set updatetime=200
+'''
+[[plugins]]
+repo = 'vim-scripts/c.vim'
+on_ft = ['c']
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+on_ft = ['cpp']
+[[plugins]]
+repo = 'vim-scripts/gtags.vim'
+hook_post_source = '''
+  nnoremap wq <C-w><C-w><C-w>q
+  nnoremap wg :Gtags -g
+  nnoremap wl :Gtags -f %<CR>
+  nnoremap wj :Gtags <C-r><C-w><CR>
+  nnoremap wk :Gtags -r <C-r><C-w><CR>
+'''
+on_ft = ['c', 'cpp']
+[[plugins]]
+repo = '5t111111/alt-gtags.vim'
+hook_post_source = '''
+  nnoremap <Space>a :AltGtags<CR>
+  nnoremap <Space>f :AltGtags -f<CR>
+  nnoremap <Space>r :AltGtags -r<CR>
+  nnoremap <Space>s :AltGtags -s<CR>
+  nnoremap <Space>m :ClangFormat<CR>
+'''
+on_ft = ['c', 'cpp']
+[[plugins]]
+repo = 'rhysd/vim-clang-format'
+hook_source = '''
+  let g:clang_format#command = 'clang-format-3.5'
+  " ========== vim-clang-format の設定 ============
+  " アクセス指定子は1インデント分下げる
+  " 短い if 文は1行にまとめる
+  " テンプレートの宣言(template<class ...>)後は必ず改行する
+  " C++11 の機能を使う
+  " {} の改行は Stroustrup スタイル（関数宣言時の { のみ括弧前で改行を入れる）
+  let g:clang_format#style_options = {
+              \ 'AccessModifierOffset' : -4,
+              \ 'AllowShortIfStatementsOnASingleLine' : 'true',
+              \ 'AlwaysBreakTemplateDeclarations' : 'true',
+              \ 'Standard' : 'C++11',
+              \ 'BreakBeforeBraces' : 'Stroustrup',
+              \}
+'''
+on_ft = ['c', 'cpp']
+# }}}}
+
+# python  {{{
+[[plugins]]
+repo = 'scrooloose/syntastic'
+hook_source = '''
+  let g:syntastic_python_checkers = ['pyflakes']
+'''
+on_ft = ['python', 'python3', 'djangohtml', 'php']
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+hook_source = '''
+  let g:jedi#auto_vim_configuration = 0
+  let g:jedi#completions_enabled = 0
+  let g:jedi#rename_command = '<Leader>R'
+'''
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'nvie/vim-flake8'
+hook_source = '''
+  let g:no_flake8_maps = 1
+  let g:flake8_show_in_gutter=1
+'''
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'hynek/vim-python-pep8-indent'
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'python_fold'
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'tshirtman/vim-cython'
+on_ft = ['cython']
+
+[[plugins]]
+repo = 'Glench/Vim-Jinja2-Syntax'
+on_ft = ['jinja']
+# }}}}
+
+# ruby {{{
+[[plugins]]
+repo = 'alpaca-tc/alpaca_tags'
+on_ft = ['ruby']
+
+[[plugins]]
+repo = 'AndrewRadev/switch.vim'
+on_ft = ['ruby']
+
+[[plugins]]
+repo = 'vim-scripts/ruby-matchit'
+on_ft = ['ruby']
+# }}}}
+
+# javascript jsx {{{
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+on_ft = ['javascript', 'jsx', 'javascript.jsx']
+
+[[plugins]]
+repo = 'mxw/vim-jsx'
+on_ft = ['javascript', 'jsx', 'javascript.jsx']
+hook_source = '''
+  let g:jsx_ext_required = 0
+'''
+# }}}}
+
+# typescript {{{
+repo = 'Quramy/tsuquyomi'
+on_ft = ['ts', 'typescript']
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ['ts', 'typescript']
+[[plugins]]
+repo = 'Quramy/vim-js-pretty-template'
+on_ft = ['ts', 'typescript']
+[[plugins]]
+repo = 'jason0x43/vim-js-indent'
+on_ft = ['ts', 'typescript']
+[[plugins]]
+repo = 'Quramy/vim-dtsm'
+on_ft = ['ts', 'typescript']
+[[plugins]]
+repo = 'mhartington/vim-typings'
+on_ft = ['ts', 'typescript']
+# }}}}
+
+# elm {{{
+[[plugins]]
+repo = 'elmcast/elm-vim'
+on_ft = ['elm']
+
+[[plugins]]
+repo = 'w0rp/ale'
+on_ft = ['elm']
+# }}}}
+
+# fish {{{
+[[plugins]]
+repo = 'dag/vim-fish'
+on_ft = ['fish']
+# }}}}
+
+# go {{{
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go']
+# }}}}
+
+# nginx {{{
+[[plugins]]
+repo = 'chr4/nginx.vim'
+on_ft = ['nginx']
+# }}}}
+
+# docker {{{
+[[plugins]]
+repo = 'ekalinin/Dockerfile.vim'
+on_ft = ['dockerfile']
+# }}}}
+
+# yaml {{{
+[[plugins]]
+repo = 'chase/vim-ansible-yaml'
+on_ft = ['yaml']
+hook_source = '''
+  let g:ansible_options = {'ignore_blank_lines': 0}
+'''
+[[plugins]]
+repo = 'stephpy/vim-yaml'
+on_ft = ['yaml']
+# }}}}
+
+# markdown  {{{
+[[plugins]]
+repo = 'Markdown'
+on_ft = ['markdown']
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
+on_ft = ['markdown']
+# }}}}
+
+# json {{{
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = ['json']
+hook_source = '''
+  let g:vim_json_syntax_conceal = 0
+'''
+# }}}}
+
+# toml {{{
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = ['toml']
+# }}}}
