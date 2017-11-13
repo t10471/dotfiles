@@ -72,6 +72,7 @@ hook_post_source = '''
 repo = 'cohama/vim-smartinput-endwise'
 depends = 'kana/vim-smartinput'
 hook_post_source = '''
+  " neosnippet and neocomplete compatible
   call smartinput#map_to_trigger('i', '<Plug>(vimrc_cr)', '<Enter>', '<Enter>')
   imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" :
               \ neocomplete#close_popup()
