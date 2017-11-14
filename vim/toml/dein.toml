@@ -77,7 +77,7 @@ hook_add = '''
 repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
-repo = 'sudo.vim'
+repo = 'vim-scripts/sudo.vim'
 hook_add = '''
   "右のようにつかう :w sudo:%
   " root権限で今開いているファイルを開き直す
@@ -128,7 +128,7 @@ repo = 'tpope/vim-repeat'
 repo = 'Konfekt/FastFold'
 
 [[plugins]]
-repo = 'surround.vim'
+repo = 'vim-scripts/surround.vim'
 # usage {{{
 # ys{motion}) {motion} で指定される範囲を () で囲む
 # yS{motion}) {motion} で指定される範囲を () で囲みインデント
