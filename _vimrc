@@ -26,7 +26,7 @@ set wildmenu
 set wildmode=longest:full,full
 set ambiwidth=double
 set directory=~/.vim/tmp
-set viminfo='50,\"1000,:0,n~/.vim/viminfo
+set viminfo='50,\"1000,<50,s10,h,n~/.viminfo
 set spelllang=en,cjk
 " 検索結果がハイライトされる
 set hlsearch
@@ -61,14 +61,23 @@ syntax on
 augroup MyAugroup
   autocmd!
   " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
-  au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
-  au BufNewFile,BufRead *.yml.tmpl set filetype=yaml
-  au BufNewFile,BufRead *.md :set filetype=markdown
-  au BufNewFile,BufRead .*nginx.conf :set filetype=nginx
-  au BufNewFile,BufRead .*nginx.conf.tmpl :set filetype=nginx
-  au BufWritePost *.py call Flake8()
-  au BufNewFile,BufRead *.pxd,*.pxi,*.pyx set filetype=cython
+  autocmd BufRead * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+  autocmd BufNewFile,BufRead *.yml.tmpl set filetype=yaml
+  autocmd BufNewFile,BufRead *.yaml.tmpl set filetype=yaml
+  autocmd BufNewFile,BufRead *.md :set filetype=markdown
+  autocmd BufNewFile,BufRead nginx.conf :set filetype=nginx
+  autocmd BufNewFile,BufRead nginx.conf.tmpl :set filetype=nginx
+  autocmd BufNewFile,BufRead *.nginx.conf :set filetype=nginx
+  autocmd BufNewFile,BufRead *.nginx.conf.tmpl :set filetype=nginx
+  autocmd BufWritePost *.py call Flake8()
+  autocmd BufNewFile,BufRead *.pxd,*.pxi,*.pyx set filetype=cython
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
 augroup END
+
+let g:indent_guides_auto_colors=0
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_guide_size=1
 
 let g:hybrid_custom_term_colors = 1
 set background=dark

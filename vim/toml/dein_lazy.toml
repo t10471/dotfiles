@@ -17,7 +17,7 @@ hook_source = '''
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
   let g:NERDTreeShowHidden=1
 '''
-hook_post_source = '''
+hook_add = '''
   nmap <silent> <C-e> :NERDTreeToggle<CR>
   vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
   omap <silent> <C-e> :NERDTreeToggle<CR>
@@ -31,7 +31,7 @@ on_cmd = ['VO']
 # 整列
 [[plugins]]
 repo = 'junegunn/vim-easy-align'
-on_map = [['n', '<Plug>(EasyAlignOperator)'], ['sxn', '<Plug>(EasyAlign)'], ['sxn', '<Plug>(LiveEasyAlign)'], ['sxn', '<Plug>(EasyAlignRepeat)']]
+on_map = {n = '<Plug>'}
 on_cmd = ['EasyAlign', 'LiveEasyAlign']
 hook_source = '''
   let g:easy_align_delimiters = {
@@ -64,25 +64,24 @@ hook_source = '''
 repo = 'kana/vim-smartinput'
 on_i = 1
 hook_post_source = '''
-  call smartinput_endwise#define_default_rules()
   call setup#smartinput#init()
+  call smartinput_endwise#define_default_rules()
 '''
 
 [[plugins]]
 repo = 'cohama/vim-smartinput-endwise'
-depends = 'kana/vim-smartinput'
+on_source = 'kana/vim-smartinput'
 hook_post_source = '''
   " neosnippet and neocomplete compatible
   call smartinput#map_to_trigger('i', '<Plug>(vimrc_cr)', '<Enter>', '<Enter>')
-  imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" :
-              \ neocomplete#close_popup()
+  imap <expr><CR> !pumvisible() ? "\<Plug>(vimrc_cr)" : neocomplete#close_popup()
 '''
 
 # コメントアウト
 [[plugins]]
 repo = 'tyru/caw.vim'
-on_map = [['vn', '<Plug>(caw']]
-hook_post_source = '''
+on_map = {vnx = '<Plug>'}
+hook_add = '''
   nmap <Leader>c <Plug>(caw:hatpos:toggle)
   vmap <Leader>c <Plug>(caw:hatpos:toggle)
 '''
@@ -95,8 +94,8 @@ repo = 'kana/vim-operator-user'
 [[plugins]]
 repo = 'kana/vim-operator-replace'
 depends = 'kana/vim-operator-user'
-on_map = [['nvx', '<Plug>(operator-replace']]
-hook_post_source = '''
+on_map = {nvx = '<Plug>'}
+hook_add = '''
   nmap <Leader>l <Plug>(operator-replace)
   vmap <C-v> <Plug>(operator-replace)
 '''
@@ -109,7 +108,6 @@ on_ft = ['vim']
 
 [[plugins]]
 repo = 'syngan/vim-vimlint'
-depends = 'ynkdir/vim-vimlparser'
 on_ft = ['vim']
 hook_source = '''
   let g:vimlint#config = {
@@ -140,7 +138,7 @@ on_ft = ['haskell']
 
 [[plugins]]
 repo = 'eagletmt/ghcmod-vim'
-hook_post_source = '''
+hook_add = '''
   " 使うにはcabal install ghc-modが必要
   " :GhcModTypeでカーソルがあるところの型が表示され
   " :GhcModTypeClearでハライトが消える
@@ -200,7 +198,7 @@ repo = 'vim-jp/cpp-vim'
 on_ft = ['cpp']
 [[plugins]]
 repo = 'vim-scripts/gtags.vim'
-hook_post_source = '''
+hook_add = '''
   nnoremap wq <C-w><C-w><C-w>q
   nnoremap wg :Gtags -g
   nnoremap wl :Gtags -f %<CR>
@@ -210,7 +208,7 @@ hook_post_source = '''
 on_ft = ['c', 'cpp']
 [[plugins]]
 repo = '5t111111/alt-gtags.vim'
-hook_post_source = '''
+hook_add = '''
   nnoremap <Space>a :AltGtags<CR>
   nnoremap <Space>f :AltGtags -f<CR>
   nnoremap <Space>r :AltGtags -r<CR>

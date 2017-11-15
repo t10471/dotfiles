@@ -32,12 +32,12 @@ hook_add = '''
 
   " Recommended key-mappings.
   " <CR>: close popup and save indent.
-  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   " function! s:my_cr_function()
-  "     " return neocomplete#close_popup() . "\<CR>"
-  "     " For no inserting <CR> key.
-  "     return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+  "      return neocomplete#close_popup() . "\<CR>"
+       " For no inserting <CR> key.
+       " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
   " endfunction
+  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   " <TAB>: completion.
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
   " <C-h>, <BS>: close popup and delete backword char.
@@ -50,29 +50,35 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/neosnippet'
-hook_add = '''
-  " Plugin key-mappings.
-  imap <C-m>     <Plug>(neosnippet_expand_or_jump)
-  " smap <C-m>     <Plug>(neosnippet_expand_or_jump)
-  " xmap <C-m>     <Plug>(neosnippet_expand_target)
-  "
-  " SuperTab like snippets behavior.
-  " imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-  "             \ '\<Plug>(neosnippet_expand_or_jump)'
-  "             \: pumvisible() ? '\<C-n>' : '\<TAB>'
-  " smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-  "             \ '\<Plug>(neosnippet_expand_or_jump)'
-  "             \: '\<TAB>'
-
-  " For snippet_complete marker.
-  if has('conceal')
-    set conceallevel=2 concealcursor=i
-  endif
-  let s:my_snippet = '~/.vim/snippets'
-  let g:neosnippet#snippets_directory = s:my_snippet
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_ft = 'snippet'
+hook_source = '''
+  imap <silent>L     <Plug>(neosnippet_jump_or_expand)
+  smap <silent>L     <Plug>(neosnippet_jump_or_expand)
+  xmap <silent>L     <Plug>(neosnippet_expand_target)
+  let g:neosnippet#enable_snipmate_compatibility = 1
+  let g:neosnippet#enable_completed_snippet = 1
+  let g:neosnippet#expand_word_boundary = 1
 '''
-
+# [[plugins]]
+# repo = 'Shougo/neosnippet'
+# hook_add = '''
+#   " Plugin key-mappings.
+#   imap <C-m>     <Plug>(neosnippet_expand_or_jump)
+#   " smap <C-m>     <Plug>(neosnippet_expand_or_jump)
+#   " xmap <C-m>     <Plug>(neosnippet_expand_target)
+#   " SuperTab like snippets behavior.
+#   " imap <expr><TAB> neosnippet#expandable_or_jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : pumvisible() ? '\<C-n>' : '\<TAB>'
+#   " smap <expr><TAB> neosnippet#expandable_or_jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : '\<TAB>'
+#   if has('conceal')
+#     set conceallevel=2 concealcursor=i
+#   endif
+#   let s:my_snippet = '~/.vim/snippets'
+#   let g:neosnippet#snippets_directory = s:my_snippet
+# '''
+#
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 
@@ -117,7 +123,6 @@ hook_add = '''
   nmap gP <Plug>(yankround-gP)
   nmap <C-p> <Plug>(yankround-prev)
   nmap <C-n> <Plug>(yankround-next)
-  nnoremap <leader>p :Unite yankround<CR>
 '''
 
 # .をいい感じにしてくれる
@@ -170,25 +175,13 @@ hook_source = '''
 '''
 hook_post_source = '''
   augroup vim-gitgutter
-      autocmd!
-      autocmd BufNewFile,BufRead * vim-gitgutter
+    autocmd!
+    autocmd BufNewFile,BufRead * vim-gitgutter
   augroup END
 '''
 
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
-hook_source = '''
-  let g:indent_guides_auto_colors=0
-  let g:indent_guides_enable_on_vim_startup=1
-  let g:indent_guides_guide_size=1
-'''
-hook_add = '''
-  augroup vim-indent-guides
-      autocmd!
-      autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
-      autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
-  augroup END
-'''
 
 # 下のline
 [[plugins]]

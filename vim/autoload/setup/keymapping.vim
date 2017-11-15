@@ -41,10 +41,6 @@ nnoremap sq :<C-u>q<CR>
 " バッファ {{{
 " バッファを閉じる
 nnoremap sQ :<C-u>bd<CR>
-" 現在のタブで開いたバッファ一覧
-nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
-" バッファ一覧
-nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 " バッファリストの一つ前のバッファを開く
 nnoremap <silent>sbp :bprevious<CR>
 " バッファリストの次のバッファを開く
@@ -157,6 +153,7 @@ nnoremap <Leader>s :%s/\s\+$//ge<CR>
 
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
+vnoremap <silent> <C-v> "0p
 nnoremap <Space>o :only<CR>
 nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
@@ -191,7 +188,7 @@ nnoremap <silent><C-C><C-D> :lcd %:h<CR>
 " autocmd InsertLeave * set nopaste
 
 " 挿入モード時 Ctr + v でペースト
-inoremap <C-v> <C-r>"
+" inoremap <C-v> <C-r>"
 " Exモードに入らないようにする
 nnoremap Q <nop>
 " }}}
