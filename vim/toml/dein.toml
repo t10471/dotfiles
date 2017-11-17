@@ -17,6 +17,7 @@ hook_add = '''
   let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
   let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
   let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+  let g:neocomplete#force_omni_input_patterns.go = '\h\w\.\w*'
   " Disable AutoComplPop.
   let g:acp_enableAtStartup = 0
   " Use neocomplete.
@@ -32,12 +33,11 @@ hook_add = '''
 
   " Recommended key-mappings.
   " <CR>: close popup and save indent.
-  " function! s:my_cr_function()
-  "      return neocomplete#close_popup() . "\<CR>"
+  function! s:my_cr_function()
        " For no inserting <CR> key.
-       " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-  " endfunction
-  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+       return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+  endfunction
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   " <TAB>: completion.
   inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
   " <C-h>, <BS>: close popup and delete backword char.
