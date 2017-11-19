@@ -279,7 +279,9 @@ repo = 'kana/vim-textobj-fold' # az, iz
 # tag {{{
 [[plugins]]
 repo = 'majutsushi/tagbar'
-hook_add = '''
+hook_source = '''
+  let g:tagbar_left = 0
+  let g:tagbar_autofocus = 1
   nmap <F8> :TagbarToggle<CR>
 '''
 

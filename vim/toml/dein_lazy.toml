@@ -101,6 +101,40 @@ hook_add = '''
 '''
 # }}}
 
+# 多言語 {{{
+[[plugins]]
+repo = 'scrooloose/syntastic'
+hook_source = '''
+'''
+on_ft = ['php']
+
+[[plugins]]
+repo = 'w0rp/ale'
+on_ft = ['python', 'python3', 'djangohtml', 'go']
+hook_source = '''
+  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_lint_on_enter = 1
+  let g:ale_lint_on_save = 1
+
+  let g:ale_sign_column_always = 1
+  let g:ale_set_loclist = 0
+  let g:ale_set_quickfix = 1
+
+  let g:ale_linters = {'python': ['flake8'], 'go': ['gometalinter'], }
+  let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
+  let g:ale_open_list = 1
+  let g:ale_sign_error = '✗'
+  let g:ale_sign_warning = '⚠'
+  let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+
+  let g:ale_echo_msg_error_str = 'E'
+  let g:ale_echo_msg_warning_str = 'W'
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+  let g:ale_python_flake8_args = '--max-line-length=100'
+
+'''
+# }}}
+
 # vim {{{
 [[plugins]]
 repo = 'vim-jp/vim-vimlparser'
@@ -139,11 +173,14 @@ on_ft = ['haskell']
 [[plugins]]
 repo = 'eagletmt/ghcmod-vim'
 hook_add = '''
-  " 使うにはcabal install ghc-modが必要
-  " :GhcModTypeでカーソルがあるところの型が表示され
-  " :GhcModTypeClearでハライトが消える
-  nnoremap <Space>g :GhcModType<CR>
-  nnoremap <Space>c :GhcModTypeClear<CR>
+  augroup HaskellAugroup
+    autocmd!
+    " 使うにはcabal install ghc-modが必要
+    " :GhcModTypeでカーソルがあるところの型が表示され
+    " :GhcModTypeClearでハライトが消える
+    autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
+    autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
+  augroup END
 '''
 on_ft = ['haskell']
 
@@ -193,29 +230,42 @@ hook_source = '''
 [[plugins]]
 repo = 'vim-scripts/c.vim'
 on_ft = ['c']
+
 [[plugins]]
 repo = 'vim-jp/cpp-vim'
 on_ft = ['cpp']
+
 [[plugins]]
 repo = 'vim-scripts/gtags.vim'
 hook_add = '''
-  nnoremap wq <C-w><C-w><C-w>q
-  nnoremap wg :Gtags -g
-  nnoremap wl :Gtags -f %<CR>
-  nnoremap wj :Gtags <C-r><C-w><CR>
-  nnoremap wk :Gtags -r <C-r><C-w><CR>
+  augroup CCAugroup
+    autocmd!
+    autocmd FileType c, cpp nnoremap wq <C-w><C-w><C-w>q
+    autocmd FileType c, cpp nnoremap wg :Gtags -g
+    autocmd FileType c, cpp nnoremap wl :Gtags -f %<CR>
+    autocmd FileType c, cpp nnoremap wj :Gtags <C-r><C-w><CR>
+    autocmd FileType c, cpp nnoremap wk :Gtags -r <C-r><C-w><CR>
+  augroup END
 '''
 on_ft = ['c', 'cpp']
+
 [[plugins]]
 repo = '5t111111/alt-gtags.vim'
 hook_add = '''
-  nnoremap <Space>a :AltGtags<CR>
-  nnoremap <Space>f :AltGtags -f<CR>
-  nnoremap <Space>r :AltGtags -r<CR>
-  nnoremap <Space>s :AltGtags -s<CR>
-  nnoremap <Space>m :ClangFormat<CR>
+  augroup CCAugroup
+    autocmd!
+    " 使うにはcabal install ghc-modが必要
+    " :GhcModTypeでカーソルがあるところの型が表示され
+    " :GhcModTypeClearでハライトが消える
+    autocmd FileType c, cpp nnoremap <Space>a :AltGtags<CR>
+    autocmd FileType c, cpp nnoremap <Space>f :AltGtags -f<CR>
+    autocmd FileType c, cpp nnoremap <Space>r :AltGtags -r<CR>
+    autocmd FileType c, cpp nnoremap <Space>s :AltGtags -s<CR>
+    autocmd FileType c, cpp nnoremap <Space>m :ClangFormat<CR>
+  augroup END
 '''
 on_ft = ['c', 'cpp']
+
 [[plugins]]
 repo = 'rhysd/vim-clang-format'
 hook_source = '''
@@ -238,13 +288,6 @@ on_ft = ['c', 'cpp']
 # }}}}
 
 # python  {{{
-[[plugins]]
-repo = 'scrooloose/syntastic'
-hook_source = '''
-  let g:syntastic_python_checkers = ['pyflakes']
-'''
-on_ft = ['go', 'python', 'python3', 'djangohtml', 'php']
-
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
 hook_source = '''
@@ -347,9 +390,37 @@ on_ft = ['fish']
 repo = 'fatih/vim-go'
 on_ft = ['go']
 hook_source = '''
+  "" highlight
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_highlight_structs = 1
+  let g:go_highlight_interfaces = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_build_constraints = 1
+  let g:go_term_enabled = 1
+  let g:go_auto_type_info = 1
+  "" GoFmt時にインポートするパッケージを整理(GoFmtはファイル書き込み時に自動的に実行される)
+  let g:go_fmt_command = "goimports"
+'''
+hook_add = '''
+  augroup Gogroup 
+    autocmd!
+    autocmd FileType go nmap <Space>go <Plug>(go-info)
+    autocmd FileType go nmap <Space>gr <Plug>(go-run)
+    autocmd FileType go nmap <Space>gb <Plug>(go-build)
+    autocmd FileType go nmap <Space>gt <Plug>(go-test)
+    autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
+    autocmd FileType go nmap <Space>gd <Plug>(go-doc)
+    autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
+    autocmd FileType go nmap <Space>gi <Plug>(go-import)
+    autocmd FileType go nmap <Space>gm <Plug>(go-implements)
+    autocmd FileType go nmap <Space>df <Plug>(go-def)
+    autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
+    autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
+    autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
+    autocmd FileType go :highlight goErr cterm=bold ctermfg=211
+    autocmd FileType go :match goErr /\<err\>/
+  augroup END
 '''
 # }}}}
 

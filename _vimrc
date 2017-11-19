@@ -73,8 +73,6 @@ augroup MyAugroup
   autocmd BufNewFile,BufRead *.pxd,*.pxi,*.pyx set filetype=cython
   autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
-  autocmd FileType go :highlight goErr cterm=bold ctermfg=214
-  autocmd FileType go :match goErr /\<err\>/
 augroup END
 
 let g:indent_guides_auto_colors=0
