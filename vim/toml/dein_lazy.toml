@@ -398,7 +398,7 @@ hook_source = '''
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
   let g:go_term_enabled = 1
-  let g:go_auto_type_info = 1
+  " let g:go_auto_type_info = 1
   "" GoFmt時にインポートするパッケージを整理(GoFmtはファイル書き込み時に自動的に実行される)
   let g:go_fmt_command = "goimports"
 '''
