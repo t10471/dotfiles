@@ -151,9 +151,22 @@ map ]. <C-w>.
 " 末尾スペースを削除
 nnoremap <Leader>s :%s/\s\+$//ge<CR>
 
+function! Put_text_without_override_register()
+  let line_len = strlen(getline('.'))
+  execute "normal! `>"
+  let col_loc = col('.')
+  execute 'normal! gv"_x'
+  if line_len == col_loc
+    execute 'normal! p'
+  else
+    execute 'normal! P'
+  endif
+endfunction
+xnoremap <silent><C-v> :call Put_text_without_override_register()<CR>
+
 " ペーストした後にビジュアルモードで選択する ちなみにgvで直前の選択範囲を再選択
 nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
-vnoremap <silent> <C-v> "0p
+" vnoremap <silent><C-v> "0p
 nnoremap <Space>o :only<CR>
 nnoremap <PageDown> <C-F>
 nnoremap <PageUp> <C-B>
