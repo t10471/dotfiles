@@ -1,8 +1,8 @@
 # base {{{
-# [[plugins]]
-# repo = 'Shougo/vimproc.vim'
-# build = 'make'
-# on_source = ['unite.vim', 'vimshell.vim']
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+on_source = ['ghcmod-vim']
 
 # quickfixウィンドウ内でrを押すと、各行のテキスト部分が別バッファに書き出される。
 # http://thinca.hatenablog.com/entry/20081107/1225997310
