@@ -4,7 +4,6 @@ set -x GOPATH $HOME/.gopath
 set -x GOENV_ROOT $HOME/.goenv
 set -x EDITOR vim
 set -x TERM xterm-256color
-set -x PATH $HOME/.stack/programs/x86_64-osx/ghcjs-0.2.1.9007002_ghc-8.0.1/bin $PATH
 set -x PATH $GOPATH/bin $PATH
 set -x PATH $HOME/bin $PATH
 set -x PATH $HOME/dotfiles/bin $PATH

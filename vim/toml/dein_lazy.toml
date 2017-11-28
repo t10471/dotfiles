@@ -95,9 +95,8 @@ repo = 'kana/vim-operator-user'
 repo = 'kana/vim-operator-replace'
 depends = 'kana/vim-operator-user'
 on_map = {nvx = '<Plug>'}
-hook_add = '''
-  nmap <Leader>l <Plug>(operator-replace)
-  vmap <C-v> <Plug>(operator-replace)
+hook_post_source = '''
+  vnoremap <C-v> <Plug>(operator-replace)
 '''
 # }}}
 
