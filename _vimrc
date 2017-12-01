@@ -19,7 +19,7 @@ set splitright
 " grep検索を設定する
 set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f
 set grepprg=grep\ -In
-set laststatus=2
+set laststatus=2 " エディタウィンドウの末尾から2行目にステータスラインを常時表示させるための指定
 set showtabline=2 " 常にタブラインを表示
 set fdm=marker
 set wildmenu
@@ -71,15 +71,19 @@ augroup MyAugroup
   autocmd BufNewFile,BufRead *.nginx.conf.tmpl :set filetype=nginx
   autocmd BufWritePost *.py call Flake8()
   autocmd BufNewFile,BufRead *.pxd,*.pxi,*.pyx set filetype=cython
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=92
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=155
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=231
+  autocmd VimEnter,Colorscheme * :hi NonText ctermfg=228
+  autocmd VimEnter,Colorscheme * :hi SpecialKey ctermfg=224
 augroup END
 
 let g:indent_guides_auto_colors=0
 let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_start_level=1
 let g:indent_guides_guide_size=1
+let g:indent_guides_tab_guides = 0
 
-let g:hybrid_custom_term_colors = 1
+let g:hybrid_custom_term_colors=1
 set background=dark
 colorscheme hybrid
 " }}}
