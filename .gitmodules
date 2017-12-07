@@ -1,0 +1,3 @@
+[submodule "kubeabc"]
+	path = kubeabc
+	url = git@github.com:b4b4r07/kubeabc.git
