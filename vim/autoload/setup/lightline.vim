@@ -13,16 +13,10 @@ function! setup#lightline#init()
               \     ['fugitive', 'gitgutter', 'filename'],
               \   ],
               \   'right': [
-              \     ['lineinfo', 'syntastic'],
+              \     ['lineinfo', 'ale'],
               \     ['percent'],
               \     ['charcode', 'fileformat', 'fileencoding', 'filetype'],
               \   ]
-              \ },
-              \ 'component_expand': {
-              \   'syntastic': 'SyntasticStatuslineFlag'
-              \ },
-              \ 'component_type': {
-              \   'syntastic': 'error'
               \ },
               \ 'separator': {
               \   'left': "⮀",
@@ -43,12 +37,8 @@ function! setup#lightline#init()
               \   'mode': 'MyMode',
               \   'charcode': 'MyCharCode',
               \   'gitgutter': 'MyGitGutter',
+              \   'ale': 'ALEStatus'
               \ }}
-  let g:syntastic_mode_map = { 'mode': 'passive' }
-  augroup AutoSyntastic
-      autocmd!
-      autocmd BufWritePost *.php,*.py call s:syntastic()
-  augroup END
 endfunction
 
 function! MyModified()
@@ -155,4 +145,8 @@ endfunction
 function! s:syntastic()
     SyntasticCheck
     call lightline#update()
+endfunction
+
+function! ALEStatus()
+  return ALEGetStatusLine()
 endfunction
