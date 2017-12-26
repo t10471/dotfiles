@@ -8,7 +8,7 @@ repo = 'vim-jp/vimdoc-ja'
 [[plugins]]
 repo = 'mopp/autodirmake.vim'
 hook_add = '''
-  let g:ctrlp_map = '<c-p>'
+  let g:ctrlp_map = '<Space>l'
   let g:ctrlp_cmd = 'CtrlP'
   let g:ctrlp_working_path_mode = 'a'
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
