@@ -37,6 +37,10 @@ augroup MyAugroup
   autocmd!
 augroup END
 
+if has('nvim')
+  let g:python3_host_prog = $HOME . '.pyenv/versions/anaconda3-2.5.0/envs/py35/bin/python'
+endif
+
 filetype off
 
 if &compatible

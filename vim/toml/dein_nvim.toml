@@ -1,0 +1,272 @@
+# base {{{
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'mopp/autodirmake.vim'
+hook_add = '''
+  let g:ctrlp_map = '<Space>l'
+  let g:ctrlp_cmd = 'CtrlP'
+  let g:ctrlp_working_path_mode = 'a'
+  set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+  let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+
+  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll)$',
+    \ 'link': 'some_bad_symbolic_links',
+    \ }
+'''
+
+[[plugins]]
+repo = 'voronkovich/ctrlp-nerdtree.vim'
+
+[[plugins]]
+repo = 'kien/ctrlp.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_ft = 'snippet'
+hook_source = '''
+  imap <silent><C-L>     <Plug>(neosnippet_jump_or_expand)
+  smap <silent><C-L>     <Plug>(neosnippet_jump_or_expand)
+  xmap <silent><C-L>     <Plug>(neosnippet_expand_target)
+  let g:neosnippet#enable_snipmate_compatibility = 1
+  let g:neosnippet#enable_completed_snippet = 1
+  let g:neosnippet#expand_word_boundary = 1
+  if has('conceal')
+    set conceallevel=2 concealcursor=i
+  endif
+  let s:my_snippet = '~/.vim/snippets'
+  let g:neosnippet#snippets_directory = s:my_snippet
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'vim-scripts/sudo.vim'
+hook_add = '''
+  "右のようにつかう :w sudo:%
+  " root権限で今開いているファイルを開き直す
+  command! ES :e sudo:%<CR><C-^>:bd!
+  " root権限で保存
+  command! WS :w sudo:%
+'''
+
+[[plugins]]
+repo = 'yonchu/accelerated-smooth-scroll'
+
+# 独自のサブモードを作ることで入力が楽になる
+# http://thinca.hatenablog.com/entry/20130131/1359567419
+[[plugins]]
+repo = 'kana/vim-submode'
+hook_add = '''
+  call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+  call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+  call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+  call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+  call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+  call submode#map('bufmove', 'n', '', '<', '<C-w><')
+  call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+  call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+'''
+
+# ヤンクのレジスタを取り出す
+# https://github.com/LeafCage/yankround.vim
+[[plugins]]
+repo = 'LeafCage/yankround.vim'
+hook_add = '''
+  nmap p <Plug>(yankround-p)
+  xmap p <Plug>(yankround-p)
+  nmap P <Plug>(yankround-P)
+  nmap gp <Plug>(yankround-gp)
+  xmap gp <Plug>(yankround-gp)
+  nmap gP <Plug>(yankround-gP)
+  nmap <C-p> <Plug>(yankround-prev)
+  nmap <C-n> <Plug>(yankround-next)
+'''
+
+# .をいい感じにしてくれる
+[[plugins]]
+repo = 'tpope/vim-repeat'
+# foldingを早くしてくれる
+[[plugins]]
+repo = 'Konfekt/FastFold'
+
+[[plugins]]
+repo = 'vim-scripts/surround.vim'
+# usage {{{
+# ys{motion}) {motion} で指定される範囲を () で囲む
+# yS{motion}) {motion} で指定される範囲を () で囲みインデント
+# yss)    行を () で囲む
+# ySS)    行を () で囲みインデント
+# (ヴィジュアルモード)s)  選択範囲を () で囲む
+# (ヴィジュアルモード)S)  選択範囲を () で囲みインデント
+# ds) () を削除
+# dst タグを除去(<b></b>など)
+# cs'"    ' を " に変える
+# cs'<b>  ' を <b>に変える
+# vi'で'で囲われた中身を選択
+# va'で'で囲われた全体を選択
+# }}}
+
+# カーソルがある場所のfiletypeを判別してくれる
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'lambdalisue/gina.vim'
+# }}}
+
+# design {{{
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+
+# 左にgitの差分(+とか) をだす http://wonderwall.hatenablog.com/entry/2016/03/26/211710
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+hook_source = '''
+  let g:gitgutter_sign_added = '✚'
+  let g:gitgutter_sign_modified = '➜'
+  let g:gitgutter_sign_removed = '✘'
+'''
+hook_post_source = '''
+  augroup vim-gitgutter
+    autocmd!
+    autocmd BufNewFile,BufRead * vim-gitgutter
+  augroup END
+'''
+
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+
+# 下のline
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+# }}}
+
+# 移動・検索 {{{
+# http://secret-garden.hatenablog.com/entry/2015/04/16/000000
+# キャメルケース変換、賢い検索・置換
+[[plugins]]
+repo = 'tpope/vim-abolish'
+# usage {{{
+# キャメルケース  crc
+# ミックストケース    crm
+# スネークケース  cr_
+# スネークケース  crs
+# スネークアッパーケース  cru
+# 単語連結法（ハイフン連結）* cr-
+# * この命名規則から他の命名規則には変換できない
+# }}}
+[[plugins]]
+repo = 'fuenor/qfixgrep'
+# 移動
+[[plugins]]
+repo = 'easymotion/vim-easymotion'
+hook_source = '''
+  let g:EasyMotion_do_mapping = 0 "Disable default mappings
+'''
+hook_add = '''
+  map <Leader> <Plug>(easymotion-prefix)
+  " <Leader>f{char} to move to {char}
+  map  <Leader>f <Plug>(easymotion-bd-f)
+  nmap <Leader>f <Plug>(easymotion-overwin-f)
+  " s{char}{char} to move to {char}{char}
+  nmap s <Plug>(easymotion-overwin-f2)
+  " Move to line
+  map <Leader>L <Plug>(easymotion-bd-jk)
+  nmap <Leader>L <Plug>(easymotion-overwin-line)
+  " Move to word
+  map  <Leader>w <Plug>(easymotion-bd-w)
+  nmap <Leader>w <Plug>(easymotion-overwin-w)
+'''
+
+# 検索
+[[plugins]]
+repo = 'haya14busa/incsearch.vim'
+hook_source = '''
+  let g:incsearch#auto_nohlsearch = 1
+'''
+hook_add = '''
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+  augroup incsearch-keymap
+    autocmd!
+    autocmd VimEnter * call s:incsearch_keymap()
+  augroup END
+  function! s:incsearch_keymap()
+      IncSearchNoreMap <Right> <Over>(incsearch-next)
+      IncSearchNoreMap <Left>  <Over>(incsearch-prev)
+      IncSearchNoreMap <Down>  <Over>(incsearch-scroll-f)
+      IncSearchNoreMap <Up>    <Over>(incsearch-scroll-b)
+  endfunction
+'''
+
+[[plugins]]
+repo = 'haya14busa/incsearch-easymotion.vim'
+hook_add = '''
+  map z/ <Plug>(incsearch-easymotion-/)
+  map z? <Plug>(incsearch-easymotion-?)
+  map zg/ <Plug>(incsearch-easymotion-stay)
+  function! s:config_easyfuzzymotion(...) abort
+    return extend(copy({
+    \   'converters': [incsearch#config#fuzzy#converter()],
+    \   'modules': [incsearch#config#easymotion#module()],
+    \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+    \   'is_expr': 0,
+    \   'is_stay': 1
+    \ }), get(a:, 1, {}))
+  endfunction
+  noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
+'''
+# }}}
+
+# textobj {{{
+
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'kana/vim-textobj-syntax' # ay, iy
+
+[[plugins]]
+repo = 'kana/vim-textobj-indent' # al, il
+
+[[plugins]]
+repo = 'kana/vim-textobj-fold' # az, iz
+# }}}
+
+# tag {{{
+[[plugins]]
+repo = 'majutsushi/tagbar'
+hook_source = '''
+  let g:tagbar_left = 0
+  let g:tagbar_autofocus = 1
+  nmap <F8> :TagbarToggle<CR>
+'''
+
+[[plugins]]
+repo = 't10471/vim-tags'
+hook_source = '''
+  let g:vim_tags_ignore_files = []
+'''
+# }}}
