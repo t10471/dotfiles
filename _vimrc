@@ -94,7 +94,7 @@ let g:ale_sign_column_always = 1
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 
-let g:ale_linters = {'python': ['flake8'], 'go': ['gometalinter'], }
+let g:ale_linters = {'python': ['flake8'], 'go': ['gometalinter'], 'solidity': ['solium'], 'html': ['alex']}
 let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
 let g:ale_open_list = 1
 let g:ale_sign_error = '✗'
