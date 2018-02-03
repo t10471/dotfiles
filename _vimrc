@@ -26,7 +26,17 @@ set wildmenu
 set wildmode=longest:full,full
 set ambiwidth=double
 set directory=~/.vim/tmp
-set viminfo='50,\"1000,<50,s10,h,n~/.viminfo
+
+if has('nvim')
+  set completeopt+=noinsert
+  set completeopt+=noselect
+endif
+
+
+if !has('nvim')
+  set viminfo='50,\"1000,<50,s10,h,n~/.viminfo
+endif
+
 set spelllang=en,cjk
 " 検索結果がハイライトされる
 set hlsearch
@@ -38,7 +48,9 @@ augroup MyAugroup
 augroup END
 
 if has('nvim')
-  let g:python3_host_prog = $HOME . '.pyenv/versions/anaconda3-2.5.0/envs/py35/bin/python'
+  let g:python3_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py35/bin/python'
+  let g:python_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py27/bin/python'
+  let g:python3_host_skip_check = 1
 endif
 
 filetype off

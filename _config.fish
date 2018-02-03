@@ -1,9 +1,16 @@
-set fish_greeting 
+set fish_greeting
 
+set -x GOROOT (go env GOROOT)
 set -x GOPATH $HOME/.gopath
 set -x GOENV_ROOT $HOME/.goenv
-set -x EDITOR vim
-set -x TERM xterm-256color
+set -x PYENV_ROOT $HOME/.pyenv
+set -x EDITOR nvim
+if test -n $TMUX
+  set -x TERM xterm-256color
+else
+  set -x TERM tmux-256color
+end
+
 set -x PATH $GOPATH/bin $PATH
 set -x PATH $HOME/bin $PATH
 set -x PATH $HOME/dotfiles/bin $PATH
@@ -13,12 +20,15 @@ set -x PATH /usr/local/bin $PATH
 set -x PATH /usr/local/bin $PATH
 set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/.goenv/bin $PATH
+set -x ANACONDA_VERSION anaconda3-2.5.0
 
 eval (direnv hook fish)
 . (pyenv init -| psub)
 . (goenv init -| psub)
 
 balias diff colordiff
+balias ovim vim
+balias vim nvim
 balias g git
 balias k kubectl
 balias kc kubectl
@@ -44,7 +54,7 @@ end
 set -U Z_CMD "z"
 set -U Z_DATA "$HOME/.z"
 
-set -x CLOUDSDK_PYTHON $HOME/.pyenv/versions/anaconda3-2.5.0/envs/py27/bin/python
+set -x CLOUDSDK_PYTHON $PYENV_ROOT/versions/$ANACONDA_VERSION/envs/py27/bin/python
 
 . ~/google-cloud-sdk/path.fish.inc.fish
 . ~/.python.fish

@@ -22,6 +22,8 @@ hook_source = '''
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#enable_ignore_case = 1
     let g:deoplete#enable_smart_case = 1
+    let g:deoplete#sources = {}
+    let g:deoplete#sources.go = ['buffer', 'go']
 
     " <TAB>: completion.
     imap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
@@ -311,6 +313,7 @@ on_ft = ['c', 'cpp']
 # python  {{{
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
+depends = ['deoplete.nvim', 'davidhalter/jedi-vim']
 on_ft = ['python', 'python3', 'djangohtml']
 
 [[plugins]]
@@ -413,6 +416,17 @@ on_ft = ['fish']
 # }}}}
 
 # go {{{
+[[plugins]]
+repo = 'zchee/deoplete-go'
+build = 'make'
+depends = ['deoplete.nvim']
+on_ft = ['go']
+hook_source = '''
+  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+  let g:deoplete#sources#go#package_dot = 1
+'''
+
 [[plugins]]
 repo = 'fatih/vim-go'
 on_ft = ['go']
