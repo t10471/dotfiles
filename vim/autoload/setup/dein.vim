@@ -3,13 +3,6 @@ function! setup#dein#init()
   " プラグインがインストールされるディレクトリ
   let s:dein_dir = expand('~/.cache/dein')
   let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-  " dein.vim がなければ github から落としてくる
-  if &runtimepath !~# '/dein.vim'
-    if !isdirectory(s:dein_repo_dir)
-      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-    endif
-    execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
-  endif
 
   " 設定開始
   call dein#begin(s:dein_dir)
@@ -36,6 +29,7 @@ function! setup#dein#init()
 
   " もし、未インストールものものがあったらインストール
   if !has('vim_starting') && dein#check_install()
+    echomesg "exexute dein#install()"
     call dein#install()
   endif
 endfunction
