@@ -5,12 +5,7 @@ set -x GOPATH $HOME/.gopath
 set -x GOENV_ROOT $HOME/.goenv
 set -x PYENV_ROOT $HOME/.pyenv
 set -x EDITOR nvim
-if test -n $TMUX
-  set -x TERM xterm-256color
-else
-  set -x TERM tmux-256color
-end
-
+set -x TERM tmux-256color
 set -x PATH $GOPATH/bin $PATH
 set -x PATH $HOME/bin $PATH
 set -x PATH $HOME/dotfiles/bin $PATH
@@ -23,12 +18,12 @@ set -x PATH $HOME/.goenv/bin $PATH
 set -x ANACONDA_VERSION anaconda3-2.5.0
 
 eval (direnv hook fish)
-. (pyenv init -| psub)
-. (goenv init -| psub)
+source (pyenv init -| psub)
+source (goenv init -| psub)
 
+alias ovim vim
+alias vim nvim
 balias diff colordiff
-balias ovim vim
-balias vim nvim
 balias g git
 balias k kubectl
 balias kc kubectl
@@ -56,11 +51,11 @@ set -U Z_DATA "$HOME/.z"
 
 set -x CLOUDSDK_PYTHON $PYENV_ROOT/versions/$ANACONDA_VERSION/envs/py27/bin/python
 
-. ~/google-cloud-sdk/path.fish.inc.fish
-. ~/.python.fish
-. ~/.gcp_commands.fish
+source ~/google-cloud-sdk/path.fish.inc.fish
+source ~/.python.fish
+source ~/.gcp_commands.fish
 
-set fish_plugins theme peco z tmux goenv
+set fish_plugins theme peco z tmux goenv debug
 
 function fish_prompt
     ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --shell bare ^/dev/null

@@ -364,7 +364,7 @@ on_ft = ['c', 'cpp']
 # python  {{{
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
-depends = ['deoplete.nvim', 'davidhalter/jedi-vim']
+depends = ['deoplete.nvim', 'jedi-vim']
 on_ft = ['python', 'python3', 'djangohtml']
 
 [[plugins]]
@@ -376,7 +376,6 @@ hook_source = '''
   let g:jedi#smart_auto_mappings = 0
   let g:jedi#rename_command = '<Leader>R'
 '''
-on_ft = ['python', 'python3', 'djangohtml']
 
 [[plugins]]
 repo = 'nvie/vim-flake8'
