@@ -30,6 +30,7 @@ set directory=~/.vim/tmp
 if has('nvim')
   set completeopt+=noinsert
   set completeopt+=noselect
+  tnoremap <silent> <ESC> <C-\><C-n>
 endif
 
 

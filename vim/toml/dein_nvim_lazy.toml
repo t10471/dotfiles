@@ -138,14 +138,14 @@ let g:NERDTreeIndicatorMapCustom = {
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 build = 'make'
-on_source = ['ghcmod-vim']
+on_source = ['ghcmod-vim', 'tsuquyomi']
 
 [[plugins]]
 repo = 'Shougo/neosnippet'
 hook_source = '''
-  imap <silent><C-L>     <Plug>(neosnippet_jump_or_expand)
-  smap <silent><C-L>     <Plug>(neosnippet_jump_or_expand)
-  xmap <silent><C-L>     <Plug>(neosnippet_expand_target)
+  imap <silent><C-L> <Plug>(neosnippet_jump_or_expand)
+  smap <silent><C-L> <Plug>(neosnippet_jump_or_expand)
+  xmap <silent><C-L> <Plug>(neosnippet_expand_target)
   if has('conceal')
     set conceallevel=2 concealcursor=niv
   endif
@@ -418,15 +418,21 @@ on_ft = ['ruby']
 
 # javascript jsx {{{
 [[plugins]]
-repo = 'pangloss/vim-javascript'
+repo = 'neovim/node-host'
+build = 'npm install'
 on_ft = ['javascript', 'jsx', 'javascript.jsx']
 
+
 [[plugins]]
-repo = 'mxw/vim-jsx'
+repo = 'billyvg/tigris.nvim'
+build = './install.sh'
 on_ft = ['javascript', 'jsx', 'javascript.jsx']
 hook_source = '''
-  let g:jsx_ext_required = 0
+  let g:tigris#enabled = 1
+  let g:tigris#on_the_fly_enabled = 1
+  let g:tigris#delay = 300
 '''
+
 # }}}}
 
 # typescript {{{
@@ -561,4 +567,9 @@ hook_source = '''
 [[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = ['toml']
+# }}}}
+
+# solidity {{{
+repo = 'tomlion/vim-solidity'
+on_ft = ['solidity']
 # }}}}

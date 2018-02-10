@@ -1,6 +1,7 @@
 # base {{{
 [[plugins]]
 repo = 'Shougo/dein.vim'
+hook_add = 'source ~/dotfiles/vim/rc/dein.rc.vim'
 
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
