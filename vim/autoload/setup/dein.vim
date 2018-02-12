@@ -22,6 +22,7 @@ function! setup#dein#init()
   call dein#load_toml(s:toml,      {'lazy': 0})
   call dein#load_toml(s:lazy_toml, {'lazy': 1})
   call dein#add('w0rp/ale')
+  call dein#add('cespare/vim-toml')
 
   " 設定終了
   call dein#end()

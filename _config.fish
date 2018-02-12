@@ -39,13 +39,12 @@ balias syncoff 'tmux set-window-option synchronize-panes off'
 balias mon 'eval (minikube docker-env)'
 
 function moff
-    unset DOCKER_TLS_VERIFY
-    unset DOCKER_HOST
-    unset DOCKER_CERT_PATH
-    unset DOCKER_API_VERSION
+  unset DOCKER_TLS_VERIFY
+  unset DOCKER_HOST
+  unset DOCKER_CERT_PATH
+  unset DOCKER_API_VERSION
 end
 
-# Change commands to j and jo
 set -U Z_CMD "z"
 set -U Z_DATA "$HOME/.z"
 
@@ -54,49 +53,52 @@ set -x CLOUDSDK_PYTHON $PYENV_ROOT/versions/$ANACONDA_VERSION/envs/py27/bin/pyth
 source ~/google-cloud-sdk/path.fish.inc.fish
 source ~/.python.fish
 source ~/.gcp_commands.fish
+if test -e ~/.cargo/env
+  source ~/.cargo/env
+end
 
 set fish_plugins theme peco z tmux goenv debug
 
 function fish_prompt
-    if test -z $VIMRUNTIME
-      ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --shell bare ^/dev/null
-    else
-      vim_fish_prompt
-    end
+  if test -z $VIMRUNTIME
+    ~/.pyenv/versions/anaconda3-2.5.0/bin/python ~/powerline-shell/powerline-shell.py $status --shell bare ^/dev/null
+  else
+    vim_fish_prompt
+  end
 end
 
 function vim_fish_prompt -d "Prints left prompt"
-    set -l last_status  $status
-    set -l glyph        "\$"
-    set -l glyph_color  (set_color normal)
-    set -l pwd          (prompt_pwd)
-    set -l pwd_color    (set_color blue)
+  set -l last_status  $status
+  set -l glyph        "\$"
+  set -l glyph_color  (set_color normal)
+  set -l pwd          (prompt_pwd)
+  set -l pwd_color    (set_color blue)
 
-    if test (id -u "$USER") -eq 0
-        set glyph "#"
-    end
+  if test (id -u "$USER") -eq 0
+    set glyph "#"
+  end
 
-    if test "$last_status" -ne 0
-        set pwd_color (set_color red)
-    end
+  if test "$last_status" -ne 0
+    set pwd_color (set_color red)
+  end
 
-    if git_is_repo
-        if git_is_staged
-            set glyph_color (set_color green)
-        else if git_is_stashed
-            set glyph_color (set_color yellow)
-        end
+  if git_is_repo
+    if git_is_staged
+      set glyph_color (set_color green)
+    else if git_is_stashed
+      set glyph_color (set_color yellow)
     end
+  end
 
     printf " $pwd_color$pwd $glyph_color$glyph "
 end
 
 function peco
-      command peco --layout=bottom-up $argv
+  command peco --layout=bottom-up $argv
 end
 
 function unset
-    set --erase $argv
+  set --erase $argv
 end
 
 function fish_user_key_bindings

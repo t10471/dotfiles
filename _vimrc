@@ -21,6 +21,12 @@ set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f
 set grepprg=grep\ -In
 set laststatus=2 " エディタウィンドウの末尾から2行目にステータスラインを常時表示させるための指定
 set showtabline=2 " 常にタブラインを表示
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set infercase           " 補完時に大文字小文字を区別しない
+set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
+set showmatch           " 対応する括弧などをハイライト表示する
+set matchtime=5         " 対応括弧のハイライト表示を3秒にする
 set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
@@ -91,6 +97,7 @@ augroup MyAugroup
   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=231
   autocmd VimEnter,Colorscheme * :hi NonText ctermfg=228
   autocmd VimEnter,Colorscheme * :hi SpecialKey ctermfg=224
+  autocmd VimEnter,Colorscheme * :hi MatchParen ctermfg=LightGreen ctermbg=blue
 augroup END
 
 let g:indent_guides_auto_colors=0
@@ -111,7 +118,7 @@ let g:ale_sign_column_always = 1
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 
-let g:ale_linters = {'python': ['flake8'], 'go': ['gometalinter'], 'solidity': ['solium'], 'html': ['alex']}
+let g:ale_linters = {'python': ['flake8'], 'go': ['gometalinter'], 'solidity': ['solium'], 'html': ['alex'], 'rust': ['rls']}
 let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
 let g:ale_open_list = 1
 let g:ale_sign_error = '✗'
