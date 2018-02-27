@@ -41,7 +41,7 @@ function moff() {
 eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
 eval "$(goenv init -)"
-powerline=/Users/a14332/.pyenv/versions/anaconda3-2.5.0/bin/powerline-shell
+powerline=$HOME/.pyenv/versions/anaconda3-2.5.0/bin/powerline-shell
 function powerline_precmd() {
   PS1="$($powerline --shell zsh $?)"
 }
