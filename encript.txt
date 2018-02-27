@@ -1,0 +1,8 @@
+https://qiita.com/yuhr/items/52cb02d46aa19b1b9e87
+
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install gnupg
+https://qiita.com/spiegel-im-spiegel/items/079d69282166281eb946
+git-crypt add-mpg-user t10471
+
+

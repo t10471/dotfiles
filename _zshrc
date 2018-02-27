@@ -67,7 +67,7 @@ source ~/.gcp_commands.sh
 if [[ -e ~/.cargo/env ]]; then
   source ~/.cargo/env
 fi
-#
+
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions"
@@ -77,42 +77,41 @@ zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
 zplug "rupa/z"
 zplug "Tarrasch/zsh-bd"
 zplug "mollifier/cd-gitroot"
+zplug "b4b4r07/enhancd", use:enhancd.sh
 zplug load
+
+export ENHANCD_FILTER=fzy:peco
+
 function peco-history-selection() {
     BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
     CURSOR=$#BUFFER
     PS1="$($powerline --shell zsh $?)"
     zle reset-prompt
 }
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
 
-export VIMODE='i'
-function zle-keymap-select
-{
+export VIMODE='[i]'
+function zle-keymap-select {
   case $KEYMAP in
     main|viins)
-      VIMODE='i';;
+      VIMODE='[i]';;
     vicmd)
-      VIMODE='n';;
+      VIMODE='[n]';;
     vivis|vivli)
-      VIMODE='v';;
+      VIMODE='[v]';;
   esac
   powerline_precmd
   zle reset-prompt
-  }
-
+}
 zle -N zle-keymap-select
-
-zle -N peco-history-selection
-bindkey '^R' peco-history-selection
+# vimのキーバインドを使う
 bindkey -v
-
-# source ~/dotfiles/zsh/incr.zsh
-# source ~/dotfiles/zsh/auto-fu.zsh; zle-line-init () { auto-fu-init; }; zle -N zle-line-init
 
 # 自動補完を有効にする
 # コマンドの引数やパス名を途中まで入力して <Tab> を押すといい感じに補完してくれる
 # 例： `cd path/to/<Tab>`, `ls -<Tab>`
-# autoload -U compinit; compinit
+autoload -U compinit; compinit
 
 # 入力したコマンドが存在せず、かつディレクトリ名と一致するなら、ディレクトリに cd する
 # 例： /usr/bin と入力すると /usr/bin ディレクトリに移動
@@ -146,26 +145,7 @@ setopt hist_ignore_space
 # 候補を選ぶには <Tab> か Ctrl-N,B,F,P
 zstyle ':completion:*:default' menu select=1
 
-# setopt   auto_list auto_param_slash list_packed rec_exact
-# unsetopt list_beep
-# zstyle ':completion:*' menu select
-# zstyle ':completion:*' format '%F{white}%d%f'
-# zstyle ':completion:*' group-name ''
-# zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-# zstyle ':completion:*' keep-prefix
-# zstyle ':completion:*' completer _oldlist _complete _match _ignored _approximate _list _history
-# autoload -U compinit
-# compinit
-
 # 単語の一部として扱われる文字のセットを指定する
 # ここではデフォルトのセットから / を抜いたものとする
 # こうすると、 Ctrl-W でカーソル前の1単語を削除したとき、 / までで削除が止まる
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
-
-# function () {
-#     local code
-#     code=${functions[auto-fu-init]/'\n-azfu-'/''}
-#     eval "function auto-fu-init () { $code }"
-#     code=${functions[auto-fu]/fg=black,bold/fg=white}
-#     eval "function auto-fu () { $code }"
-# }
