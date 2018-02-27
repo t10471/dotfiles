@@ -610,6 +610,7 @@ hook_source = '''
 # https://github.com/rust-lang-nursery/rustfmt
 # https://github.com/rust-lang-nursery/rust-clippy
 # https://github.com/rust-lang-nursery/rls
+# rustup completions fish > ~/.config/fish/completions/rustup.fish
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends = 'deoplete.nvim'

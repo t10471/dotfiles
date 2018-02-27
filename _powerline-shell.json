@@ -1,0 +1,18 @@
+{
+  "segments": [
+    "vim",
+    "virtual_env",
+    "ssh",
+    "cwd",
+    "git",
+    "jobs",
+    "read_only",
+    "exit_code",
+    "root"
+  ],
+  "cwd": {
+    "mode": "plain",
+    "max_depth": 4
+  },
+  "theme": "default"
+}
