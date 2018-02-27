@@ -59,11 +59,14 @@ if [ "$TERM" != "linux" ]; then
   install_powerline_precmd
 fi
 
+# pythonはanaconda入れて.python.shにあるpyenvを作る
 export CLOUDSDK_PYTHON=$PYENV_ROOT/versions/$ANACONDA_VERSION/envs/py27/bin/python
+# gclond-sdkは下記の場所にインストールする必要がある
 source ~/google-cloud-sdk/path.zsh.inc
 source ~/google-cloud-sdk/completion.zsh.inc
-source ~/.python.sh
-source ~/.gcp_commands.sh
+
+source ~/dotfiles/.python.sh
+source ~/dotfiles/.gcp_cmd.sh
 if [[ -e ~/.cargo/env ]]; then
   source ~/.cargo/env
 fi
