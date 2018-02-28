@@ -1,0 +1,2 @@
+.python.sh filter=git-crypt diff=git-crypt
+.gcp_cmd.sh filter=git-crypt diff=git-crypt
