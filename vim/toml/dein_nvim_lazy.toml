@@ -553,6 +553,10 @@ on_ft = ['markdown']
 [[plugins]]
 repo = 'rcmdnk/vim-markdown'
 on_ft = ['markdown']
+[[plugins]]
+repo = 'euclio/vim-markdown-composer'
+on_ft = ['markdown']
+build = 'cargo build --release'
 # }}}}
 
 # json {{{
