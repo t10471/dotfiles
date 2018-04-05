@@ -636,3 +636,12 @@ hook_source = '''
 '''
 
 # }}}}
+
+# apiblueprint {{{
+[[plugins]]
+repo = 'kylef/apiblueprint.vim'
+on_ft = ['apiblueprint']
+hook_source = '''
+  autocmd FileType apiblueprint nnoremap <C-b> :call GenerateRefract()<cr>
+'''
+# }}}}
