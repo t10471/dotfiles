@@ -93,6 +93,7 @@ augroup MyAugroup
   autocmd BufNewFile,BufRead *.nginx.conf :set filetype=nginx
   autocmd BufNewFile,BufRead *.nginx.conf.tmpl :set filetype=nginx
   autocmd BufNewFile,BufRead *.pxd,*.pxi,*.pyx set filetype=cython
+  autocmd BufNewFile,BufRead api.md set filetype=apib
   autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=155
   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=231
   autocmd VimEnter,Colorscheme * :hi NonText ctermfg=228
@@ -128,5 +129,5 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_python_flake8_args = '--max-line-length=100'
+" let g:ale_python_flake8_args = '--max-line-length=100'
 " }}}
