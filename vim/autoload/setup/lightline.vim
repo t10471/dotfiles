@@ -19,12 +19,12 @@ function! setup#lightline#init()
               \   ]
               \ },
               \ 'separator': {
-              \   'left': "⮀",
-              \   'right': "⮂"
+              \   'left': "",
+              \   'right': ""
               \ },
               \ 'subseparator': {
-              \    'left': "⮁",
-              \    'right': "⮃"
+              \    'left': "",
+              \    'right': ""
               \ },
               \ 'component_function': {
               \   'modified': 'MyModified',
@@ -46,7 +46,7 @@ function! MyModified()
 endfunction
 
 function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\|gundo' && &ro ? '⭤' : ''
+    return &ft !~? 'help\|vimfiler\|gundo' && &ro ? '' : ''
 endfunction
 
 function! MyFilename()
@@ -62,7 +62,7 @@ function! MyFugitive()
     try
         if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
             let _ = fugitive#head()
-            return strlen(_) ? '⭠ '._ : ''
+            return strlen(_) ? ' '._ : ''
         endif
     catch
     endtry
