@@ -9,6 +9,7 @@ ln -s ${PWD}/_tmux.conf ~/.tmux.conf
 ln -s ${PWD}/_zshrc ~/.zshrc
 ln -s ${PWD}/_powerline-shell.json ~/.powerline-shell.json
 ln -s ${PWD}/after ~/.vim/after
+bash link_karabiner.sh
 mkdir -p ~/.vim/snippets
 bash snip.sh
 mkdir -p ~/.vim/tmp
