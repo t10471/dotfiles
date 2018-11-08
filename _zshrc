@@ -43,6 +43,7 @@ eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
 eval "$(goenv init -)"
 
+powerline=""
 if [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/bin/powerline-shell ]]; then
   powerline=$HOME/.pyenv/versions/$ANACONDA_VERSION/bin/powerline-shell
 elif [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/envs/py27/bin/powerline-shell ]]; then
@@ -50,16 +51,21 @@ elif [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/envs/py27/bin/powerline-shell
 fi
 
 function powerline_precmd() {
-  PS1="$($powerline --shell zsh $?)"
+  if [[ -n "$powerline" ]]; then
+    PS1="$($powerline --shell zsh $?)"
+  fi
 }
 
 function install_powerline_precmd() {
-  for s in "${precmd_functions[@]}"; do
-    if [ "$s" = "powerline_precmd" ]; then
-      return
-    fi
-  done
-  precmd_functions+=(powerline_precmd)
+  if [[ -n "$powerline" ]]; then
+    for s in "${precmd_functions[@]}"; do
+      if [ "$s" = "powerline_precmd" ]; then
+        return
+      fi
+    done
+    precmd_functions+=(powerline_precmd)
+  fi
+
 }
 
 if [ "$TERM" != "linux" ]; then
