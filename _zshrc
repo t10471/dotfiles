@@ -202,3 +202,9 @@ setopt inc_append_history
 if [[ -e /Users/a14332/.pyenv/versions/anaconda3-2.5.0/bin/aws_zsh_completer.sh ]]; then
   source /Users/a14332/.pyenv/versions/anaconda3-2.5.0/bin/aws_zsh_completer.sh
 fi
+if [[ -e /usr/local/opt/avr-gcc@7/bin ]]; then
+  export PATH="/usr/local/opt/avr-gcc@7/bin:$PATH"
+fi
+if [[ -e "$HOME/bin/kube.sh" ]]; then
+  source $HOME/bin/kube.sh
+fi
