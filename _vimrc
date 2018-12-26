@@ -30,8 +30,8 @@ set matchtime=5         " 対応括弧のハイライト表示を3秒にする
 set fdm=marker
 set wildmenu
 set wildmode=longest:full,full
-set ambiwidth=double
 set directory=~/.vim/tmp
+set noshowmode
 
 if has('nvim')
   set completeopt+=noinsert

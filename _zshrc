@@ -94,6 +94,7 @@ zplug "rupa/z", use:z.sh
 zplug "Tarrasch/zsh-bd"
 zplug "mollifier/cd-gitroot"
 zplug "b4b4r07/enhancd", use:enhancd.sh
+zplug "nnao45/zsh-kubectl-completion"
 zplug load
 
 export ENHANCD_FILTER=fzy:peco
@@ -208,3 +209,4 @@ fi
 if [[ -e "$HOME/bin/kube.sh" ]]; then
   source $HOME/bin/kube.sh
 fi
+export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"
