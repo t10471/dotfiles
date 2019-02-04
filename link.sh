@@ -8,6 +8,7 @@ ln -s ${PWD}/_tmux.conf ~/.tmux.conf
 # ln -s ${PWD}/_config.fish ~/.config/fish/config.fish
 ln -s ${PWD}/_zshrc ~/.zshrc
 ln -s ${PWD}/_powerline-shell.json ~/.powerline-shell.json
+mkdir -p ~/.vim.after
 ln -s ${PWD}/after ~/.vim/after
 bash link_karabiner.sh
 mkdir -p ~/.vim/snippets
