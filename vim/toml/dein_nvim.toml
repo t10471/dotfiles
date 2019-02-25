@@ -12,7 +12,7 @@ repo = 'mopp/autodirmake.vim'
 [[plugins]]
 repo = 'vim-scripts/sudo.vim'
 hook_add = '''
-  "右のようにつかう :w sudo:%
+  " 右のようにつかう :w sudo:%
   " root権限で今開いているファイルを開き直す
   command! ES :e sudo:%<CR><C-^>:bd!
   " root権限で保存
@@ -134,7 +134,7 @@ repo = 'nathanaelkane/vim-indent-guides'
 repo = 'itchyny/lightline.vim'
 
 [[plugins]]
-repo = 'itchyny/maximbaz/lightline-ale'
+repo = 'maximbaz/lightline-ale'
 
 # }}}
 
@@ -252,4 +252,110 @@ hook_add = '''
   let g:gen_tags#ctags_auto_gen = 1
   let g:gen_tags#gtags_auto_gen = 1
 '''
-# }}}
+ # }}}
+
+# complete {{{
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+depends = 'neosnippet-snippets'
+hook_source = '''
+  " <TAB>: completion.
+  inoremap <expr> <S-TAB> pumvisible() ? '<C-p>' : '<S-TAB>'
+
+  " Plugin key-mappings.
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+  " SuperTab like snippets behavior.
+  imap <expr> <TAB> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : pumvisible() ? '<C-n>' : '<TAB>'
+  smap <expr> <TAB> neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<TAB>'
+
+  let g:neosnippet#data_directory = expand('~/_vim/.neosnippet')
+
+  " Tell Neosnippet about the other snippets
+  " gosnippets は vim-go がうまいことやってくれるはずだけど、なんかうまくいかないので直接追加。
+  let g:neosnippet#snippets_directory = [
+        \   '~/vimfiles/snippets',
+        \   '~/_vim/dein/repos/github.com/honza/vim-snippets/snippets/',
+        \   '~/_vim/dein/repos/github.com/fatih/vim-go/gosnippets/snippets/',
+        \ ]
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'honza/vim-snippets'
+# snippets ファイルだけを使うので runtimepath へ追加しない
+rtp = ''
+
+[[plugins]]
+repo = 'prabirshrestha/async.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+hook_add = '''
+  " hook_source だとうまく動かなかった
+
+  if executable('pyls')
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'pyls',
+      \ 'cmd': {server_info->['pyls']},
+      \ 'whitelist': ['python'],
+      \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}} }}
+      \ })
+  endif
+
+  if executable('go-langserver')
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'go-langserver',
+      \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+      \ 'whitelist': ['go'],
+      \ })
+  endif
+
+  if executable('rls')
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'rls',
+      \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+      \ 'whitelist': ['rust'],
+      \ })
+  endif
+
+  if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'typescript-language-server',
+      \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+      \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+      \ 'whitelist': ['typescript', 'typescript.tsx'],
+      \ })
+  endif
+  augroup Commands
+      autocmd!
+      autocmd FileType python,go,rust,typescript nnoremap <C-]> :<C-u>LspDefinition<CR>
+      autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspImplementation<CR>
+      autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspTypeDefinition<CR>
+      autocmd FileType python,go,rust,typescript nnoremap K :<C-u>LspHover<CR>
+      autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>R :<C-u>LspRename<CR>
+      autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>n :<C-u>LspReferences<CR>
+  augroup END
+  augroup Gogroup 
+    autocmd!
+    autocmd FileType go nmap <Space>go <Plug>(go-info)
+    autocmd FileType go nmap <Space>gr <Plug>(go-run)
+    autocmd FileType go nmap <Space>gb <Plug>(go-build)
+    autocmd FileType go nmap <Space>gt <Plug>(go-test)
+    autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
+    autocmd FileType go nmap <Space>gd <Plug>(go-doc)
+    autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
+    autocmd FileType go nmap <Space>gi <Plug>(go-import)
+    autocmd FileType go nmap <Space>gm <Plug>(go-implements)
+    autocmd FileType go nmap <Space>df <Plug>(go-def)
+    autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
+    autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
+    autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
+    autocmd FileType go :highlight goErr cterm=bold ctermfg=211
+    autocmd FileType go :match goErr /\<err\>/
+  augroup END
+'''
+ # }}}

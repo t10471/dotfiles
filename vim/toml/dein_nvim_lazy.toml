@@ -20,28 +20,28 @@ repo = 'Shougo/neoyank.vim'
 on_source = 'denite.nvim'
 on_event = 'TextYankPost'
 
-[[plugins]] # 補完
-repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-on_event = 'InsertEnter'
-do = ':UpdateRemotePlugins'
-hook_source = '''
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#enable_ignore_case = 1
-  let g:deoplete#enable_smart_case = 1
-  let g:deoplete#sources = {}
-  let g:deoplete#sources.go = ['buffer', 'go']
-
-  " <TAB>: completion.
-  imap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction
-
-  " <S-TAB>: completion back.
-  inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
-'''
+# [[plugins]] # 補完
+# repo = 'Shougo/deoplete.nvim'
+# depends = 'context_filetype.vim'
+# on_event = 'InsertEnter'
+# do = ':UpdateRemotePlugins'
+# hook_source = '''
+#   let g:deoplete#enable_at_startup = 1
+#   let g:deoplete#enable_ignore_case = 1
+#   let g:deoplete#enable_smart_case = 1
+#   let g:deoplete#sources = {}
+#   let g:deoplete#sources.go = ['buffer', 'go']
+#
+#   " <TAB>: completion.
+#   imap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
+#   function! s:check_back_space() abort
+#     let col = col('.') - 1
+#     return !col || getline('.')[col - 1]  =~ '\s'
+#   endfunction
+#
+#   " <S-TAB>: completion back.
+#   inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
+# '''
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
@@ -363,20 +363,20 @@ on_ft = ['c', 'cpp']
 # }}}}
 
 # python  {{{
-[[plugins]]
-repo = 'zchee/deoplete-jedi'
-depends = ['deoplete.nvim', 'jedi-vim']
-on_ft = ['python', 'python3', 'djangohtml']
-
-[[plugins]]
-repo = 'davidhalter/jedi-vim'
-hook_source = '''
-  let g:jedi#auto_initialization = 0
-  let g:jedi#completions_enabled = 0
-  let g:jedi#auto_vim_configuration = 0
-  let g:jedi#smart_auto_mappings = 0
-  let g:jedi#rename_command = '<Leader>R'
-'''
+# [[plugins]]
+# repo = 'zchee/deoplete-jedi'
+# depends = ['deoplete.nvim', 'jedi-vim']
+# on_ft = ['python', 'python3', 'djangohtml']
+#
+# [[plugins]]
+# repo = 'davidhalter/jedi-vim'
+# hook_source = '''
+#   let g:jedi#auto_initialization = 0
+#   let g:jedi#completions_enabled = 0
+#   let g:jedi#auto_vim_configuration = 0
+#   let g:jedi#smart_auto_mappings = 0
+#   let g:jedi#rename_command = '<Leader>R'
+# '''
 
 [[plugins]]
 repo = 'nvie/vim-flake8'
@@ -473,16 +473,16 @@ on_ft = ['fish']
 # }}}}
 
 # go {{{
-[[plugins]]
-repo = 'zchee/deoplete-go'
-build = 'make'
-depends = ['deoplete.nvim']
-on_ft = ['go']
-hook_source = '''
-  let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-  let g:deoplete#sources#go#package_dot = 1
-'''
+# [[plugins]]
+# repo = 'zchee/deoplete-go'
+# build = 'make'
+# depends = ['deoplete.nvim']
+# on_ft = ['go']
+# hook_source = '''
+#   let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+#   let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+#   let g:deoplete#sources#go#package_dot = 1
+# '''
 
 [[plugins]]
 repo = 'fatih/vim-go'
@@ -499,23 +499,25 @@ hook_source = '''
   " let g:go_auto_type_info = 1
   "" GoFmt時にインポートするパッケージを整理(GoFmtはファイル書き込み時に自動的に実行される)
   let g:go_fmt_command = "goimports"
+  let g:go_def_mapping_enabled = 0
+  let g:go_doc_keywordprg_enabled = 0
 '''
 hook_add = '''
   augroup Gogroup 
     autocmd!
-    autocmd FileType go nmap <Space>go <Plug>(go-info)
-    autocmd FileType go nmap <Space>gr <Plug>(go-run)
-    autocmd FileType go nmap <Space>gb <Plug>(go-build)
-    autocmd FileType go nmap <Space>gt <Plug>(go-test)
-    autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
-    autocmd FileType go nmap <Space>gd <Plug>(go-doc)
-    autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
-    autocmd FileType go nmap <Space>gi <Plug>(go-import)
-    autocmd FileType go nmap <Space>gm <Plug>(go-implements)
-    autocmd FileType go nmap <Space>df <Plug>(go-def)
-    autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
-    autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
-    autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
+    " autocmd FileType go nmap <Space>go <Plug>(go-info)
+    " autocmd FileType go nmap <Space>gr <Plug>(go-run)
+    " autocmd FileType go nmap <Space>gb <Plug>(go-build)
+    " autocmd FileType go nmap <Space>gt <Plug>(go-test)
+    " autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
+    " autocmd FileType go nmap <Space>gd <Plug>(go-doc)
+    " autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
+    " autocmd FileType go nmap <Space>gi <Plug>(go-import)
+    " autocmd FileType go nmap <Space>gm <Plug>(go-implements)
+    " autocmd FileType go nmap <Space>df <Plug>(go-def)
+    " autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
+    " autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
+    " autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
     autocmd FileType go :highlight goErr cterm=bold ctermfg=211
     autocmd FileType go :match goErr /\<err\>/
   augroup END

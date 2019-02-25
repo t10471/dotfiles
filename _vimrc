@@ -55,7 +55,7 @@ augroup MyAugroup
 augroup END
 
 if has('nvim')
-  let g:python3_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py35/bin/python'
+  let g:python3_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py37/bin/python'
   let g:python_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py27/bin/python'
   let g:python3_host_skip_check = 1
 endif
@@ -100,6 +100,13 @@ augroup MyAugroup
   autocmd VimEnter,Colorscheme * :hi SpecialKey ctermfg=224
   autocmd VimEnter,Colorscheme * :hi MatchParen ctermfg=LightGreen ctermbg=blue
 augroup END
+
+augroup vimrc
+  autocmd!
+augroup END
+
+" let g:asyncomplete_enable_for_all = 0
+" autocmd vimrc FileType autohotkey,autoit,cfg,git,go,javascript,typescript,python,snippet,toml,vim,xsl call asyncomplete#enable_for_buffer()
 
 let g:indent_guides_auto_colors=0
 let g:indent_guides_enable_on_vim_startup=1
