@@ -32,6 +32,9 @@ set wildmenu
 set wildmode=longest:full,full
 set directory=~/.vim/tmp
 set noshowmode
+let mapleader = ","
+set clipboard=unnamed
+set incsearch
 
 if has('nvim')
   set completeopt+=noinsert
@@ -55,8 +58,8 @@ augroup MyAugroup
 augroup END
 
 if has('nvim')
-  let g:python3_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py37/bin/python'
-  let g:python_host_prog = $PYENV_ROOT . '/versions/' . $ANACONDA_VERSION . '/envs/py27/bin/python'
+  let g:python3_host_prog = $PYENV_ROOT . '/versions/3.8.5/bin/python'
+  let g:python_host_prog  = $PYENV_ROOT . '/versions/2.7.18/bin/python'
   let g:python3_host_skip_check = 1
 endif
 
@@ -65,6 +68,11 @@ filetype off
 if &compatible
   set nocompatible
 endif
+
+augroup vimrc
+  autocmd!
+augroup END
+
 
 " }}}
 
@@ -86,6 +94,7 @@ augroup MyAugroup
   " vimでファイルをひらいたとき最後にカーソルがあった場所に移動する
   autocmd BufRead * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
   autocmd BufNewFile,BufRead *.yml.tmpl set filetype=yaml
+  autocmd BufNewFile,BufRead *tsx set filetype=typescript
   autocmd BufNewFile,BufRead *.yaml.tmpl set filetype=yaml
   autocmd BufNewFile,BufRead *.md :set filetype=markdown
   autocmd BufNewFile,BufRead nginx.conf :set filetype=nginx
@@ -99,14 +108,38 @@ augroup MyAugroup
   autocmd VimEnter,Colorscheme * :hi NonText ctermfg=228
   autocmd VimEnter,Colorscheme * :hi SpecialKey ctermfg=224
   autocmd VimEnter,Colorscheme * :hi MatchParen ctermfg=LightGreen ctermbg=blue
+  " カーソル位置ハイライトのon off
+  autocmd InsertEnter * :PreciousSwitch
+  autocmd InsertLeave * :PreciousReset
 augroup END
 
-augroup vimrc
-  autocmd!
-augroup END
-
-" let g:asyncomplete_enable_for_all = 0
-" autocmd vimrc FileType autohotkey,autoit,cfg,git,go,javascript,typescript,python,snippet,toml,vim,xsl call asyncomplete#enable_for_buffer()
+  " augroup Commands
+  "   autocmd!
+  "   autocmd FileType python,go,rust,typescript nnoremap <C-]> :<C-u>LspDefinition<CR>
+  "   autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspImplementation<CR>
+  "   autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspTypeDefinition<CR>
+  "   autocmd FileType python,go,rust,typescript nnoremap K :<C-u>LspHover<CR>
+  "   autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>R :<C-u>LspRename<CR>
+  "   autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>n :<C-u>LspReferences<CR>
+  " augroup END
+  augroup Gogroup 
+    autocmd!
+    autocmd FileType go nmap <Space>go <Plug>(go-info)
+    autocmd FileType go nmap <Space>gr <Plug>(go-run)
+    autocmd FileType go nmap <Space>gb <Plug>(go-build)
+    autocmd FileType go nmap <Space>gt <Plug>(go-test)
+    autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
+    autocmd FileType go nmap <Space>gd <Plug>(go-doc)
+    autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
+    autocmd FileType go nmap <Space>gi <Plug>(go-import)
+    autocmd FileType go nmap <Space>gm <Plug>(go-implements)
+    autocmd FileType go nmap <Space>df <Plug>(go-def)
+    autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
+    autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
+    autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
+    autocmd FileType go :highlight goErr cterm=bold ctermfg=211
+    autocmd FileType go :match goErr /\<err\>/
+  augroup END
 
 let g:indent_guides_auto_colors=0
 let g:indent_guides_enable_on_vim_startup=1
@@ -136,5 +169,7 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+let g:dein#auto_recache = 1
 " let g:ale_python_flake8_args = '--max-line-length=100'
 " }}}

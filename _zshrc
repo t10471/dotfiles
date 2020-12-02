@@ -1,19 +1,27 @@
-export GOROOT=(go env GOROOT)
-export GOPATH="$HOME/.gopath"
-export GOENV_ROOT="$HOME/.goenv"
+eval "$(starship init zsh)"
+
+export PATH="/usr/local/bin:$HOME/go/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
+export GOPATH="$HOME/go"
 export EDITOR=nvim
 export TERM=tmux-256color
-export PATH="$GOPATH/bin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/dotfiles/bin:$PATH"
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-export PATH="$HOME/.pyenv/shims:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.goenv/bin:$PATH"
-# export ANACONDA_VERSION="anaconda3-2.5.0"
-export ANACONDA_VERSION="anaconda3-2018.12"
+# workaround git gettext problem
+export GIT_INTERNAL_GETTEXT_TEST_FALLBACKS=1
+
+
+eval "$(direnv hook zsh)"
+eval "$(pyenv init -)"
+
+if [[ -n /usr/local/bin/rbenv ]]; then
+  eval "$(rbenv init -)"
+fi
+
+if [[ ! -e "$HOME/.nodebrew/src" ]]; then
+  mkdir -p "$HOME/.nodebrew/src"
+fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source $HOME/.path.sh
 
 alias ovim=vim
 alias vim=nvim
@@ -30,58 +38,12 @@ alias la='exa -la --git'
 alias lt='exa -l -T --git'
 alias syncon='tmux set-window-option synchronize-panes on'
 alias syncoff='tmux set-window-option synchronize-panes off'
-alias mon='eval $(minikube docker-env)'
-alias cabcaws='export AWS_DEFAULT_PROFILE=cabc'
 
-function moff() {
-  unset DOCKER_TLS_VERIFY
-  unset DOCKER_HOST
-  unset DOCKER_CERT_PATH
-  unset DOCKER_API_VERSION
-}
 
-if [[ ! -e "$HOME/.nodebrew/src" ]]; then
-  mkdir -p "$HOME/.nodebrew/src"
-fi
-
-eval "$(direnv hook zsh)"
-eval "$(pyenv init -)"
-eval "$(goenv init -)"
-
-if [[ -n /usr/local/bin/rbenv ]]; then
-  eval "$(rbenv init -)"
-fi
-
-powerline=""
-if [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/bin/powerline-shell ]]; then
-  powerline=$HOME/.pyenv/versions/$ANACONDA_VERSION/bin/powerline-shell
-elif [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/envs/py37/bin/powerline-shell ]]; then
-  powerline=$HOME/.pyenv/versions/$ANACONDA_VERSION/envs/py37/bin/powerline-shell
-fi
-
-function powerline_precmd() {
-  if [[ -n "$powerline" ]]; then
-    PS1="$($powerline --shell zsh $?)"
-  fi
-}
-
-function install_powerline_precmd() {
-  if [[ -n "$powerline" ]]; then
-    for s in "${precmd_functions[@]}"; do
-      if [ "$s" = "powerline_precmd" ]; then
-        return
-      fi
-    done
-    precmd_functions+=(powerline_precmd)
-  fi
-}
-
-if [ "$TERM" != "linux" ]; then
-  install_powerline_precmd
-fi
+export GREP_OPTIONS='--color=auto'
 
 # pythonはanaconda入れて.python.shにあるpyenvを作る
-export CLOUDSDK_PYTHON=$PYENV_ROOT/versions/$ANACONDA_VERSION/envs/py27/bin/python
+export CLOUDSDK_PYTHON=/Users/n-toshinai/.pyenv/shims/python
 # gclond-sdkは下記の場所にインストールする必要がある
 source ~/google-cloud-sdk/path.zsh.inc
 source ~/google-cloud-sdk/completion.zsh.inc
@@ -92,74 +54,42 @@ if [[ -e ~/.cargo/env ]]; then
   source ~/.cargo/env
 fi
 
-if [[ -e $HOME/.pyenv/versions/$ANACONDA_VERSION/bin/aws_zsh_completer.sh ]]; then
-  source $HOME/.pyenv/versions/$ANACONDA_VERSION/bin/aws_zsh_completer.sh
-fi
-if [[ -e /usr/local/opt/avr-gcc@7/bin ]]; then
-  export PATH="/usr/local/opt/avr-gcc@7/bin:$PATH"
-fi
 if [[ -e "$HOME/bin/kube.sh" ]]; then
   source $HOME/bin/kube.sh
 fi
-export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"
-
 export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-zplug "peco/peco", as:command, from:gh-r, use:"*amd64*"
+zplug "nnao45/zsh-kubectl-completion"
 zplug "rupa/z", use:z.sh
 zplug "Tarrasch/zsh-bd"
 zplug "mollifier/cd-gitroot"
-zplug "b4b4r07/enhancd", use:enhancd.sh
-zplug "nnao45/zsh-kubectl-completion"
+zplug "b4b4r07/enhancd", use:init.sh
 zplug load
 
-export ENHANCD_FILTER=fzy:peco
+export ENHANCD_FILTER=fzf
 
-function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
-    CURSOR=$#BUFFER
-    PS1="$($powerline --shell zsh $?)"
-    zle reset-prompt
+bindkey -e
+
+function select-history() {
+  BUFFER=$(history -n -r 1 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
+  CURSOR=$#BUFFER
 }
-zle -N peco-history-selection
-bindkey '^R' peco-history-selection
+zle -N select-history
+bindkey '^r' select-history
 
-export VIMODE='[i]'
-function zle-keymap-select {
-  case $KEYMAP in
-    main|viins)
-      VIMODE='[i]';;
-    vicmd)
-      VIMODE='[n]';;
-    vivis|vivli)
-      VIMODE='[v]';;
-  esac
-  powerline_precmd
-  zle reset-prompt
-}
-zle -N zle-keymap-select
-# vimのキーバインドを使う
-bindkey -v
+# fkill - kill process
+fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 
-function peco-ghq-look () {
-    # brew install binutils findutils diffutils coreutils moreutils
-    local ghq_roots="$(git config --path --get-all ghq.root)"
-    local selected_dir=$(ghq list --full-path | \
-        xargs -I{} /usr/local/opt/coreutils/libexec/gnubin/ls -dl --time-style=+%s {}/.git | sed 's/.*\([0-9]\{10\}\)/\1/' | sort -nr | \
-        sed "s,.*\(${ghq_roots/$'\n'/\|}\)/,," | \
-        sed 's/\/.git//' | \
-        peco --prompt="cd-ghq >" --query "$LBUFFER")
-    if [ -n "$selected_dir" ]; then
-        BUFFER="cd $(ghq list --full-path | grep --color=never -E "/$selected_dir$")"
-        zle accept-line
-    fi
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
 }
 
-zle -N peco-ghq-look
-bindkey '^G' peco-ghq-look
 
 # 自動補完を有効にする
 # コマンドの引数やパス名を途中まで入力して <Tab> を押すといい感じに補完してくれる
@@ -235,3 +165,19 @@ setopt hist_expand
 
 # 履歴をインクリメンタルに追加
 setopt inc_append_history
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/n-toshinai/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/n-toshinai/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/n-toshinai/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/n-toshinai/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

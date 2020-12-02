@@ -1,3 +1,14 @@
+# deinの遅延読み込みの際の条件指定
+# on_ft     ファイルタイプがマッチしたとき。String or List
+# on_path   パスが一致した時
+# on_func   呼び出し機能が一致した時
+# on_source プラグインがロードされたとき
+# on_cmd    コマンドが一致した時
+# on_map    キーが一致した時
+# on_i      on_event が奨励
+# on_event  eventが発生したら
+#           http://vim-jp.org/vimdoc-ja/autocmd.html#autocmd-events
+
 # base {{{
 [[plugins]]
 repo = 'Shougo/dein.vim'
@@ -83,9 +94,11 @@ repo = 'Shougo/context_filetype.vim'
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
 depends = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo = 'lambdalisue/gina.vim'
+hook_add = '''
+  " NORMALモードのカーソル移動中に頻繁に切り替わるとうざいのでデフォは無効化しておく(helpは例外)
+  let g:precious_enable_switch_CursorMoved = { '*': 0, 'help': 1 }
+  " INSERTモードのON／OFFに合わせてトグル
+'''
 
 
 [[plugins]]
@@ -93,10 +106,10 @@ repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
   let g:ctrlp_map = '<Space>l'
   let g:ctrlp_cmd = 'CtrlP'
-  let g:ctrlp_working_path_mode = 'a'
+  let g:ctrlp_working_path_mode = 'ra'
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-  " let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
-  " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+  let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
   let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
   let g:ctrlp_custom_ignore = {
@@ -120,7 +133,7 @@ hook_source = '''
   let g:gitgutter_sign_removed = '✘'
 '''
 hook_post_source = '''
-  augroup vim-gitgutter
+  augroup gitgutter
     autocmd!
     autocmd BufNewFile,BufRead * vim-gitgutter
   augroup END
@@ -139,6 +152,8 @@ repo = 'maximbaz/lightline-ale'
 # }}}
 
 # 移動・検索 {{{
+
+
 # http://secret-garden.hatenablog.com/entry/2015/04/16/000000
 # キャメルケース変換、賢い検索・置換
 [[plugins]]
@@ -175,51 +190,6 @@ hook_add = '''
   nmap <Leader>w <Plug>(easymotion-overwin-w)
 '''
 
-# 検索
-[[plugins]]
-repo = 'haya14busa/incsearch.vim'
-hook_source = '''
-  let g:incsearch#auto_nohlsearch = 1
-'''
-hook_add = '''
-  map n  <Plug>(incsearch-nohl-n)
-  map N  <Plug>(incsearch-nohl-N)
-  map *  <Plug>(incsearch-nohl-*)
-  map #  <Plug>(incsearch-nohl-#)
-  map g* <Plug>(incsearch-nohl-g*)
-  map g# <Plug>(incsearch-nohl-g#)
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
-  augroup incsearch-keymap
-    autocmd!
-    autocmd VimEnter * call s:incsearch_keymap()
-  augroup END
-  function! s:incsearch_keymap()
-      IncSearchNoreMap <Right> <Over>(incsearch-next)
-      IncSearchNoreMap <Left>  <Over>(incsearch-prev)
-      IncSearchNoreMap <Down>  <Over>(incsearch-scroll-f)
-      IncSearchNoreMap <Up>    <Over>(incsearch-scroll-b)
-  endfunction
-'''
-
-[[plugins]]
-repo = 'haya14busa/incsearch-easymotion.vim'
-hook_add = '''
-  map z/ <Plug>(incsearch-easymotion-/)
-  map z? <Plug>(incsearch-easymotion-?)
-  map zg/ <Plug>(incsearch-easymotion-stay)
-  function! s:config_easyfuzzymotion(...) abort
-    return extend(copy({
-    \   'converters': [incsearch#config#fuzzy#converter()],
-    \   'modules': [incsearch#config#easymotion#module()],
-    \   'keymap': {"\<CR>": '<Over>(easymotion)'},
-    \   'is_expr': 0,
-    \   'is_stay': 1
-    \ }), get(a:, 1, {}))
-  endfunction
-  noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
-'''
 # }}}
 
 # textobj {{{
@@ -254,7 +224,125 @@ hook_add = '''
 '''
  # }}}
 
-# complete {{{
+# asyncomplete {{{
+
+# [[plugins]]
+# repo = 'Quramy/tsuquyomi'
+# on_ft = ['ts', 'typescript', 'typescriptreact']
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ['ts', 'typescript', 'typescriptreact']
+[[plugins]]
+repo = 'Quramy/vim-js-pretty-template'
+on_ft = ['ts', 'typescript', 'typescriptreact']
+[[plugins]]
+repo = 'jason0x43/vim-js-indent'
+on_ft = ['ts', 'typescript', 'typescriptreact']
+[[plugins]]
+repo = 'Quramy/vim-dtsm'
+on_ft = ['ts', 'typescript', 'typescriptreact']
+[[plugins]]
+repo = 'mhartington/vim-typings'
+on_ft = ['ts', 'typescript', 'typescriptreact']
+
+
+[[plugins]]
+repo = 'honza/vim-snippets'
+# snippets ファイルだけを使うので runtimepath へ追加しない
+rtp = ''
+
+[[plugins]]
+repo = 'prabirshrestha/async.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+hook_add = '''
+  if executable('pyls')
+    augroup LspPython
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+     \ 'name': 'pyls',
+     \ 'cmd': {server_info->['pyls']},
+     \ 'whitelist': ['python'],
+     \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}} }}
+     \ })
+      autocmd FileType python setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+
+  if executable('golsp')
+    augroup LspGo
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+         \ 'name': 'go-lang',
+         \ 'cmd': {server_info->['gospls', '-mode', 'stdio']},
+         \ 'whitelist': ['go'],
+         \ })
+      autocmd FileType go setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+
+  if executable('rls')
+    augroup LspRust
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+     \ 'name': 'rls',
+     \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+     \ 'whitelist': ['rust'],
+     \ })
+      autocmd FileType rust setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+
+  if executable('typescript-language-server')
+    augroup LspTypescript
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+      \ 'name': 'typescript-language-server',
+      \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+      \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+      \ 'whitelist': ['typescript', 'typescript.tsx', 'typescriptreact'],
+      \ })
+      autocmd FileType typescript setlocal omnifunc=lsp#complete
+      autocmd FileType typescriptreact setlocal omnifunc=lsp#complete
+      autocmd FileType typescript.tsx setlocal omnifunc=lsp#complete
+    augroup END
+  endif
+  let g:lsp_async_completion = 1
+  let g:lsp_log_verbose = 1
+  let g:lsp_log_file = expand('~/.vim/log/vim-lsp.log')
+'''
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+hook_source = '''
+  let g:asyncomplete_log_file = expand('~/.vim/log/asyncomplete.log')
+  let g:asyncomplete_enable_for_all = 0
+    augroup asyncomplete
+      autocmd!
+      autocmd vimrc FileType go,javascript,typescript,typescriptreact,python call asyncomplete#enable_for_buffer()
+    augroup END
+  " let g:asyncomplete_smart_completion = 1
+  let g:asyncomplete_auto_popup = 1
+  " let g:asyncomplete_auto_popup = 0
+
+  function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+
+  inoremap <silent><expr> <TAB> \ pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : asyncomplete#force_refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+on_i  = 1
+
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = 'neosnippet-snippets'
@@ -282,80 +370,532 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+repo = 'prabirshrestha/asyncomplete-buffer.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+hook_source = '''
+  autocmd vimrc User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+      \ 'name': 'buffer',
+      \ 'priority': 5,
+      \ 'whitelist': ['*'],
+      \ 'completor': function('asyncomplete#sources#buffer#completor'),
+      \ }))
+'''
 
 [[plugins]]
-repo = 'honza/vim-snippets'
-# snippets ファイルだけを使うので runtimepath へ追加しない
-rtp = ''
+repo = 'prabirshrestha/asyncomplete-file.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+hook_source = '''
+  autocmd vimrc User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+      \ 'name': 'file',
+      \ 'priority': 3,
+      \ 'whitelist': ['*'],
+      \ 'completor': function('asyncomplete#sources#file#completor'),
+      \ }))
+'''
 
 [[plugins]]
-repo = 'prabirshrestha/async.vim'
+repo = 'prabirshrestha/asyncomplete-necosyntax.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+depends = ['neco-syntax']
+hook_source = '''
+  autocmd vimrc User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necosyntax#get_source_options({
+      \ 'name': 'necosyntax',
+      \ 'priority': 7,
+      \ 'whitelist': ['*'],
+      \ 'completor': function('asyncomplete#sources#necosyntax#completor'),
+      \ }))
+'''
 
 [[plugins]]
-repo = 'prabirshrestha/vim-lsp'
+repo = 'Shougo/neco-syntax'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-necovim.vim'
+on_ft = ['vim']
+depends = ['neco-vim']
+hook_source = '''
+  autocmd vimrc User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+      \ 'name': 'necovim',
+      \ 'whitelist': ['vim'],
+      \ 'priority': 10,
+      \ 'completor': function('asyncomplete#sources#necovim#completor'),
+      \ }))
+'''
+
+[[plugins]]
+repo = 'Shougo/neco-vim'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-neosnippet.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+depends = ['neosnippet.vim']
+hook_source = '''
+  autocmd vimrc User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+      \ 'name': 'neosnippet',
+      \ 'whitelist': ['*'],
+      \ 'priority': 9,
+      \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+      \ }))
+'''
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+on_ft = ['go', 'rust', 'javascript', 'typescript', 'typescriptreact', 'python']
+depends = ['asyncomplete.vim', 'vim-lsp']
+
+[[plugins]]
+repo = 'ryanolsonx/vim-lsp-python'
+on_ft = ['python']
+
+[[plugins]]
+repo = 'ryanolsonx/vim-lsp-typescript'
+on_ft = ['typescript']
+
+ # }}}
+
+# denite {{{
+[[plugins]] # Plugin to easily access Most Recently Used (MRU) files
+repo = 'Shougo/neomru.vim'
+on_source = 'denite.nvim'
+on_path = '.*'
+
+[[plugins]] # Yank
+repo = 'Shougo/neoyank.vim'
+on_source = 'denite.nvim'
+on_event = 'TextYankPost'
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+on_cmd = 'Denite'
+hook_post_source = '''
+  call denite#custom#option('default', 'prompt', '>')
+
+  " カーソルキーで移動
+  call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<c-n>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<c-p>', '<denite:move_to_previous_line>', 'noremap')
+
+  " file_rec
+  if executable('fd')
+    call denite#custom#alias('source', 'file_rec', 'file_rec')
+    " fd --follow --hidden --exclude '.git' --type f
+    call denite#custom#var('file_rec', 'command', ['fd', '--follow', '--hidden', '--exclude', '.git', '--type', 'f', ''])
+  elseif executable('rg')
+    call denite#custom#var('file_rec', 'command', ['rg', '--files', '--hidden', '--glob', '!.git'])
+  endif
+
+  " grep
+  if executable('rg')
+    call denite#custom#var('grep', 'command', ['rg'])
+    call denite#custom#var('grep', 'default_opts', ['--vimgrep', '--no-heading'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+  elseif executable('pt')
+    call denite#custom#var('grep', 'command', ['pt'])
+    call denite#custom#var('grep', 'default_opts', ['--nogroup', '--nocolor', '--smart-case'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', [])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+  endif
+'''
 hook_add = '''
-  " hook_source だとうまく動かなかった
+  nmap <silent> \ut :,Denite filetype<CR>
+  nmap <silent> \ub :,Denite buffer<CR>
+  nmap <silent> \uf :,Denite file_rec<CR>
+  nmap <silent> \ul :,Denite line<CR>
+  nmap <silent> \ug :,Denite grep<CR>
+  nmap <silent> \u] :,DeniteCursorWord grep<CR>
+  nmap <silent> \uc :,Denite colorscheme<CR>
+  nmap <silent> \um :,Denite file_mru<CR>
+  nmap <silent> \uy :,Denite neoyank<CR>
+  nmap <silent> \ur :,Denite -resume<CR>
+  nmap <silent> \u; :,Denite -resume -immediately -select=+1<CR>
+  nmap <silent> \u- :,Denite -resume -immediately -select=-1<CR>
+'''
+# }}}
 
-  if executable('pyls')
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'pyls',
-      \ 'cmd': {server_info->['pyls']},
-      \ 'whitelist': ['python'],
-      \ 'workspace_config': {'pyls': {'plugins': {'pydocstyle': {'enabled': v:true}} }}
-      \ })
-  endif
+# nerdtree {{{
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+augroup = 'NERDTreeHijackNetrw'
+depends = ['ctrlp-nerdtree.vim', 'nerdtree-git-plugin']
+hook_source = '''
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+  let g:NERDTreeShowHidden=1
+'''
+hook_add = '''
+  nmap <silent> <C-e> :NERDTreeToggle<CR>
+  vmap <silent> <C-e> <Esc> :NERDTreeToggle<CR>
+  omap <silent> <C-e> :NERDTreeToggle<CR>
+'''
 
-  if executable('go-langserver')
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'go-langserver',
-      \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
-      \ 'whitelist': ['go'],
-      \ })
-  endif
+[[plugins]]
+repo = 'voronkovich/ctrlp-nerdtree.vim'
 
-  if executable('rls')
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'rls',
-      \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-      \ 'whitelist': ['rust'],
-      \ })
-  endif
+[[plugins]]
+repo = 'Xuyuanp/nerdtree-git-plugin'
+hook_add = '''
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+    \ "Modified"  : "➜",
+    \ "Staged"    : "✭",
+    \ "Untracked" : "✚",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+'''
 
-  if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'typescript-language-server',
-      \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-      \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-      \ 'whitelist': ['typescript', 'typescript.tsx'],
-      \ })
-  endif
-  augroup Commands
-      autocmd!
-      autocmd FileType python,go,rust,typescript nnoremap <C-]> :<C-u>LspDefinition<CR>
-      autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspImplementation<CR>
-      autocmd FileType python,go,rust,typescript nnoremap <C-i> :<C-u>LspTypeDefinition<CR>
-      autocmd FileType python,go,rust,typescript nnoremap K :<C-u>LspHover<CR>
-      autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>R :<C-u>LspRename<CR>
-      autocmd FileType python,go,rust,typescript nnoremap <LocalLeader>n :<C-u>LspReferences<CR>
-  augroup END
-  augroup Gogroup 
+# }}}
+
+# base {{{
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+on_source = ['ghcmod-vim', 'tsuquyomi']
+
+# quickfixウィンドウ内でrを押すと、各行のテキスト部分が別バッファに書き出される。
+# http://thinca.hatenablog.com/entry/20081107/1225997310
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
+on_cmd = ['Qfreplace']
+
+
+# :VO :set setの結果を確認するのに便利 http://nanasi.jp/articles/vim/viewoutput_vim.html
+[[plugins]]
+repo = 'vim-scripts/ViewOutput'
+on_cmd = ['VO']
+
+# 整列
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+on_map = {n = '<Plug>'}
+on_cmd = ['EasyAlign', 'LiveEasyAlign']
+hook_source = '''
+  let g:easy_align_delimiters = {
+              \ '>': { 'pattern': '>>\|=>\|>' },
+              \ '/': {
+              \     'pattern':         '//\+\|/\*\|\*/',
+              \     'delimiter_align': 'l',
+              \     'ignore_groups':   ['!Comment'] },
+              \ ']': {
+              \     'pattern':       '[[\]]',
+              \     'left_margin':   0,
+              \     'right_margin':  0,
+              \     'stick_to_left': 0
+              \   },
+              \ ')': {
+              \     'pattern':       '[()]',
+              \     'left_margin':   0,
+              \     'right_margin':  0,
+              \     'stick_to_left': 0
+              \   },
+              \ 'd': {
+              \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+              \     'left_margin':  0,
+              \     'right_margin': 0
+              \   }
+              \ }
+'''
+
+# 閉じ括弧の補完
+[[plugins]]
+repo = 'cohama/lexima.vim'
+on_i = 1
+
+
+# コメントアウト
+[[plugins]]
+repo = 'tyru/caw.vim'
+on_map = {vnx = '<Plug>'}
+hook_add = '''
+  nmap <Leader>c <Plug>(caw:hatpos:toggle)
+  vmap <Leader>c <Plug>(caw:hatpos:toggle)
+'''
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+# Rで置換 yiwで単語をヤンクして変換したい個所に行きRiwで置換
+# .を使うと同じ操作が他でもできる
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+depends = 'kana/vim-operator-user'
+on_map = {nvx = '<Plug>'}
+hook_post_source = '''
+  map R  <Plug>(operator-replace)
+'''
+# }}}
+
+# vim {{{
+[[plugins]]
+repo = 'vim-jp/vim-vimlparser'
+on_ft = ['vim']
+
+[[plugins]]
+repo = 'syngan/vim-vimlint'
+on_ft = ['vim']
+hook_source = '''
+  let g:vimlint#config = {
+              \ 'EVL102': 1,
+              \ 'EVL103': 1,
+              \ 'EVL105': 1,
+              \ 'EVL201': 1,
+              \ 'EVL204': 1,
+              \ 'EVL205': 1
+              \ }
+'''
+
+# http://thinca.hatenablog.com/entry/20090625/1245864363
+[[plugins]]
+repo = 'thinca/vim-prettyprint'
+on_ft = ['vim']
+
+# vim変数の書き換え
+[[plugins]]
+repo = 'thinca/vim-editvar'
+on_ft = ['vim']
+# }}}
+
+# haskell {{{
+[[plugins]]
+repo = 'kana/vim-filetype-haskell'
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'eagletmt/ghcmod-vim'
+hook_add = '''
+  augroup HaskellAugroup
     autocmd!
-    autocmd FileType go nmap <Space>go <Plug>(go-info)
-    autocmd FileType go nmap <Space>gr <Plug>(go-run)
-    autocmd FileType go nmap <Space>gb <Plug>(go-build)
-    autocmd FileType go nmap <Space>gt <Plug>(go-test)
-    autocmd FileType go nmap <Space>gc <Plug>(go-coverage)
-    autocmd FileType go nmap <Space>gd <Plug>(go-doc)
-    autocmd FileType go nmap <Space>gv <Plug>(go-doc-vertical)
-    autocmd FileType go nmap <Space>gi <Plug>(go-import)
-    autocmd FileType go nmap <Space>gm <Plug>(go-implements)
-    autocmd FileType go nmap <Space>df <Plug>(go-def)
-    autocmd FileType go nmap <Space>ds <Plug>(go-def-split)
-    autocmd FileType go nmap <Space>dv <Plug>(go-def-vertical)
-    autocmd FileType go nmap <Space>dt <Plug>(go-def-tab)
-    autocmd FileType go :highlight goErr cterm=bold ctermfg=211
-    autocmd FileType go :match goErr /\<err\>/
+    " 使うにはcabal install ghc-modが必要
+    " :GhcModTypeでカーソルがあるところの型が表示され
+    " :GhcModTypeClearでハライトが消える
+    autocmd FileType haskell nnoremap <Space>g :GhcModType<CR>
+    autocmd FileType haskell nnoremap <Space>c :GhcModTypeClear<CR>
   augroup END
 '''
- # }}}
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'ujihisa/neco-ghc'
+on_ft = ['haskell']
+hook_source = '''
+  setlocal omnifunc=necoghc#omnifunc
+'''
+
+[[plugins]]
+repo = 'dag/vim2hs'
+hook_source = '''
+  " \をラムダにするのをやめる
+  let g:haskell_conceal = 0
+'''
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'pbrisbin/vim-syntax-shakespeare'
+on_ft = ['haskell']
+
+[[plugins]]
+repo = 'wting/lhaskell.vim'
+on_ft = ['haskell']
+# }}}}
+
+# c c++用 {{{
+[[plugins]]
+repo = 'osyo-manga/vim-marching'
+on_ft = ['c', 'cpp']
+hook_source = '''
+  let g:marching_clang_command = '/usr/bin/clang'
+  " オプションを追加する
+  " filetype=cpp に対して設定する場合
+  let g:marching#clang_command#options = {'cpp' : '-std=gnu++1y'}
+  " インクルードディレクトリのパスを設定
+  " let g:marching_include_paths = [
+  " \]
+  " neocomplete.vim と併用して使用する場合
+  let g:marching_enable_neocomplete = 1
+  " 処理のタイミングを制御する
+  " 短いほうがより早く補完ウィンドウが表示される
+  " ただし、marching.vim 以外の処理にも影響するので注意する
+  " set updatetime=200
+'''
+[[plugins]]
+repo = 'vim-scripts/c.vim'
+on_ft = ['c']
+
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+on_ft = ['cpp']
+
+
+[[plugins]]
+repo = 'rhysd/vim-clang-format'
+hook_source = '''
+  let g:clang_format#command = 'clang-format-3.5'
+  " ========== vim-clang-format の設定 ============
+  " アクセス指定子は1インデント分下げる
+  " 短い if 文は1行にまとめる
+  " テンプレートの宣言(template<class ...>)後は必ず改行する
+  " C++11 の機能を使う
+  " {} の改行は Stroustrup スタイル（関数宣言時の { のみ括弧前で改行を入れる）
+  let g:clang_format#style_options = {
+              \ 'AccessModifierOffset' : -4,
+              \ 'AllowShortIfStatementsOnASingleLine' : 'true',
+              \ 'AlwaysBreakTemplateDeclarations' : 'true',
+              \ 'Standard' : 'C++11',
+              \ 'BreakBeforeBraces' : 'Stroustrup',
+              \}
+'''
+on_ft = ['c', 'cpp']
+# }}}}
+
+# python  {{{
+[[plugins]]
+repo = 'nvie/vim-flake8'
+hook_source = '''
+  let g:no_flake8_maps = 1
+  let g:flake8_show_in_gutter=1
+'''
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'hynek/vim-python-pep8-indent'
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'vim-scripts/python_fold'
+on_ft = ['python', 'python3', 'djangohtml']
+
+[[plugins]]
+repo = 'tshirtman/vim-cython'
+on_ft = ['cython']
+
+[[plugins]]
+repo = 'Glench/Vim-Jinja2-Syntax'
+on_ft = ['jinja']
+# }}}}
+
+# javascript jsx {{{
+[[plugins]]
+repo = 'neovim/node-host'
+build = 'npm install'
+on_ft = ['javascript', 'jsx', 'javascript.jsx', 'typescriptreact']
+
+
+[[plugins]]
+repo = 'billyvg/tigris.nvim'
+build = './install.sh'
+on_ft = ['javascript', 'jsx', 'javascript.jsx', 'typescriptreact']
+hook_source = '''
+  let g:tigris#enabled = 1
+  let g:tigris#on_the_fly_enabled = 1
+  let g:tigris#delay = 300
+'''
+
+# }}}}
+
+# docker {{{
+[[plugins]]
+repo = 'ekalinin/Dockerfile.vim'
+on_ft = ['dockerfile']
+# }}}}
+
+# yaml {{{
+[[plugins]]
+repo = 'chase/vim-ansible-yaml'
+on_ft = ['yaml']
+hook_source = '''
+  let g:ansible_options = {'ignore_blank_lines': 0}
+'''
+[[plugins]]
+repo = 'stephpy/vim-yaml'
+on_ft = ['yaml']
+# }}}}
+
+# markdown  {{{
+[[plugins]]
+repo = 'vim-scripts/Markdown'
+on_ft = ['markdown']
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
+on_ft = ['markdown']
+[[plugins]]
+repo = 'euclio/vim-markdown-composer'
+on_ft = ['markdown']
+build = 'cargo build --release'
+# }}}}
+
+# json {{{
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = ['json']
+hook_source = '''
+  let g:vim_json_syntax_conceal = 0
+'''
+# }}}}
+
+# rust {{{
+# [[plugins]]
+# repo = 'rust-lang/rust.vim'
+# on_ft = ['rust']
+# hook_source = '''
+#   let g:rustfmt_autosave = 1
+#   let g:rust_clip_command = 'pbcopy'
+# '''
+
+# DeopleteRustShowDocumentationが微妙なのでコメントアウト
+# [[plugins]]
+# repo = 'sebastianmarkow/deoplete-rust'
+# on_ft = ['rust']
+# depends = ['deoplete.nvim']
+# hook_source = '''
+#   function! ChompedSystem( ... )
+#     return substitute(call('system', a:000), '\n\+$', '', '')
+#   endfunction
+#
+#   let g:deoplete#sources#rust#racer_binary = $HOME . '/.cargo/bin/racer'
+#   let g:deoplete#sources#rust#rust_source_path = ChompedSystem("rustc --print sysroot") . '/lib/rustlib/src/rust/src'
+#   let g:deoplete#sources#rust#show_duplicates = 1
+#   let g:deoplete#sources#rust#disable_keymap = 1
+#   nmap <buffer> gd <plug>DeopleteRustGoToDefinitionDefault
+#   nmap <buffer> K  <plug>DeopleteRustShowDocumentation
+# '''
+# [[plugins]]
+# repo = 'timonv/vim-cargo'
+# on_ft = ['rust']
+# hook_source = '''
+#   let g:cargo_command = "!cargo {cmd}"
+# '''
+# https://github.com/rust-lang-nursery/rustfmt
+# https://github.com/rust-lang-nursery/rust-clippy
+# https://github.com/rust-lang-nursery/rls
+# rustup completions fish > ~/.config/fish/completions/rustup.fish
+# [[plugins]]
+# repo = 'autozimu/LanguageClient-neovim'
+# depends = 'deoplete.nvim'
+# on_ft = ['rust']
+# build = './install.sh'
+# rev = 'next'
+# hook_source = '''
+#   set hidden
+#   let g:LanguageClient_serverCommands = {
+#       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+#       \ }
+#   let g:LanguageClient_autoStart = 1
+#   let g:LanguageClient_loggingLevel = 'DEBUG'
+#   set completefunc=LanguageClient#complete
+#   set formatexpr=LanguageClient_textDocument_rangeFormatting()
+#   nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+#   nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+#   nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
+# '''
+
+# }}}}

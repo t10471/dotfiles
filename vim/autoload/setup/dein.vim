@@ -11,13 +11,9 @@ function! setup#dein#init()
   " 予め TOML ファイルを用意しておく
   let g:rc_dir    = expand("~/dotfiles/vim/toml/")
   let s:toml      = g:rc_dir . '/dein_nvim.toml'
-  let s:lazy_toml = g:rc_dir . '/dein_nvim_lazy.toml'
-  let s:asyncomlete = g:rc_dir . '/dein_nvim_asyncomplete.toml'
 
   " TOML を読み込み、キャッシュしておく
   call dein#load_toml(s:toml,      {'lazy': 0})
-  call dein#load_toml(s:lazy_toml, {'lazy': 1})
-  call dein#load_toml(s:asyncomlete, {'lazy': 1})
   call dein#add('w0rp/ale')
   call dein#add('cespare/vim-toml')
 
