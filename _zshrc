@@ -1,16 +1,23 @@
 eval "$(starship init zsh)"
 
 export PATH="/usr/local/bin:$HOME/go/bin:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="/usr/local/opt/qt@5/bin:$PATH"
+export PATH="/usr/local/opt/berkeley-db@4/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export GOPATH="$HOME/go"
 export EDITOR=nvim
 export TERM=tmux-256color
 # workaround git gettext problem
 export GIT_INTERNAL_GETTEXT_TEST_FALLBACKS=1
+export PATH="$PATH:$HOME/.poetry/bin"
 
+export OP_SESSION_mercari="uZK-TWNt7U_nWyhZhfxYTX1UK9Nk5SCmh0ypydqpUPE"
 
 eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
+export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 
 if [[ -n /usr/local/bin/rbenv ]]; then
   eval "$(rbenv init -)"
@@ -166,6 +173,8 @@ setopt hist_expand
 # 履歴をインクリメンタルに追加
 setopt inc_append_history
 
+setopt nonomatch
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/Users/n-toshinai/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -180,4 +189,9 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+if [ -f /usr/local/lib/libstderred.dylib ]; then
+  export DYLD_INSERT_LIBRARIES="/usr/local/lib/libstderred.dylib${DYLD_INSERT_LIBRARIES:+:$DYLD_INSERT_LIBRARIES}"
+  export STDERRED_ESC_CODE=$'\x1b[1;31m'
+fi
 

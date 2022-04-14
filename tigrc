@@ -1,79 +1,36 @@
-########
-# main view
-########
-
-# チーム開発しているとよくremoteで更新が入るため手元に同期
-bind main W !git pull --rebase %(remote) %(branch)
-# revert作業は手早く行う必要があるためバインドして効率化
-bind main V !?git revert %(commit)
-# 任意のリビジョンを再現するためにcheckoutすることが多いためバインド
-bind main C !?git checkout %(commit)
-
-########
-# branch view
-########
-
-# リモートブランチをtrackしつつチェックアウト
-bind branch T !git checkout -t %(branch)
-# カーソル行のブランチを親にして入力した名前のブランチを作成
-bind branch n !git checkout -b %(prompt) %(branch)
-# 不要になったブランチを削除（squash mergeや別リポジトリへのmergeをするワークフロー用）
-bind branch D !?git branch -D %(branch)
-# 不要になったブランチを削除
-bind branch d !?git branch -d %(branch)
-# originへのpush
-bind branch P !git push -u origin %(branch)
 
 
-# F で fetch (default: :toggle file-name / :toggle commit-title-refs)
-bind generic F      ?git fetch %(remote)
-bind main    F      ?git fetch %(remote)
+# ?は確認あり 
+bind generic g  move-first-line
+bind generic G  move-last-line
+bind generic @ft @?git fetch %(remote)
+bind generic @pf @?git push -f -u %(remote) %(repo:head)
+bind generic @ps @?git push -u %(remote) %(repo:head)
+bind generic @pl @?git pull %(remote)
+bind generic @mg @?git merge %(branch)
+bind generic @st @?git stash save "%(prompt Enter stash comment: )"
+bind generic @rt @?git reset --soft HEAD^
 
-# Alt-f で :toggle file-name / :toggle commit-title-refs
-bind generic <Esc>f :toggle file-name
-bind main    <Esc>f :toggle commit-title-refs
+bind main @sy @git pull --rebase %(remote) %(branch)
+bind main @rv @?git revert %(commit)
+bind main @co @git checkout %(commit)
+bind main @ri @git rebase -i %(commit)~
+bind main @rc @git rebase --continue
+bind main @ra @git rebase --abort
+bind main @rs @git rebase --skip
+bind main @fc @git commit -m "[ci skip]" --allow-empty
 
-# U で pull
-bind generic U      ?git pull %(remote)
 
-# Alt-u で該当ブランチを更新
-bind main    <Esc>u ?sh -c "git checkout %(branch) && git pull %(remote) --ff-only && git checkout -"
-bind diff    <Esc>u ?sh -c "git checkout %(branch) && git pull %(remote) --ff-only && git checkout -"
-bind refs    <Esc>u ?sh -c "git checkout %(branch) && git pull %(remote) --ff-only && git checkout -"
+bind branch @nw @git checkout -b %(prompt) %(branch)
+bind branch @co @git checkout %(branch)
+bind branch @df @?git branch -D %(branch)
+bind branch @de @?git branch -d %(branch)
+bind branch @rb @?git pull --rebase %(prompt)
 
-# P で remote への push
-bind generic P      ?git push -u %(remote) %(repo:head)
+bind diff   @sp @?git stash pop %(stash)
+bind diff   @sa @?git stash apply %(stash)
 
-# M で merge
-bind main    M      ?git merge %(branch)
-bind diff    M      ?git merge %(branch)
-bind refs    M      ?git merge %(branch)
-bind main    <Esc>m ?git merge %(commit)
-bind diff    <Esc>m ?git merge %(commit)
+bind stash  @sp @?git stash pop %(stash)
+bind stash  @sa @?git stash apply %(stash)
 
-# R で rebase
-bind main    R      ?git rebase %(branch)
-bind diff    R      ?git rebase %(branch)
-bind refs    R      ?git rebase %(branch)
-bind main    <Esc>r ?git rebase %(commit)
-bind diff    <Esc>r ?git rebase %(commit)
-
-# I で rebase -i
-bind main    I      ?git rebase -i %(branch)
-bind diff    I      ?git rebase -i %(branch)
-bind refs    I      ?git rebase -i %(branch)
-bind main    <Esc>i ?git rebase -i %(commit)
-bind diff    <Esc>i ?git rebase -i %(commit)
-
-# S で stash save
-bind generic S      ?git stash save "%(prompt Enter stash comment: )"
-
-bind generic ^      ?git reset --soft HEAD^
-
-# Y で stash pop
-bind diff    Y      ?git stash pop %(stash)
-bind stash   Y      ?git stash pop %(stash)
-
-# Alt-y で stash apply
-bind diff    <Esc>y ?git stash apply %(stash)
-bind stash   <Esc>y ?git stash apply %(stash)
+bind refs   @rn @?git branch -m %(branch) %(prompt)
