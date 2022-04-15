@@ -1,23 +1,17 @@
-eval "$(starship init zsh)"
-
 export PATH="/usr/local/bin:$HOME/go/bin:$PATH"
 export PATH="$HOME/.poetry/bin:$PATH"
-export PATH="/usr/local/opt/qt@5/bin:$PATH"
-export PATH="/usr/local/opt/berkeley-db@4/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 export GOPATH="$HOME/go"
 export EDITOR=nvim
 export TERM=tmux-256color
 # workaround git gettext problem
 export GIT_INTERNAL_GETTEXT_TEST_FALLBACKS=1
-export PATH="$PATH:$HOME/.poetry/bin"
 
-export OP_SESSION_mercari="uZK-TWNt7U_nWyhZhfxYTX1UK9Nk5SCmh0ypydqpUPE"
-
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(starship init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
-export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
-export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
+export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
 
 if [[ -n /usr/local/bin/rbenv ]]; then
   eval "$(rbenv init -)"
@@ -49,13 +43,11 @@ alias syncoff='tmux set-window-option synchronize-panes off'
 
 export GREP_OPTIONS='--color=auto'
 
-# pythonはanaconda入れて.python.shにあるpyenvを作る
-export CLOUDSDK_PYTHON=/Users/n-toshinai/.pyenv/shims/python
 # gclond-sdkは下記の場所にインストールする必要がある
+export CLOUDSDK_PYTHON=/Users/toshinao/.pyenv/versions/3.10.3/bin/python
 source ~/google-cloud-sdk/path.zsh.inc
 source ~/google-cloud-sdk/completion.zsh.inc
 
-source ~/dotfiles/.python.sh
 source ~/dotfiles/.gcp_cmd.sh
 if [[ -e ~/.cargo/env ]]; then
   source ~/.cargo/env
@@ -64,7 +56,7 @@ fi
 if [[ -e "$HOME/bin/kube.sh" ]]; then
   source $HOME/bin/kube.sh
 fi
-export ZPLUG_HOME=/usr/local/opt/zplug
+export ZPLUG_HOME=/opt/homebrew/opt/zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting"
@@ -175,23 +167,9 @@ setopt inc_append_history
 
 setopt nonomatch
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/n-toshinai/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/n-toshinai/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/n-toshinai/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/n-toshinai/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-if [ -f /usr/local/lib/libstderred.dylib ]; then
-  export DYLD_INSERT_LIBRARIES="/usr/local/lib/libstderred.dylib${DYLD_INSERT_LIBRARIES:+:$DYLD_INSERT_LIBRARIES}"
-  export STDERRED_ESC_CODE=$'\x1b[1;31m'
-fi
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/toshinao/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/toshinao/google-cloud-sdk/path.zsh.inc'; fi
 
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/toshinao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/toshinao/google-cloud-sdk/completion.zsh.inc'; fi
