@@ -9,6 +9,7 @@ export GIT_INTERNAL_GETTEXT_TEST_FALLBACKS=1
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
+export PATH="$PATH:$HOME/.poetry/bin"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
 export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
