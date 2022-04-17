@@ -17,3 +17,4 @@ ln -s ${PWD}/_vimrc ~/.config/nvim/init.vim
 # bash snip.sh
 # mkdir -p ~/.vim/tmp
 # mkdir -p ~/.cache/dein
+ln -s ${PWD}/_ideavimrc ~/.ideavimrc

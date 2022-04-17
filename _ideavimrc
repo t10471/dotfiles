@@ -1,0 +1,225 @@
+
+"
+"
+" 色々説明
+" https://github.com/JetBrains/ideavim
+" action list
+" https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+" デフォルトのキーバインド
+" https://github.com/JetBrains/ideavim/blob/master/src/com/maddyhome/idea/vim/package-info.java
+"
+let mapleader = " "
+" set 系{{{
+" ----------------
+" easymotion
+" https://github.com/AlexPl292/IdeaVim-EasyMotion#supported-commands
+" https://github.com/easymotion/vim-easymotion/blob/master/doc/easymotion.txt
+set easymotion
+" ----------------
+set commentary " コメント gcc or v modeでgc
+set surround " https://github.com/tpope/vim-surround
+" ----------------
+" https://github.com/terryma/vim-multiple-cursors
+" <A-n>で対象を選択, <A-x>でスキップ, <A-p>で戻る
+" cを押して変更開始
+set multiple-cursors
+" ----------------
+
+set vb " ピープ音を消す
+set showmode "モード表示
+set wildmenu wildmode=list:full "コマンドラインモードの補完機能 on
+" set ignorecase " 検索するときに大文字小文字を区別しない
+set smartcase " 検索時に大文字を含んでいたら大/小を区別
+set incsearch " インクリメンタル検索 (検索ワードの最初の文字を入力した時点で検索が開始)
+set hlsearch " 検索対象をハイライト
+set showmatch matchtime=1 " 対応する括弧やブレースを表示
+set cmdheight=2 " メッセージ表示欄を2行確保
+set laststatus=2 " ステータス行を常に表示
+set showcmd " ウィンドウの右下にまだ実行していない入力中のコマンドを表示
+set display=lastline " 省略されずに表示
+set listchars=tab:^\ ,trail:~ " 行末のスペースを可視化
+set clipboard=unnamedplus,unnamed " ヤンクでクリップボードにコピー
+set showmatch " 対応する括弧を強調表示
+set whichwrap=b,s,h,l,<,>,[,],~ " 行をまたいで移動
+set cinoptions+=:0 " インデント方法の変更
+set shiftwidth=2 " インデント幅
+set softtabstop=2 " タブキー押下時に挿入される文字幅を指定
+set mouse=a " マウスの入力を受け付ける
+set iminsert=2 " インサートモードから抜けると自動的にIMEをオフにする
+set ideajoin " 行結合が賢い
+
+"}}}
+
+" ジャンプ機能をIDEA純正に
+nnoremap <C-o>      :<C-u>action Back<CR>
+
+
+nnoremap <C-i>      :<C-u>action Forward<CR>
+nnoremap <C-S-o>    <C-o>
+nnoremap <C-S-i>    <C-i>
+" 前/次のメソッド定義へジャンプ
+nnoremap [m         :<C-u>action MethodUp<CR>
+nnoremap ]m         :<C-u>action MethodDown<CR>
+" 前/次の変更箇所へジャンプ
+nnoremap [c         :<C-u>action VcsShowPrevChangeMarker<CR>
+nnoremap ]c         :<C-u>action VcsShowNextChangeMarker<CR>
+" 前/次のエラー箇所へジャンプ
+nnoremap [e         :<C-u>action GotoPreviousError<CR>
+nnoremap ]e         :<C-u>action GotoNextError<CR>
+" 前回の変更箇所へジャンプ
+nnoremap [g         :<C-u>action JumpToLastChange<CR>
+nnoremap ]g         :<C-u>action JumpToNextChange<CR>
+" 前後にnewlineを追加する
+nnoremap [<Space>   O<esc>j
+nnoremap ]<Space>   o<esc>k
+
+" 実行
+nnoremap <leader>G  :<C-u>action Generate<CR>
+
+nnoremap <leader>rx :<C-u>action Run<CR>
+nnoremap <leader>rr :<C-u>action Rerun<CR>
+nnoremap <leader>rt :<C-u>action RerunTests<CR>
+nnoremap <leader>rf :<C-u>action RerunFailedTests<CR>
+
+nnoremap <leader>gd :<C-u>action GotoDeclaration<CR>
+nnoremap <leader>gt :<C-u>action GotoTypeDeclaration<CR>
+nnoremap <leader>gi :<C-u>action GotoImplementation<CR>
+nnoremap <leader>gs :<C-u>action GotoSuperMethod<CR>
+nnoremap <leader>go :<C-u>action OverrideMethods<CR>
+nnoremap <leader>gt :<C-u>action GotoTest<CR>
+nnoremap <leader>gr :<C-u>action GotoRelated<CR>
+nnoremap <leader>ge :<C-u>action GoToErrorGroup<CR>
+
+nnoremap <leader>us :<C-u>action ShowUsages<CR>
+nnoremap <leader>uf :<C-u>action FindUsages<CR>
+
+nnoremap <leader>sh :<C-u>action HighlightUsagesInFile<CR>
+nnoremap <leader>si :<C-u>action ShowIntentionActions<CR>
+nnoremap <leader>sf :<C-u>action FileStructurePopup<CR>
+nnoremap <leader>se :<C-u>action ShowErrorDesCRiption<CR>
+
+nnoremap <leader>ps :<C-u>action GotoClass<CR>
+nnoremap <leader>pS :<C-u>action GotoSymbol<CR>
+nnoremap <leader>pf :<C-u>action GotoFile<CR>
+nnoremap <leader>pa :<C-u>action GotoAction<CR>
+nnoremap <leader>pi :<C-u>action FindInPath<CR>
+
+nnoremap <leader>=  :<C-u>action ReformatCode<CR>
+
+" debugger
+nnoremap <leader>di :ForceStepInto
+nnoremap <leader>do :ForceStepOver
+nnoremap <leader>dp :Stepout
+nnoremap <leader>dn :<C-u>action ToggleLineBreakpoint<CR>
+nnoremap <leader>db :<C-u>action ToggleLineBreakpoint<CR>
+nnoremap <leader>dm :<C-u>action ToggleMethodBreakpoint<CR>
+nnoremap <leader>dn :<C-u>action Resume<CR>
+nnoremap <leader>dp :<C-u>action ShowExecutionPoint<CR>
+" easy window navigation
+nnoremap <A-l> <c-w>l
+nnoremap <A-j> <c-w>j
+nnoremap <A-h> <c-w>h
+nnoremap <A-k> <c-w>k
+nnoremap <C-w>x :<C-u>action MoveTabDown<CR>
+nnoremap <C-w>v :<C-u>action MoveTabRight<CR>
+nnoremap <C-w>q :<C-u>action CloseContent<CR>
+nnoremap <C-w>Q :<C-u>action ReopenClosedTab<CR>
+nnoremap <C-w>m :<C-u>action ActivateEventLogToolWindow<CR>
+nnoremap <C-w>d :<C-u>action ActivateDebugToolWindow<CR>
+nnoremap <C-w>r :<C-u>action ActivateRunToolWindow<CR>
+nnoremap <C-w>b :<C-u>action ViewBreakpoints<CR>
+nnoremap <C-w>p :<C-u>action ActivateProjectToolWindow<CR>
+nnoremap <C-w>t :<C-u>action ActivateTerminalToolWindow<CR>
+nnoremap <C-w>P :<C-u>action ManageRecentProjects<CR>
+nnoremap <C-w>o :<C-u>action CloseAllEditorsButActive<CR>
+nnoremap <C-w>\ :<C-u>action VimFilePrevious<CR>
+nnoremap <C-w>e :<C-u>action SearchEverywhere<CR>
+nnoremap <C-w>E :<C-u>action Switcher<CR>
+nnoremap <C-w>X :<C-u>action SplitHorizontally<CR>
+nnoremap <C-w>V :<C-u>action SplitVertically<CR>
+nnoremap <C-w>u :<C-u>action Unsplit<CR>
+nnoremap <C-w>U :<C-u>action UnsplitAll<CR>
+" 画面折返し
+nnoremap cow :<C-u>action EditorToggleUseSoftWraps<CR>
+nnoremap col :<C-u>action EditorToggleShowWhitespaces<CR>
+" folding
+nnoremap zc :<C-u>action CollapseRegion<CR>
+nnoremap zo :<C-u>action ExpandRegion<CR>
+nnoremap zC :<C-u>action CollapseRegionRecursively<CR>
+nnoremap zO :<C-u>action ExpandRegionRecursively<CR>
+nnoremap zm :<C-u>action CollapseAllRegions<CR>
+nnoremap zr :<C-u>action ExpandAllRegions<CR>
+" code refactoring
+nnoremap ce :<C-u>action RenameElement<CR>
+nnoremap cs :<C-u>action ChangeSignature<CR>
+" Escの2回押しでハイライト消去
+nnoremap <Esc><Esc> :nohlsearch<CR><ESC>
+" 検索の際に正規表現を普通に使えるようにする。
+nnoremap / /\v
+" タブ移動
+noremap <Tab>   gt
+noremap <S-Tab> gT
+" TABにて対応ペアにジャンプ
+nnoremap <C-Tab> %
+vnoremap <C-Tab> %
+"ノーマルモード中にEnterで改行
+noremap <CR> i<CR><Esc>
+" 移動キー remap
+nnoremap <C-h>   ^
+nnoremap <C-l>   $
+vnoremap <C-h>   ^
+vnoremap <C-l>   $
+" ヤンクでクリップボードにコピー
+nnoremap "+y "*y
+nnoremap "+Y "*Y
+nnoremap "+p "*p
+nnoremap "+P "*P
+nnoremap <C-S-c> "*y
+
+nnoremap <C-S-v> "*P
+" レジスタに入れない工夫 
+nnoremap x     "_x
+vnoremap x     "_x
+nnoremap <C-x> x
+vnoremap <C-x> x
+nnoremap <C-d> "_dd
+vnoremap p     "_dp
+vnoremap <S-p> "_dP
+vnoremap <C-p> p
+" j, k による移動を折り返されたテキストでも自然に振る舞うように変更
+nnoremap j gj
+nnoremap k gk
+"
+"vv で行末まで選択
+vnoremap v ^$h
+"選択範囲のインデントを連続して変更
+vnoremap < <gv
+vnoremap > >gv
+
+" inoremap
+" 括弧、クォーテーションを入力した際にカーソルを内部に持っていく
+inoremap {} {}<Left>
+inoremap [] []<Left>
+inoremap () ()<Left>
+inoremap “” “”<Left>
+inoremap '' ''<Left>
+inoremap <> <><Left>
+inoremap “ “<Left>
+
+inoremap <C-k> <C-o>k
+inoremap <C-j> <C-o>j
+inoremap <C-l> <C-o>l
+inoremap <C-h> <C-o>h
+inoremap <C-a> <Esc>I
+inoremap <C-e> <Esc>A
+" 入力モード中に素早くJJと入力した場合はESCとみなす
+inoremap jj <Esc>
+" templates
+inoremap <C-k> <C-o>:action NextTemplateVariable<CR>
+inoremap <C-j> <C-o>:action PreviousTemplateVariable<CR>
+SHIFT+カーソルキーで範囲選択（インサートモード）
+inoremap <S-Left>  <C-O>:action EditorLeftWithSelection<CR>
+inoremap <S-Right> <C-O>:action EditorRightWithSelection<CR>
+inoremap <S-Up>    <C-O>:action EditorUpWithSelection<CR>
+inoremap <S-Down>  <C-O>:action EditorDownWithSelection<CR>
+set clipboard+=ideaput
