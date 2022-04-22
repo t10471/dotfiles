@@ -1,4 +1,4 @@
-#!/bin/bash
+<<<<<<< HEAD
 PWD=$(cd $(dirname $0) && pwd)
 # mkdir -p ~/.config/nvim
 # ln -s ${PWD}/_eslintrc.json ~/.eslintrc
@@ -18,3 +18,7 @@ ln -s ${PWD}/_vimrc ~/.config/nvim/init.vim
 # mkdir -p ~/.vim/tmp
 # mkdir -p ~/.cache/dein
 ln -s ${PWD}/_ideavimrc ~/.ideavimrc
+
+mkdir -p ~/.config/wezterm
+ln -s ${PWD}/wezterm/wezterm.lua ~/.config/wezterm/.
+ln -s ${PWD}/wezterm/utils.lua ~/.config/wezterm/.
