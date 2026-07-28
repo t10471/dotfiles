@@ -1,23 +1,53 @@
-PWD=$(cd $(dirname $0) && pwd)
-# mkdir -p ~/.config/nvim
-# ln -s ${PWD}/_eslintrc.json ~/.eslintrc
-# ln -s ${PWD}/_vimrc ~/.vimrc
-# ln -s ${PWD}/_vimrc ~/.config/nvim/init.vim
-# ln -s ${PWD}/_tmux.conf ~/.tmux.conf
-# # ln -s ${PWD}/_config.fish ~/.config/fish/config.fish
-# ln -s ${PWD}/_zshrc ~/.zshrc
-# ln -s ${PWD}/_powerline-shell.json ~/.powerline-shell.json
-# ln -s ${PWD}/.path.sh ~/.path.sh
-# ln -s ${PWD}/tigrc ~/.tigrc
-# mkdir -p ~/.vim.after
-# ln -s ${PWD}/after ~/.vim/after
-# bash link_karabiner.sh
-# mkdir -p ~/.vim/snippets
-# bash snip.sh
-# mkdir -p ~/.vim/tmp
-# mkdir -p ~/.cache/dein
-ln -s ${PWD}/_ideavimrc ~/.ideavimrc
+#!/bin/sh
+PWD=$(cd "$(dirname "$0")" && pwd)
 
+# 実体があり、リンク先がまだ無いときだけ symlink を張る。
+# 既にあるものは上書きしないので、何度実行しても安全。
+# -e だけだと壊れた symlink を「無い」と判定して ln が失敗するので -L も見る
+link_if_absent() {
+  [ -e "$1" ] || return 0
+  if [ -e "$2" ] || [ -L "$2" ]; then
+    return 0
+  fi
+  ln -s "$1" "$2"
+}
+
+# --- zsh ---
+link_if_absent "${PWD}/_zshrc" ~/.zshrc
+link_if_absent "${PWD}/_zprofile" ~/.zprofile
+
+# --- git ---
+link_if_absent "${PWD}/_gitconfig" ~/.gitconfig
+link_if_absent "${PWD}/_gitignore_global" ~/.gitignore
+
+# git のサブコマンド。~/bin は _zshrc が PATH に入れる
+mkdir -p ~/bin
+link_if_absent "${PWD}/bin/git-br" ~/bin/git-br
+link_if_absent "${PWD}/bin/git-conflict" ~/bin/git-conflict
+link_if_absent "${PWD}/bin/git-open" ~/bin/git-open
+
+# --- vim / neovim ---
+# _vimrc の directory=~/.vim/tmp 用
+mkdir -p ~/.vim/tmp
+link_if_absent "${PWD}/_vimrc" ~/.vimrc
+link_if_absent "${PWD}/after" ~/.vim/after
+link_if_absent "${PWD}/_eslintrc.json" ~/.eslintrc
+
+mkdir -p ~/.config/nvim
+link_if_absent "${PWD}/_vimrc" ~/.config/nvim/init.vim
+
+# --- wezterm ---
 mkdir -p ~/.config/wezterm
-ln -s ${PWD}/wezterm/wezterm.lua ~/.config/wezterm/.
-ln -s ${PWD}/wezterm/utils.lua ~/.config/wezterm/.
+link_if_absent "${PWD}/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
+link_if_absent "${PWD}/wezterm/utils.lua" ~/.config/wezterm/utils.lua
+
+# --- prompt / plugin manager / tool versions ---
+link_if_absent "${PWD}/starship.toml" ~/.config/starship.toml
+
+mkdir -p ~/.config/sheldon
+link_if_absent "${PWD}/sheldon/plugins.toml" ~/.config/sheldon/plugins.toml
+
+mkdir -p ~/.config/mise
+# mise は mise/config.toml をプロジェクト設定として探索してしまうので、
+# repo 側では探索対象にならない名前で持つ
+link_if_absent "${PWD}/mise-config.toml" ~/.config/mise/config.toml

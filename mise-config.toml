@@ -1,0 +1,6 @@
+[tools]
+go = "latest"
+node = "20"
+
+[settings]
+go_set_gobin = false

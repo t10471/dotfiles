@@ -1,83 +1,99 @@
-export PATH="/usr/local/bin:$HOME/go/bin:$PATH"
-export PATH="$HOME/.poetry/bin:$PATH"
-export PYENV_ROOT="$HOME/.pyenv"
-export GOPATH="$HOME/go"
+# source ~/bin/emsdk/emsdk_env.sh
+
+export PATH="$HOME/.local/bin:/usr/local/bin:$HOME/bin:$PATH"
 export EDITOR=nvim
-export TERM=tmux-256color
 # workaround git gettext problem
 export GIT_INTERNAL_GETTEXT_TEST_FALLBACKS=1
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-eval "$(starship init zsh)"
-export PATH="$PATH:$HOME/.poetry/bin"
-eval "$(direnv hook zsh)"
-eval "$(pyenv init -)"
-export NODEBREW_ROOT=/opt/homebrew/var/nodebrew
+# 未導入のコマンドに依存する設定を黙って飛ばすための判定
+_has_cmd() { command -v "$1" >/dev/null 2>&1; }
 
-if [[ -n /usr/local/bin/rbenv ]]; then
-  eval "$(rbenv init -)"
+# Starship: only for interactive + real terminals
+if [[ -o interactive ]] && [[ "${TERM:-}" != "dumb" ]] && _has_cmd starship; then
+  eval "$(starship init zsh)"
 fi
-
-if [[ ! -e "$HOME/.nodebrew/src" ]]; then
-  mkdir -p "$HOME/.nodebrew/src"
-fi
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source $HOME/.path.sh
+_has_cmd direnv && eval "$(direnv hook zsh)"
+_has_cmd mise && eval "$(mise activate zsh)"
+autoload -Uz compinit && compinit
+_has_cmd sheldon && eval "$(sheldon source)"
+_has_cmd fzf && source <(fzf --zsh)
+_has_cmd zoxide && eval "$(zoxide init zsh)"
 
 alias ovim=vim
-alias vim=nvim
-alias diff=colordiff
+_has_cmd nvim && alias vim=nvim
+_has_cmd delta && alias diff=delta
+_has_cmd terraform && alias tf=terraform
 alias g=git
 alias k=kubectl
 alias kc=kubectl
 alias kg='kubectl get'
 alias kd='kubectl describe'
 alias sudo='sudo '
-alias ls=exa
-alias ll='exa -l --git'
-alias la='exa -la --git'
-alias lt='exa -l -T --git'
-alias syncon='tmux set-window-option synchronize-panes on'
-alias syncoff='tmux set-window-option synchronize-panes off'
+if _has_cmd eza; then
+  alias ls=eza
+  alias ll='eza -l --git'
+  alias la='eza -la --git'
+  alias lt='eza -l -T --git'
+fi
+if _has_cmd zoxide; then
+  alias cd='z'
+  alias cdi='zi'
+fi
+unalias cc 2>/dev/null
+cc() {
+  _has_cmd claude || return 127
+  if [[ "$1" == "-w" ]]; then
+    local selected
+    selected=$(
+      { echo "[new]"; ls -d .worktrees/*/ 2>/dev/null | sed 's|\.worktrees/||;s|/$||'; } |
+      fzf --prompt="worktree> "
+    )
+    if [[ "$selected" == "[new]" ]]; then
+      claude --dangerously-skip-permissions -w
+    elif [[ -n "$selected" ]]; then
+      cd ".worktrees/$selected" && claude --dangerously-skip-permissions
+    fi
+  elif [[ "$1" == "-c" ]]; then
+    shift
+    claude --continue --dangerously-skip-permissions "$@"
+  else
+    claude --dangerously-skip-permissions "$@"
+  fi
+}
 
-
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export GREP_OPTIONS='--color=auto'
 
-# gclond-sdkは下記の場所にインストールする必要がある
-export CLOUDSDK_PYTHON=/Users/toshinao/.pyenv/versions/3.10.3/bin/python
-source ~/google-cloud-sdk/path.zsh.inc
-source ~/google-cloud-sdk/completion.zsh.inc
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+# The next line enables shell command completion for gcloud.
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
-source ~/dotfiles/.gcp_cmd.sh
-if [[ -e ~/.cargo/env ]]; then
-  source ~/.cargo/env
+autoload -Uz bashcompinit && bashcompinit
+if _has_cmd brew; then
+  _az_completion="$(brew --prefix)/etc/bash_completion.d/az"
+  [ -f "$_az_completion" ] && source "$_az_completion"
+  unset _az_completion
+fi
+
+# git-crypt でロックしたままの clone では暗号文なので読み込まない
+if [ -f "$HOME/dotfiles/.gcp_cmd.sh" ] && ! head -c 9 "$HOME/dotfiles/.gcp_cmd.sh" | grep -q GITCRYPT; then
+  source "$HOME/dotfiles/.gcp_cmd.sh"
 fi
 
 if [[ -e "$HOME/bin/kube.sh" ]]; then
   source $HOME/bin/kube.sh
 fi
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
-source $ZPLUG_HOME/init.zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "nnao45/zsh-kubectl-completion"
-zplug "rupa/z", use:z.sh
-zplug "Tarrasch/zsh-bd"
-zplug "mollifier/cd-gitroot"
-zplug "b4b4r07/enhancd", use:init.sh
-zplug load
-
-export ENHANCD_FILTER=fzf
 
 bindkey -e
 
-function select-history() {
-  BUFFER=$(history -n -r 1 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
+function fzf-select-history() {
+  BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER" --reverse)
   CURSOR=$#BUFFER
+  zle reset-prompt
 }
-zle -N select-history
-bindkey '^r' select-history
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
 
 # fkill - kill process
 fkill() {
@@ -89,12 +105,6 @@ fkill() {
     echo $pid | xargs kill -${1:-9}
   fi
 }
-
-
-# 自動補完を有効にする
-# コマンドの引数やパス名を途中まで入力して <Tab> を押すといい感じに補完してくれる
-# 例： `cd path/to/<Tab>`, `ls -<Tab>`
-autoload -U compinit; compinit
 
 # 入力したコマンドが存在せず、かつディレクトリ名と一致するなら、ディレクトリに cd する
 # 例： /usr/bin と入力すると /usr/bin ディレクトリに移動
@@ -137,7 +147,7 @@ WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export HISTFILE=${HOME}/.zsh_history
 
 # メモリに保存される履歴の件数
-export HISTSIZE=1000
+export HISTSIZE=100000
 
 # 履歴ファイルに保存される履歴の件数
 export SAVEHIST=100000
@@ -156,6 +166,7 @@ setopt hist_reduce_blanks
 
 # 古いコマンドと同じものは無視
 setopt hist_save_no_dups
+setopt hist_ignore_all_dups
 
 # historyコマンドは履歴に登録しない
 setopt hist_no_store
@@ -166,42 +177,39 @@ setopt hist_expand
 # 履歴をインクリメンタルに追加
 setopt inc_append_history
 
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+
+setopt print_eight_bit
+
 setopt nonomatch
+# Drop /Applications/Zed.app/Contents/MacOS from PATH so ~/bin/zed wrapper wins
+# and Zed's bundled `git` helper doesn't shadow the system git.
+typeset -U path
+path=("${(@)path:#/Applications/Zed.app/Contents/MacOS}")
 
+# --- Android development ---
+# java_home は macOS 専用。JDK 17 が無ければ JAVA_HOME を空にしない
+if [ -x /usr/libexec/java_home ]; then
+  _java_home="$(/usr/libexec/java_home -v 17 2>/dev/null)"
+  [ -n "$_java_home" ] && export JAVA_HOME="$_java_home"
+  unset _java_home
+fi
+if [ -d "$HOME/Library/Android/sdk" ]; then
+  export ANDROID_HOME="$HOME/Library/Android/sdk"
+  export ANDROID_SDK_ROOT="$ANDROID_HOME"
+  path+=(
+    "$ANDROID_HOME/platform-tools"
+    "$ANDROID_HOME/emulator"
+    "$ANDROID_HOME/cmdline-tools/latest/bin"
+  )
+fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/toshinao/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/toshinao/google-cloud-sdk/path.zsh.inc'; fi
+# Tailscale CLI (App Store 版の同梱バイナリ)
+[ -x /Applications/Tailscale.app/Contents/MacOS/Tailscale ] && \
+  alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/toshinao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/toshinao/google-cloud-sdk/completion.zsh.inc'; fi
-
-# hyper settings start
-
-# Override auto-title when static titles are desired ($ title My new title)
-title() { export TITLE_OVERRIDDEN=1; echo -en "\e]0;$*\a"}
-# Turn off static titles ($ autotitle)
-autotitle() { export TITLE_OVERRIDDEN=0 }; autotitle
-# Condition checking if title is overridden
-overridden() { [[ $TITLE_OVERRIDDEN == 1 ]]; }
-# Echo asterisk if git state is dirty
-gitDirty() { [[ $(git status 2> /dev/null | grep -o '\w\+' | tail -n1) != ("clean"|"") ]] && echo "*" }
-
-# Show cwd when shell prompts for input.
-tabtitle_precmd() {
-   if overridden; then return; fi
-   pwd=$(pwd) # Store full path as variable
-   cwd=${pwd##*/} # Extract current working dir only
-   print -Pn "\e]0;$cwd$(gitDirty)\a" # Replace with $pwd to show full path
-}
-[[ -z $precmd_functions ]] && precmd_functions=()
-precmd_functions=($precmd_functions tabtitle_precmd)
-
-# Prepend command (w/o arguments) to cwd while waiting for command to complete.
-tabtitle_preexec() {
-   if overridden; then return; fi
-   printf "\033]0;%s\a" "${1%% *} | $cwd$(gitDirty)" # Omit construct from $1 to show args
-}
-[[ -z $preexec_functions ]] && preexec_functions=()
-preexec_functions=($preexec_functions tabtitle_preexec)
-
-# hyper settings end
+# gcloud プロファイル切り替え。プロファイル定義は repo の外に置く
+if [ -f "$HOME/.config/gcloud-profiles.sh" ]; then
+  source "$HOME/.config/gcloud-profiles.sh"
+fi

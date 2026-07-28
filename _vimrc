@@ -149,7 +149,7 @@ let g:indent_guides_tab_guides = 0
 
 let g:hybrid_custom_term_colors=1
 set background=dark
-colorscheme hybrid
+silent! colorscheme hybrid
 
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 1
