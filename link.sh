@@ -16,7 +16,7 @@ PWD=$(cd $(dirname $0) && pwd)
 # bash snip.sh
 # mkdir -p ~/.vim/tmp
 # mkdir -p ~/.cache/dein
-ln -s ${PWD}/_ideavimrc ~/.ideavimrc
+[ -f "${PWD}/_ideavimrc" ] && ln -s ${PWD}/_ideavimrc ~/.ideavimrc
 
 mkdir -p ~/.config/wezterm
 ln -s ${PWD}/wezterm/wezterm.lua ~/.config/wezterm/.
