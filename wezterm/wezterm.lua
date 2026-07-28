@@ -5,6 +5,11 @@ local utils = require("utils")
 --- keybinds
 ---------------------------------------------------------------
 
+-- bell が鳴ったタブの記録。下のキーバインドのコールバックが参照するので、
+-- local 宣言を default_keybinds より前に置く。後ろに置くとコールバック側は
+-- 同名のグローバル変数 (nil) を見てしまう
+local bell_tabs = {}
+
 local default_keybinds = {
     {key = "x", mods = "CMD", action = "ShowDebugOverlay"},
     {key = "b", mods = "CMD", action = "ActivateCopyMode"},
@@ -77,9 +82,6 @@ end
 ---------------------------------------------------------------
 --- wezterm on
 ---------------------------------------------------------------
-
--- Bell tab tracking for Claude Code response notifications
-local bell_tabs = {}
 
 wezterm.on("bell", function(window, pane)
     local tab = pane:tab()
