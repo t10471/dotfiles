@@ -1,0 +1,32 @@
+[user]
+	name = t10471
+	email = t104711202@gmail.com
+	signingkey = 548E70B157B58FCE74C3C774608337A02D32EC72
+[core]
+	excludesfile = ~/.gitignore
+[diff]
+	colorMoved = default
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[alias]
+	b  = branch
+	cm = commit
+	pl = pull
+	ps = push
+	f  = fetch
+	sw = switch
+	r  = restore
+	co = checkout
+	st = status
+	dm = "!f () { git branch --merged | egrep -v '\\*|master|develop' | xargs git branch -d; }; f"
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[pull]
+	rebase = true
+[commit]
+	gpgsign = true

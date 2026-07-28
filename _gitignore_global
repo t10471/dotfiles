@@ -1,0 +1,14 @@
+*~
+.DS_Store
+.idea
+*.iml
+.env
+.envrc
+node_modules/*
+*.code-workspace
+.vscode
+.tool-versions
+
+**/.claude/settings.local.json
+# skill のローカル専用設定（機密語を含みうるため共有しない）
+**/.claude/skills/**/*.local.*
