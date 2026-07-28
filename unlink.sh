@@ -7,14 +7,23 @@ unlink_if_symlink() {
   fi
 }
 
-unlink_if_symlink ~/.vimrc
-unlink_if_symlink ~/.config/nvim/init.vim
-unlink_if_symlink ~/.vim/after
+unlink_if_symlink ~/.zshrc
 unlink_if_symlink ~/.zprofile
+
 unlink_if_symlink ~/.gitconfig
 unlink_if_symlink ~/.gitignore
+unlink_if_symlink ~/bin/git-br
+unlink_if_symlink ~/bin/git-conflict
+unlink_if_symlink ~/bin/git-open
+
+unlink_if_symlink ~/.vimrc
+unlink_if_symlink ~/.vim/after
+unlink_if_symlink ~/.eslintrc
+unlink_if_symlink ~/.config/nvim/init.vim
+
 unlink_if_symlink ~/.config/wezterm/wezterm.lua
 unlink_if_symlink ~/.config/wezterm/utils.lua
+
 unlink_if_symlink ~/.config/starship.toml
 unlink_if_symlink ~/.config/sheldon/plugins.toml
 unlink_if_symlink ~/.config/mise/config.toml

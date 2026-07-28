@@ -1,3 +1,4 @@
+#!/bin/sh
 PWD=$(cd "$(dirname "$0")" && pwd)
 
 # 実体があり、リンク先がまだ無いときだけ symlink を張る。
@@ -11,24 +12,36 @@ link_if_absent() {
   ln -s "$1" "$2"
 }
 
-# mkdir -p ~/.config/nvim
-# ln -s ${PWD}/_eslintrc.json ~/.eslintrc
-# ln -s ${PWD}/_vimrc ~/.vimrc
-# ln -s ${PWD}/_vimrc ~/.config/nvim/init.vim
-# ln -s ${PWD}/_zshrc ~/.zshrc
-# mkdir -p ~/.vim.after
-# ln -s ${PWD}/after ~/.vim/after
-# mkdir -p ~/.vim/tmp
-# mkdir -p ~/.cache/dein
-
+# --- zsh ---
+link_if_absent "${PWD}/_zshrc" ~/.zshrc
 link_if_absent "${PWD}/_zprofile" ~/.zprofile
+
+# --- git ---
 link_if_absent "${PWD}/_gitconfig" ~/.gitconfig
 link_if_absent "${PWD}/_gitignore_global" ~/.gitignore
 
+# git のサブコマンド。~/bin は _zshrc が PATH に入れる
+mkdir -p ~/bin
+link_if_absent "${PWD}/bin/git-br" ~/bin/git-br
+link_if_absent "${PWD}/bin/git-conflict" ~/bin/git-conflict
+link_if_absent "${PWD}/bin/git-open" ~/bin/git-open
+
+# --- vim / neovim ---
+# _vimrc の directory=~/.vim/tmp 用
+mkdir -p ~/.vim/tmp
+link_if_absent "${PWD}/_vimrc" ~/.vimrc
+link_if_absent "${PWD}/after" ~/.vim/after
+link_if_absent "${PWD}/_eslintrc.json" ~/.eslintrc
+
+mkdir -p ~/.config/nvim
+link_if_absent "${PWD}/_vimrc" ~/.config/nvim/init.vim
+
+# --- wezterm ---
 mkdir -p ~/.config/wezterm
 link_if_absent "${PWD}/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
 link_if_absent "${PWD}/wezterm/utils.lua" ~/.config/wezterm/utils.lua
 
+# --- prompt / plugin manager / tool versions ---
 link_if_absent "${PWD}/starship.toml" ~/.config/starship.toml
 
 mkdir -p ~/.config/sheldon
