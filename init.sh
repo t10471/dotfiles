@@ -34,15 +34,13 @@ FORMULAE=(
   neovim              # _vimrc / vim=nvim
   starship            # プロンプト
   direnv
-  mise                # go / node のバージョン管理（mise/config.toml）
+  mise                # go / node のバージョン管理（mise-config.toml）
   sheldon             # zsh プラグイン管理（sheldon/plugins.toml）
   fzf                 # ^r の履歴検索、fkill
   fzy                 # bin/git-br
   zoxide              # cd / cdi
   eza                 # ls / ll / la / lt
-  git-delta           # git の pager
-  ghq                 # ghq-get / ghq-cd
-  tig                 # tigrc
+  git-delta           # diff の置き換え（alias diff=delta）
   kubernetes-cli      # k / kg / kd、link_k8s.sh
   gnupg               # コミット署名
   pinentry-mac        # 署名時のパスフレーズ入力
@@ -82,6 +80,12 @@ fi
 git -C "$DOTFILES" submodule update --init --recursive
 
 # ---------------------------------------------------------------
+# symlink
+# ---------------------------------------------------------------
+# mise と sheldon は ~/.config 配下の設定を読むので、取得より先に張る
+"$DOTFILES/link.sh"
+
+# ---------------------------------------------------------------
 # ツールと zsh プラグインの取得
 # ---------------------------------------------------------------
 if has mise; then
@@ -96,11 +100,6 @@ DEIN_DIR="$HOME/.cache/dein/repos/github.com/Shougo/dein.vim"
 if [ ! -d "$DEIN_DIR" ]; then
   git clone https://github.com/Shougo/dein.vim "$DEIN_DIR"
 fi
-
-# ---------------------------------------------------------------
-# symlink
-# ---------------------------------------------------------------
-"$DOTFILES/link.sh"
 
 # ---------------------------------------------------------------
 # ここから先は brew の外なので手で入れる

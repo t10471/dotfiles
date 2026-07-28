@@ -16,7 +16,6 @@ link_if_absent() {
 # ln -s ${PWD}/_vimrc ~/.vimrc
 # ln -s ${PWD}/_vimrc ~/.config/nvim/init.vim
 # ln -s ${PWD}/_zshrc ~/.zshrc
-# ln -s ${PWD}/tigrc ~/.tigrc
 # mkdir -p ~/.vim.after
 # ln -s ${PWD}/after ~/.vim/after
 # mkdir -p ~/.vim/tmp
@@ -36,4 +35,6 @@ mkdir -p ~/.config/sheldon
 link_if_absent "${PWD}/sheldon/plugins.toml" ~/.config/sheldon/plugins.toml
 
 mkdir -p ~/.config/mise
-link_if_absent "${PWD}/mise/config.toml" ~/.config/mise/config.toml
+# mise は mise/config.toml をプロジェクト設定として探索してしまうので、
+# repo 側では探索対象にならない名前で持つ
+link_if_absent "${PWD}/mise-config.toml" ~/.config/mise/config.toml
