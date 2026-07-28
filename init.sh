@@ -5,6 +5,8 @@
 # zsh は macOS の既定シェルなので入れない。brew 版に替えたいときは
 # /etc/shells に追記して chsh -s するところまで手でやる。
 set -eu
+export HOMEBREW_NO_BUILD_FROM_SOURCE=1
+export HOMEBREW_NO_ENV_HINTS=1
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -18,7 +20,7 @@ if ! has brew; then
 fi
 
 # 入れた直後は PATH に無いので、ここで通す（Apple Silicon と Intel の両対応）
-for _brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+for _brew in "$HOME/.homebrew/bin/brew" /opt/homebrew/bin/brew /usr/local/bin/brew; do
   if [ -x "$_brew" ]; then
     eval "$("$_brew" shellenv)"
     break
@@ -53,8 +55,8 @@ for f in "${FORMULAE[@]}"; do
   brew list --formula "$f" >/dev/null 2>&1 || missing+=("$f")
 done
 if [ ${#missing[@]} -gt 0 ]; then
-  echo "==> brew install ${missing[*]}"
-  brew install "${missing[@]}"
+  echo "==> brew install --force-bottle ${missing[*]}"
+  brew install --force-bottle "${missing[@]}"
 fi
 
 # ---------------------------------------------------------------
