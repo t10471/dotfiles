@@ -147,8 +147,16 @@ let g:indent_guides_start_level=1
 let g:indent_guides_guide_size=1
 let g:indent_guides_tab_guides = 0
 
-let g:hybrid_custom_term_colors=1
-set background=dark
+" 端末が明るい背景なので、hybrid の light 配色（gui の色）を使う。背景は端末の色に任せる
+set termguicolors
+set background=light
+augroup HybridLight
+  autocmd!
+  autocmd ColorScheme hybrid hi Normal guibg=NONE
+  autocmd ColorScheme hybrid hi LineNr guifg=#808a80
+  autocmd ColorScheme hybrid hi IndentGuidesOdd guibg=#d3e0cd
+  autocmd ColorScheme hybrid hi IndentGuidesEven guibg=NONE
+augroup END
 silent! colorscheme hybrid
 
 let g:ale_lint_on_text_changed = 'never'
