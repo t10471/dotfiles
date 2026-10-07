@@ -206,11 +206,13 @@ local config = {
     font = wezterm.font_with_fallback({"UDEV Gothic NF", "Menlo", "Monaco"}),
     font_size = 13,
     use_ime = true,
-    color_scheme = "Duotone Dark",
-    -- ラベンダー文字 (#b7a1ff) に対し、紫を避けた寒色スレート背景で調和させる
+    color_scheme = "Github Light (Gogh)",
+    -- 既定の黄・水色・緑・ピンクは明るい背景に対して薄く読めないので、その色だけ濃くする
     colors = {
-        foreground = "#b7a1ff",
-        background = "#171a21",
+        -- 既定の背景 #f4f4f4 はまぶしいので少し落とす
+        background = "#e2e8e0",
+        ansi = { "#3e3e3e", "#970b16", "#0a7a24", "#7a5c00", "#003e8a", "#b0306a", "#00657d", "#ffffff" },
+        brights = { "#666666", "#de0000", "#1f8a3a", "#946f00", "#2e6cba", "#c2457d", "#007a96", "#ffffff" },
     },
     hide_tab_bar_if_only_one_tab = true,
     adjust_window_size_when_changing_font_size = false,
